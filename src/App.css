@@ -20,13 +20,10 @@ header {
   position: fixed;
   top: 0;
   z-index: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 
 .page-name {
+  text-align: center;
   font-size: 2.2rem;
   line-height: 80px;
 }
@@ -40,10 +37,8 @@ nav {
   width: 500px;
   border-radius: 10px;
   display: none;
-  z-index: 2;
-  position: fixed;
-  top: 70px;
-  box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.1);;
+  margin: 0 auto;
+  box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.1);
 }
 
 .show-menu {
@@ -77,8 +72,11 @@ nav {
 /* Main */
 main {
   width: 100%;
-  height: 100%;
-  margin-top: 110px;
+  height: 100vh;
+  padding-top: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 
@@ -86,30 +84,24 @@ main {
 /* Banner */
 .banner-container {
   width: 100%;
-  padding-top: 30vh;
+  display: flex;
+  align-items: center;
 }
 
 .main-introduction {
   width: 100%;
-  margin: 0 auto;
   text-align: center;
   line-height: 4rem;
   font-size: 1.8rem;
   color: black;
-  z-index: 1;
 }
 
 
 
 /* Login */
-.login-container {
-  padding-top: 30vh;
-}
-
 .login-form {
-  height: 150px;
   display: flex;
-  justify-content: center;
+  height: 150px;
   margin-bottom: 1rem;
 }
 
@@ -167,10 +159,6 @@ main {
 
 
 /* Join & Mypage */
-.info-container {
-  padding-top: 20vh;
-}
-
 .info-title {
   width: 100%;
   text-align: center;
@@ -179,7 +167,6 @@ main {
 }
 
 .info-form {
-  width: 100%;
   text-align: center;
 }
 
@@ -213,7 +200,6 @@ main {
 
 .button-container {
   width: 100%;
-  display: block;
   padding-left: 1.5rem;
 }
 

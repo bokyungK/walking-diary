@@ -15,9 +15,9 @@ function App() {
     <div>
       <Header type={type.login} />
       <Banner />
-      {/* <Login /> */}
-      {/* <Join /> */}
-      {/* <Mypage /> */}
+      {/* <Login />
+      <Join />
+      <Mypage /> */}
     </div>
   );
 }
