@@ -11,6 +11,8 @@ body {
   background-image: url(../public/background.png);
 }
 
+
+
 /* Header */
 header {
   width: 100%;
@@ -18,7 +20,6 @@ header {
   position: fixed;
   top: 0;
   z-index: 1;
-  margin-bottom: 30px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -37,7 +38,6 @@ header {
 
 nav {  
   width: 500px;
-  margin: 0 auto;
   border-radius: 10px;
   display: none;
   z-index: 2;
@@ -76,23 +76,167 @@ nav {
 
 /* Main */
 main {
-  margin-top: 150px;
   width: 100%;
   height: 100%;
-  position: relative;
-  display: flex;
-  justify-content: center;
+  margin-top: 110px;
 }
 
-video {
-  border-radius: 30px;
+
+
+/* Banner */
+.banner-container {
+  width: 100%;
+  padding-top: 30vh;
 }
 
 .main-introduction {
-  padding: 15rem 0;
-  position: absolute;
+  width: 100%;
+  margin: 0 auto;
   text-align: center;
   line-height: 4rem;
   font-size: 1.8rem;
-  color: white;
+  color: black;
+  z-index: 1;
+}
+
+
+
+/* Login */
+.login-container {
+  padding-top: 30vh;
+}
+
+.login-form {
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  text-align: end;
+  margin-right: 1.5rem;
+}
+
+.input-box:first-child {
+  margin-bottom: 1.5rem;
+}
+
+.input-label {
+  margin-right: 1rem;
+  font-size: 1.5rem;
+  font-weight: lighter;
+}
+
+.input-info {
+  background-color: skyblue;
+  color: #fff;
+  width: 12rem;
+  height: 4rem;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.login-button {
+  width: 100px;
+  height: inherit;
+  text-align: center;
+  color: #997000;
+  border: #997000 solid 3px;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.5);
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.login-button:hover {
+  cursor: pointer;
+}
+
+.join {
+  text-align: center;
+  color: lightgray;
+}
+
+.join:hover {
+  cursor: pointer;
+}
+
+
+
+/* Join & Mypage */
+.info-container {
+  padding-top: 20vh;
+}
+
+.info-title {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+}
+
+.info-form {
+  width: 100%;
+  text-align: center;
+}
+
+.form-section {
+  width: max-content;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-bottom: 1rem;
+  padding-right: 6rem;
+}
+
+.form-item {
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  margin-right: 1rem;
+  font-size: 1.1rem;
+}
+
+.form-input {
+  width: 200px;
+  height: 40px;
+  background-color: skyblue;
+  color: #fff;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.button-container {
+  width: 100%;
+  display: block;
+  padding-left: 1.5rem;
+}
+
+.form-button {
+  width: 100px;
+  height: 50px;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.form-button:hover {
+  cursor: pointer;
+}
+
+.cancle-button {
+  margin-right: 1rem;
+  border: darkred solid 3px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.submit-button {
+  margin-right: 1rem;
+  border: darkblue solid 3px;
+  background-color: rgba(255, 255, 255, 0.5);
 }

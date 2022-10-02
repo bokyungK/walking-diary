@@ -10,7 +10,6 @@ function Header({type}) {
     }
 
     return (
-    <>
         <header onMouseOver={handleShowMenu} onMouseLeave={handleHiddenMenu}>
             <h1 className='page-name'>산책 일기</h1>
             <nav className={menu}>
@@ -21,7 +20,6 @@ function Header({type}) {
                 </ul>
             </nav>
         </header>
-    </>
     )
 }
 

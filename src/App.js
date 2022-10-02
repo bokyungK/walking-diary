@@ -1,6 +1,9 @@
 import './App.css';
 import Header from './component/Header';
-import Main from './component/Main'
+import Banner from './component/Banner';
+import Login from './component/Login';
+import Join from './component/Join';
+import Mypage from './component/Mypage';
 
 function App() {
   const type = {
@@ -11,7 +14,10 @@ function App() {
   return (
     <div>
       <Header type={type.login} />
-      <Main />
+      <Banner />
+      {/* <Login /> */}
+      {/* <Join /> */}
+      {/* <Mypage /> */}
     </div>
   );
 }
