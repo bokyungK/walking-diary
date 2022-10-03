@@ -3,10 +3,7 @@ import React from "react";
 function WriteDiary() {
     return (
     <main className='over-height'>
-        <section className='write-diary'>
-            <div className='icon-container'>
-                <button className='write-cancel' type='button'><img className='icon-image' src='cancel.png' /></button>
-            </div>            
+        <section className='write-diary'>    
             <form>
                 <label className='attachments-box' for='image-attach'>영역을 눌러 사진을 첨부하세요!</label>
                 <input className='write-attachments' type='file' id='image-attach'/>
