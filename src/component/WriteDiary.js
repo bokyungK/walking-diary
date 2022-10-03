@@ -31,8 +31,14 @@ function WriteDiary() {
                 <input className='write-title diary-title' type='text' placeholder='제목을 입력하세요'/>
                 <textarea className='write-content diary-content' placeholder='일기를 입력하세요'></textarea>
                 <div className='write-buttons'>
-                    <button className='write-button cancel-button' type='button'>취소</button>
-                    <button className='write-button submit-button' type='submit'>저장</button>
+                    <button className='write-button' type='button'>
+                        <img src='button.png'/>
+                        <div>취소</div>
+                    </button>
+                    <button className='write-button' type='submit'>
+                        <img src='button.png'/>
+                        <div>저장</div>
+                    </button>
                 </div>
             </form>
         </section>

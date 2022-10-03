@@ -488,7 +488,25 @@ main {
 }
 
 .write-button {
-  width: 50px;
-  height: 50px;
-  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0);
+  border: none;
+  position: relative;
 }
+
+.write-button:first-child {
+  margin-right: 1rem;
+}
+
+.write-button img {
+  width: 55px;
+  height: 50px;
+}
+
+.write-button div{
+  position: absolute;
+  bottom: 9px;
+  left: 14px;
+  color: #fff;
+  font-weight: bold;
+}
+
