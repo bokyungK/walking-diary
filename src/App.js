@@ -4,6 +4,7 @@ import Banner from './component/Banner';
 import Login from './component/Login';
 import Join from './component/Join';
 import Mypage from './component/Mypage';
+import Mydiary from './component/Mydiary';
 
 function App() {
   const type = {
@@ -14,10 +15,11 @@ function App() {
   return (
     <div>
       <Header type={type.login} />
-      <Banner />
-      {/* <Login />
+      {/* <Banner />
+      <Login />
       <Join />
       <Mypage /> */}
+      <Mydiary />
     </div>
   );
 }

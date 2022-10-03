@@ -226,3 +226,113 @@ main {
   border: darkblue solid 3px;
   background-color: rgba(255, 255, 255, 0.5);
 }
+
+
+
+/* Mydiary */
+.mydiary {
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+}
+
+.mydiary-section {
+  width: 932px;
+}
+
+.favorite-section {
+  margin-bottom: 3rem;
+  overflow: hidden;
+}
+
+.mydiary-title {
+  margin-bottom: 1rem;
+}
+
+.sort-selection {
+  width: 90px;
+  height: 30px;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  color: rgb(103, 103, 103);
+  border: rgb(103, 103, 103) solid 3px;
+}
+
+.sort-selection:focus {
+  outline: none;
+  border: rgb(103, 103, 103) solid 3px;
+}
+
+.sort-option {
+  font-weight: bold;
+}
+
+
+.mydiary-favorites {
+  display: flex;
+  list-style: none;
+  justify-content: center;
+}
+
+.favorite-item {
+  width: 300px;
+  height: 300px;
+  background-color: skyblue;
+  border-radius: 30px;
+}
+
+.favorite-item:not(:last-child) {
+  margin-right: 1rem;
+}
+
+.diary-section {
+  margin-bottom: 3rem;
+}
+
+.diary-section-container {
+  width: 100%;
+  display: flex;
+  position: relative;
+}
+
+.diary-button {
+  background-color: rgba( 255, 255, 255, 1 );
+  border: none;
+}
+
+.button-image {
+  width: 50px;
+  height: 50px;
+  border: none;
+}
+
+.left-button {
+  position: absolute;
+  top: 45%;
+  left: -70px;
+}
+
+.right-button {
+  position: absolute;
+  top: 45%;
+  right: -70px;
+}
+
+.diary-container {
+  display: flex;
+  list-style: none;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.diary {
+  width: 300px;
+  height: 300px;
+  background-color: skyblue;
+  border-radius: 30px;
+  margin-bottom: 1rem;
+}
+
+.diary:not(:nth-child(3n)) {
+  margin-right: 1rem;
+}
