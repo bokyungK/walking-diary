@@ -15,7 +15,7 @@ function Header({type}) {
             <nav className={menu}>
                 <ul className='menu-container'>
                     <li className ='menu'>내 일기장</li>
-                    <li className ='menu'>일기추가</li>
+                    <li className ='menu'>일기 쓰기</li>
                     <li className ='menu'>{type}</li>
                 </ul>
             </nav>

@@ -25,7 +25,7 @@ function Mypage() {
                     </div>
                 </div>
                 <div className='button-container'>
-                    <button className='form-button cancle-button'>취소</button>
+                    <button className='form-button cancel-button'>취소</button>
                     <input className='form-button submit-button' type='submit' value='변경'></input>
                 </div>
             </form>

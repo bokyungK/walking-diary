@@ -108,7 +108,7 @@ main {
 .input-container {
   display: flex;
   flex-direction: column;
-  text-align: end;
+  text-align: flex-end;
   margin-right: 1.5rem;
 }
 
@@ -215,7 +215,7 @@ main {
   cursor: pointer;
 }
 
-.cancle-button {
+.cancel-button {
   margin-right: 1rem;
   border: darkred solid 3px;
   background-color: rgba(255, 255, 255, 0.5);
@@ -342,7 +342,7 @@ main {
 
 .diary-crud {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   margin-bottom: 1rem;
 }
 
@@ -384,13 +384,11 @@ main {
   border-radius: 10px;
   padding: 0 1rem;
   font-size: 1rem;
-}
-
-.dog-select {
   outline: none;
 }
 
 .diary-title {
+  width: 100%;
   background-color: white;
   margin-bottom: 1rem;
   line-height: 2rem;
@@ -399,6 +397,7 @@ main {
   border-radius: 10px;
   font-weight: normal;
   padding: 0 1rem;
+  outline: none;
 }
 
 .diary-content {
@@ -410,4 +409,86 @@ main {
   border-radius: 10px;
   font-size: 1.2rem;
   font-weight: normal;
+  outline: none;
+}
+
+
+
+/* WriteDiary */
+.over-height {
+  height: 100%;
+}
+
+.write-diary {
+  width: 50%;
+}
+
+.icon-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.write-cancel {
+  background-color: rgba(255, 255, 255, 0);
+  border: none;
+}
+
+.attachments-box {
+  background-color: skyblue;
+  display: block;
+  width: 100%;
+  height: 500px;
+  border: darkgray 3px solid;
+  margin-bottom: 1rem;
+  color: #fff;
+  text-align: center;
+  line-height: 500px;
+}
+
+.write-attachments {
+  display: none;
+}
+
+.weather-radio {
+  border: 3px solid #997000;
+  border-radius: 10px;
+  width: 33%;
+  text-align: center;
+}
+
+.weather-radio input[type=radio] {
+  display: none;
+}
+
+.weather-radio input[type=radio] + label {
+  font-size: 1.5rem;
+  color: darkgray;
+}
+
+.weather-radio input[type=radio] + label:not(:last-child) {
+  margin-right: 1rem;
+}
+
+.weather-radio input[type=radio]:checked + label {
+  color: black;
+}
+
+.write-content {
+  resize: none;
+  width: 100%;
+  height: 200px;
+  margin-bottom: 1rem;
+}
+
+.write-buttons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+.write-button {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
 }
