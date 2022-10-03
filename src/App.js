@@ -5,6 +5,7 @@ import Login from './component/Login';
 import Join from './component/Join';
 import Mypage from './component/Mypage';
 import Mydiary from './component/Mydiary';
+import DetailedDiary from './component/DetailedDiary';
 
 function App() {
   const type = {
@@ -18,8 +19,9 @@ function App() {
       {/* <Banner />
       <Login />
       <Join />
-      <Mypage /> */}
-      <Mydiary />
+      <Mypage />
+      <Mydiary /> */}
+      <DetailedDiary />
     </div>
   );
 }

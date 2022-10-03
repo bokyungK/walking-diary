@@ -256,11 +256,7 @@ main {
   font-weight: bold;
   color: rgb(103, 103, 103);
   border: rgb(103, 103, 103) solid 3px;
-}
-
-.sort-selection:focus {
   outline: none;
-  border: rgb(103, 103, 103) solid 3px;
 }
 
 .sort-option {
@@ -296,7 +292,7 @@ main {
 }
 
 .diary-button {
-  background-color: rgba( 255, 255, 255, 1 );
+  background-color: rgba(255, 255, 255, 0);
   border: none;
 }
 
@@ -335,4 +331,84 @@ main {
 
 .diary:not(:nth-child(3n)) {
   margin-right: 1rem;
+}
+
+
+
+/* DetailedDiary */
+.detailed-diary {
+  width: 50%;
+}
+
+.diary-crud {
+  display: flex;
+  justify-content: end;
+  margin-bottom: 1rem;
+}
+
+.crud-icon {
+  background-color: rgba(255, 255, 255, 0);
+  border: none;
+}
+
+.icon-image {
+  width: 30px;
+  height: 30px;
+}
+
+.crud-icon:not(:last-child) {
+  margin-right: 1rem;
+}
+
+.diary-pictures {
+  width: 100%;
+  height: 500px;
+  margin-bottom: 1rem;
+  border-radius: 30px;
+}
+
+.diary-info {
+  display: flex;
+  margin-bottom: 1rem;
+  font-weight: normal;
+  justify-content: space-between;
+  font-size: 1rem;
+}
+
+.diary-info-item {
+  background-color: white;
+  line-height: 2rem;
+  flex-basis: 30%;
+  text-align: center;
+  border: 2px solid #997000;
+  border-radius: 10px;
+  padding: 0 1rem;
+  font-size: 1rem;
+}
+
+.dog-select {
+  outline: none;
+}
+
+.diary-title {
+  background-color: white;
+  margin-bottom: 1rem;
+  line-height: 2rem;
+  font-size: 1.3rem;
+  border: 2px solid #997000;
+  border-radius: 10px;
+  font-weight: normal;
+  padding: 0 1rem;
+}
+
+.diary-content {
+  padding: 0 1rem;
+  line-height: 2rem;
+  border: 2px solid #997000;
+  border-bottom: 1px;
+  margin-bottom: 3rem;
+  background: repeating-linear-gradient(white, white 30px, #997000 30px, #997000 32px);
+  border-radius: 10px;
+  font-size: 1.2rem;
+  font-weight: normal;
 }
