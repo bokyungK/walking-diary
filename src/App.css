@@ -11,6 +11,14 @@ body {
   background-image: url(../public/background.png);
 }
 
+a { 
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover { 
+  color: #F0CA61;
+}
 
 
 /* Header */
@@ -26,11 +34,6 @@ header {
   text-align: center;
   font-size: 2.2rem;
   line-height: 80px;
-}
-
-.page-name:hover {
-  color: #F0CA61;
-  cursor: pointer;
 }
 
 nav {  
@@ -60,11 +63,6 @@ nav {
 
 .menu:not(:last-child) {
   margin-right: 3rem;
-}
-
-.menu:hover {
-  color: #F0CA61;
-  cursor: pointer;
 }
 
 
@@ -149,7 +147,7 @@ main {
 
 .join {
   text-align: center;
-  color: lightgray;
+  color: darkgray;
 }
 
 .join:hover {

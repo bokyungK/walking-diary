@@ -1,3 +1,4 @@
+import { Route } from 'react-router-dom';
 import './App.css';
 import Header from './component/Header';
 import Banner from './component/Banner';
@@ -15,17 +16,17 @@ function App() {
   };
 
   return (
-    <div>
-      <Header type={type.login} />
-      {/* <Banner />
-      <Login />
-      <Join />
-      <Mypage />
-      <Mydiary />
-      <DetailedDiary /> */}
-      <WriteDiary />
-    </div>
-  );
+  <div>
+    <Header type={type.login} />
+    <Route path="/" exact={true} component={Banner} />
+    <Route path="/login" component={Login} />
+    <Route path="/join" component={Join}/>
+    <Route path="/mypage" component={Mypage} />
+    <Route path="/mydiary" component={Mydiary} />
+    <Route path="/detail-diary" component={DetailedDiary} />
+    <Route path="/write-diary" component={WriteDiary} />
+  </div>
+  )
 }
 
 export default App;
