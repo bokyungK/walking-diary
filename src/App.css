@@ -106,7 +106,7 @@ main {
 .input-container {
   display: flex;
   flex-direction: column;
-  text-align: flex-end;
+  text-align: end;
   margin-right: 1.5rem;
 }
 
