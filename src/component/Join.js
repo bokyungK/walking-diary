@@ -25,8 +25,14 @@ function Join() {
                     </div>
                 </div>
                 <div className='button-container'>
-                    <button className='form-button cancel-button'>취소</button>
-                    <input className='form-button submit-button' type='submit' value='가입'></input>
+                    <button className='buttons'>
+                        <img src='button.png'/>
+                        <div>취소</div>
+                    </button>
+                    <button className='buttons' type='submit' value='가입'>
+                        <img src='button.png'/>
+                        <div>가입</div>
+                    </button>
                 </div>
             </form>
         </div>

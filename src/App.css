@@ -196,35 +196,6 @@ main {
   text-align: center;
 }
 
-.button-container {
-  width: 100%;
-  padding-left: 1.5rem;
-}
-
-.form-button {
-  width: 100px;
-  height: 50px;
-  border-radius: 10px;
-  font-size: 1.1rem;
-  font-weight: bold;
-}
-
-.form-button:hover {
-  cursor: pointer;
-}
-
-.cancel-button {
-  margin-right: 1rem;
-  border: darkred solid 3px;
-  background-color: rgba(255, 255, 255, 0.5);
-}
-
-.submit-button {
-  margin-right: 1rem;
-  border: darkblue solid 3px;
-  background-color: rgba(255, 255, 255, 0.5);
-}
-
 
 
 /* Mydiary */
@@ -468,28 +439,32 @@ main {
   margin-bottom: 1rem;
 }
 
-.write-buttons {
+.button-container {
   display: flex;
   justify-content: center;
   margin-bottom: 3rem;
 }
 
-.write-button {
+.buttons {
   background-color: rgba(255, 255, 255, 0);
   border: none;
   position: relative;
 }
 
-.write-button:first-child {
+.buttons:hover {
+  cursor: pointer;
+}
+
+.buttons:first-child {
   margin-right: 1rem;
 }
 
-.write-button img {
+.buttons img {
   width: 55px;
   height: 50px;
 }
 
-.write-button div{
+.buttons div{
   position: absolute;
   bottom: 9px;
   left: 14px;
