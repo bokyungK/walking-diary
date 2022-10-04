@@ -1,0 +1,102 @@
+/* Mydiary */
+.MyDiary {
+    width: 932px;
+    height: 100%;
+    margin: 0 auto;
+}
+
+.mydiarySection {
+}
+
+.favoriteSection {
+    margin-bottom: 3rem;
+}
+
+.sectionTitle {
+    margin-bottom: 1rem;
+}
+
+.favorites {
+    display: flex;
+    list-style: none;
+    justify-content: center;
+}
+
+.favoriteItem {
+    width: 300px;
+    height: 300px;
+    background-color: skyblue;
+    border-radius: 30px;
+}
+
+.favoriteItem:not(:last-child) {
+    margin-right: 1rem;
+}
+
+.diarySection {
+    margin-bottom: 3rem;
+}
+
+.diarySort {
+    width: 90px;
+    height: 30px;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    color: rgb(103, 103, 103);
+    border: rgb(103, 103, 103) solid 3px;
+    outline: none;
+}
+
+.sortOption {
+    font-weight: bold;
+}
+
+.diaryContainer{
+    width: 100%;
+    display: flex;
+    position: relative;
+}
+
+.diaries {
+    display: flex;
+    list-style: none;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.diary {
+    width: 300px;
+    height: 300px;
+    background-color: skyblue;
+    border-radius: 30px;
+    margin-bottom: 1rem;
+}
+
+.diary:not(:nth-child(3n)) {
+    margin-right: 1rem;
+}
+
+.diaryButton {
+    background-color: rgba(255, 255, 255, 0);
+    border: none;
+    position: absolute;
+    top: 45%;
+}
+
+.diaryButton:hover {
+    cursor: pointer;
+}
+
+.leftButton {
+    left: -70px;
+}
+
+.rightButton {
+    right: -70px;
+}
+
+.buttonImage {
+    width: 50px;
+    height: 50px;
+    border: none;
+}

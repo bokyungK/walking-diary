@@ -1,42 +1,37 @@
 import React from 'react';
+import Buttons from './Buttons.js';
+import styles from './Join.module.css';
 
 function Join() {
+    const buttonName = {
+        cancel: '취소',
+        submit: '가입'
+    }
     return (
-    <main>
-        <div className='info-container'>
-            <h2 className='info-title'>회원가입</h2>
-            <form className='info-form'>
-                <div className='form-section'>
-                    <div className='form-item'>
-                        <label className='form-label'>ID</label>
-                        <input className='form-input'></input>
+        <div className={styles.Join}>
+            <h2 className={styles.infoTitle}>회원가입</h2>
+            <form className={styles.infoForm}>
+                <div className={styles.formSection}>
+                    <div className={styles.formItem}>
+                        <label className={styles.itemLabel}>ID</label>
+                        <input className={styles.itemInput}></input>
                     </div>
-                    <div className='form-item'>                       
-                        <label className='form-label'>PW</label>
-                        <input className='form-input'></input>
+                    <div className={styles.formItem}>                       
+                        <label className={styles.itemLabel}>PW</label>
+                        <input className={styles.itemInput}></input>
                     </div>
-                    <div className='form-item'>
-                        <label className='form-label'>이름</label>
-                        <input className='form-input'></input>
+                    <div className={styles.formItem}>
+                        <label className={styles.itemLabel}>이름</label>
+                        <input className={styles.itemInput}></input>
                     </div>
-                    <div className='form-item'>
-                        <label className='form-label'>반려견 이름</label>
-                        <input className='form-input'></input>
+                    <div className={styles.formItem}>
+                        <label className={styles.itemLabel}>반려견 이름</label>
+                        <input className={styles.itemInput}></input>
                     </div>
                 </div>
-                <div className='button-container'>
-                    <button className='buttons'>
-                        <img src='button.png'/>
-                        <div>취소</div>
-                    </button>
-                    <button className='buttons' type='submit' value='가입'>
-                        <img src='button.png'/>
-                        <div>가입</div>
-                    </button>
-                </div>
+                <Buttons buttonName={buttonName}/>
             </form>
         </div>
-    </main>
     )
 }
 

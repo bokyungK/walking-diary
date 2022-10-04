@@ -1,0 +1,13 @@
+.Banner {
+  height: calc( 100vh - 80px);
+  display: flex;
+  align-items: center;
+}
+
+.mainIntroduction {
+  width: 100%;
+  text-align: center;
+  line-height: 4rem;
+  font-size: 1.8rem;
+  color: black;
+}
