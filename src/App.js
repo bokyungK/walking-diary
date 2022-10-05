@@ -1,5 +1,5 @@
+import React, { useEffect, useRef } from 'react';
 import { Route } from 'react-router-dom';
-import './App.css';
 import Header from './component/Header';
 import Banner from './component/Banner';
 import Login from './component/Login';
@@ -8,6 +8,7 @@ import Mypage from './component/Mypage';
 import MyDiary from './component/MyDiary';
 import DetailedDiary from './component/DetailedDiary';
 import WriteDiary from './component/WriteDiary';
+import './App.css';
 
 function App() {
   const type = {
@@ -15,9 +16,32 @@ function App() {
     mypage: '마이페이지'
   };
 
+  const [backgroundOpacity, setBackgroundOpacity] = React.useState('');
+  const wrapper = useRef();
+
+  useEffect(() => {
+    const handleShowHeaderBc = (e) => {
+      const wrapperHeight = wrapper.current.clientHeight;
+      const windowHeight = e.currentTarget.innerHeight;
+      const scrollHeight = wrapperHeight - windowHeight;
+      const scrollPosition = e.currentTarget.scrollY;
+
+      console.log(scrollPosition, scrollHeight, scrollPosition / scrollHeight);
+      if (scrollPosition / scrollHeight <= 1) {
+        setBackgroundOpacity(scrollPosition / scrollHeight);
+      } else {
+        setBackgroundOpacity(1);
+      }
+    }
+    window.addEventListener('scroll', handleShowHeaderBc);
+    return () => {
+    window.removeEventListener('scroll', handleShowHeaderBc);
+    };
+  }, []);
+  
   return (
-  <div>
-    <Header type={type.login} />
+  <div ref={wrapper}>
+    <Header backgroundOpacity={backgroundOpacity} type={type.login} />
     <main>
       <Route path="/" exact={true} component={Banner} />
       <Route path="/login" component={Login} />
