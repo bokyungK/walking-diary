@@ -7,6 +7,11 @@ function Join() {
         cancel: '취소',
         submit: '가입'
     }
+    
+    const cancelLink = {
+        path: '/login',
+    }
+
     return (
         <div className={styles.Join}>
             <h2 className={styles.infoTitle}>회원가입</h2>
@@ -29,7 +34,7 @@ function Join() {
                         <input className={styles.itemInput}></input>
                     </div>
                 </div>
-                <Buttons buttonName={buttonName}/>
+                <Buttons buttonName={buttonName} cancelLink={cancelLink} />
             </form>
         </div>
     )

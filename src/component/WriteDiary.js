@@ -7,6 +7,11 @@ function WriteDiary() {
         cancel: '취소',
         submit: '저장'
     }
+
+    const cancelLink = {
+        path: '/MyDiary'
+    }
+    
     return (
         <section className={styles.WriteDiary}>    
             <form>
@@ -32,7 +37,7 @@ function WriteDiary() {
                 </div>
                 <input className={`${styles.writingInfo} ${styles.titleInfo}`} type='text' placeholder='제목을 입력하세요'/>
                 <textarea className={`${styles.writingInfo} ${styles.contentInfo}`} placeholder='일기를 입력하세요'></textarea>
-                <Buttons buttonName={buttonName} />
+                <Buttons buttonName={buttonName} cancelLink={cancelLink} />
             </form>
         </section>
     )

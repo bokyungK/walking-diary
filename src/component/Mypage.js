@@ -7,6 +7,11 @@ function Mypage() {
         cancel: '취소',
         submit: '변경'
     }
+
+    const cancelLink = {
+        path: '/',
+    }
+    
     return (
         <div className={styles.Mypage}>
             <h2 className={styles.infoTitle}>마이페이지</h2>
@@ -29,7 +34,7 @@ function Mypage() {
                         <input className={styles.itemInput}></input>
                     </div>
                 </div>
-                <Buttons buttonName={buttonName}/>
+                <Buttons buttonName={buttonName} cancelLink={cancelLink}/>
             </form>
         </div>
     )
