@@ -18,16 +18,16 @@ function Join() {
     const userName = useRef();
     const userPetName = useRef();
 
-    const handleFormSubmit = () => {
+    function handleFormSubmit() {
         const userInfo = {
             userId: userId.current.value,
             userPw: userPw.current.value,
             userName: userName.current.value,
             userPetName: userPetName.current.value, 
         }
-        axios.post('http://localhost:3001/user', userInfo)
+        axios.post('http://localhost:3001/join', userInfo)
         .then(res => {
-            console.log('success!');
+            console.log(res);
         })
     }
 
