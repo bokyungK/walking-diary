@@ -4,15 +4,14 @@ import Buttons from './Buttons.js';
 import styles from './Join.module.css';
 
 function Join() {
+    const [display, setDisplay] = React.useState('none');
     const buttonName = {
         cancel: '취소',
         submit: '가입'
     }
-    
     const cancelLink = {
         path: '/login',
     }
-    
     const userId = useRef();
     const userPw = useRef();
     const userName = useRef();
@@ -33,7 +32,7 @@ function Join() {
                 console.log(res);
             })
         } else {
-            console.log('정보를 모두 입력해주세요!');
+            setDisplay('flex');
             return;
         }
     }
@@ -41,6 +40,10 @@ function Join() {
     return (
         <div className={styles.Join}>
             <h2 className={styles.infoTitle}>회원가입</h2>
+            <div className={styles.notice} style={{ display: `${display}` }}>
+                <img src='warning.png' alt='경고 느낌표'></img>
+                <p>모든 정보를 입력하세요</p>
+            </div>
             <form className={styles.infoForm}>
                 <div className={styles.formSection}>
                     <div className={styles.formItem}>

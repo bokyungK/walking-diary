@@ -7,6 +7,20 @@
     justify-content: center;
 }
 
+.notice {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    line-height: 30px;
+    margin-bottom: 0.5rem;
+}
+
+.notice img {
+    width: 30px;
+    height: 30px;
+    margin-right: 0.5rem;
+}
+
 .loginForm {
     display: flex;
     height: 150px;

@@ -6,6 +6,7 @@ import styles from './Login.module.css';
 function Login() {
     const userId = useRef();
     const userPw = useRef();
+    const [display, setDisplay] = React.useState('none');
 
     function handleFormSubmit() {
         const userInfo = {
@@ -20,13 +21,17 @@ function Login() {
                 console.log(res);
             })
         } else {
-            console.log('정보를 모두 입력해주세요!');
+            setDisplay('flex');
             return;
         }
     }
 
     return (
         <div className={styles.Login}>
+            <div className={styles.notice} style={{ display: `${display}` }}>
+                <img src='warning.png' alt='경고 느낌표'></img>
+                <p>모든 정보를 입력하세요</p>
+            </div>
             <form className={styles.loginForm} method='post'>
                 <div className={styles.inputContainer}>
                     <div className={styles.inputBoxes}>
