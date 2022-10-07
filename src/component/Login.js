@@ -12,10 +12,17 @@ function Login() {
             userId: userId.current.value,
             userPw: userPw.current.value
         }
-        axios.post('http://localhost:3001/login', userInfo)
-        .then(res => {
-            console.log(res);
-        })
+
+        const condition = userInfo.userId !== '' && userInfo.userPw !== '';
+        if (condition) {
+            axios.post('http://localhost:3001/login', userInfo)
+            .then(res => {
+                console.log(res);
+            })
+        } else {
+            console.log('정보를 모두 입력해주세요!');
+            return;
+        }
     }
 
     return (

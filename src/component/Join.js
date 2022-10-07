@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import Buttons from './Buttons.js';
 import styles from './Join.module.css';
@@ -25,10 +25,17 @@ function Join() {
             userName: userName.current.value,
             userPetName: userPetName.current.value, 
         }
-        axios.post('http://localhost:3001/join', userInfo)
-        .then(res => {
-            console.log(res);
-        })
+        
+        const condition = userInfo.userId !== '' && userInfo.userPw !== '' && userInfo.userName !== '' && userInfo.userPetName !== '';
+        if (condition) {
+            axios.post('http://localhost:3001/join', userInfo)
+            .then(res => {
+                console.log(res);
+            })
+        } else {
+            console.log('정보를 모두 입력해주세요!');
+            return;
+        }
     }
 
     return (
@@ -53,7 +60,7 @@ function Join() {
                         <input ref={userPetName} className={styles.itemInput} id='userPetName' type='text' />
                     </div>
                 </div>
-                <Buttons buttonName={buttonName} cancelLink={cancelLink} handleFormSubmit={handleFormSubmit} />
+                <Buttons buttonName={buttonName} cancelLink={cancelLink} handleFormSubmit={handleFormSubmit} disabled />
             </form>
         </div>
     )
