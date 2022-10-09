@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import Buttons from "./Buttons";
 import styles from "./WriteDiary.module.css";
 
@@ -10,7 +10,6 @@ function WriteDiary() {
     const cancelLink = {
         path: '/MyDiary'
     }
-    const today = new Date;
     const dateInput = useRef();
     dateInput.value = new Date().toISOString().slice(0, 10);
     
