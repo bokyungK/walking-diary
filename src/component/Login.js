@@ -1,28 +1,33 @@
 import React, { useRef } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import styles from './Login.module.css';
 
-function Login() {
+function Login({ setLoginState }) {
     const userId = useRef();
     const userPw = useRef();
+    const [notice, setNotice] = React.useState('');
     const [display, setDisplay] = React.useState('none');
-
+    const history = useHistory();
     function handleFormSubmit() {
         const userInfo = {
             userId: userId.current.value,
             userPw: userPw.current.value
         }
-
-        const condition = userInfo.userId !== '' && userInfo.userPw !== '';
+        const condition = userInfo.userId === '' || userInfo.userPw === '';
         if (condition) {
+            setNotice('모든 정보를 입력하세요');
+            setDisplay('flex');
+        } else {
             axios.post('http://localhost:3001/login', userInfo)
             .then(res => {
-                console.log(res);
+                if (res.data === 'Success') {
+                    setLoginState(true);
+                    history.push("/");
+                } else {
+                    setNotice('ID나 PW가 틀렸습니다');
+                }
             })
-        } else {
-            setDisplay('flex');
-            return;
         }
     }
 
@@ -30,7 +35,7 @@ function Login() {
         <div className={styles.Login}>
             <div className={styles.notice} style={{ display: `${display}` }}>
                 <img src='warning.png' alt='경고 느낌표'></img>
-                <p>모든 정보를 입력하세요</p>
+                <p>{notice}</p>
             </div>
             <form className={styles.loginForm} method='post'>
                 <div className={styles.inputContainer}>

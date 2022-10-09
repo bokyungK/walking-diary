@@ -3,7 +3,7 @@ import axios from 'axios';
 import Buttons from './Buttons.js';
 import styles from './Join.module.css';
 
-function Join() {
+function Join({ history }) {
     const [display, setDisplay] = React.useState('none');
     const [notice, setNotice] = React.useState('');
     const buttonName = {
@@ -65,7 +65,9 @@ function Join() {
         } else {
             axios.post('http://localhost:3001/join', userInfo)
             .then(res => {
-                console.log(res);
+                if (res.data === 'Success') {
+                    history.push("/");
+                }
             })
         }
     }

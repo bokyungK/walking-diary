@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import styles from "./Mypage.module.css";
 import Buttons from "./Buttons.js"
 
@@ -7,11 +8,10 @@ function Mypage() {
         cancel: '취소',
         submit: '변경'
     }
-
     const cancelLink = {
         path: '/',
     }
-    
+
     return (
         <div className={styles.Mypage}>
             <h2 className={styles.infoTitle}>마이페이지</h2>

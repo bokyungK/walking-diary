@@ -1,21 +1,17 @@
 import React, { useEffect, useRef } from 'react';
 import { Route } from 'react-router-dom';
 import './App.css';
-import Header from './component/Header';
-import Banner from './component/Banner';
-import Login from './component/Login';
-import Join from './component/Join';
-import Mypage from './component/Mypage';
-import MyDiary from './component/MyDiary';
-import DetailedDiary from './component/DetailedDiary';
-import WriteDiary from './component/WriteDiary';
+import Header from './component/Header.js';
+import Banner from './component/Banner.js';
+import Login from './component/Login.js';
+import Join from './component/Join.js';
+import Mypage from './component/Mypage.js';
+import MyDiary from './component/MyDiary.js';
+import DetailedDiary from './component/DetailedDiary.js';
+import WriteDiary from './component/WriteDiary.js';
 
 function App() {
-  const type = {
-    login: '로그인',
-    mypage: '마이페이지'
-  };
-
+  const [loginState, setLoginState] = React.useState(false);
   const [backgroundOpacity, setBackgroundOpacity] = React.useState('');
   const wrapper = useRef();
 
@@ -37,14 +33,14 @@ function App() {
     window.removeEventListener('scroll', handleShowHeaderBc);
     };
   }, []);
-  
+
   return (
   <div ref={wrapper}>
-    <Header backgroundOpacity={backgroundOpacity} type={type.login} />
+    <Header backgroundOpacity={backgroundOpacity} loginState={loginState} />
     <main>
       <Route path="/" exact={true} component={Banner} />
-      <Route path="/login" component={Login} />
-      <Route path="/join" component={Join}/>
+      <Route path="/login" render={() => <Login setLoginState={setLoginState} />} />
+      <Route path="/join" component={Join} />
       <Route path="/mypage" component={Mypage} />
       <Route path="/mydiary" component={MyDiary} />
       <Route path="/detail-diary" component={DetailedDiary} />
