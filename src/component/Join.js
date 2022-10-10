@@ -67,6 +67,9 @@ function Join({ history }) {
             .then(res => {
                 if (res.data === 'Success') {
                     history.push("/");
+                } else {
+                    setNotice('이미 존재하는 ID 입니다');
+                    setDisplay('flex');
                 }
             })
         }
