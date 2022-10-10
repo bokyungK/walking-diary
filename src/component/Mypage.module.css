@@ -27,6 +27,7 @@
 
 .formItem {
     margin-bottom: 1rem;
+    position: relative;
 }
 
 .itemLabel {
@@ -41,4 +42,23 @@
     color: #fff;
     font-size: 1.1rem;
     text-align: center;
+}
+
+.addPetButton {
+    border: #997000 solid 3px;
+    font-weight: bold;
+    background-color: rgba(255, 255, 255, 0);
+    border-radius: 10px;
+    position: absolute;
+    width: 50px;
+    height: 100%;
+    right: -60px;
+}
+
+.addPetButton:hover {
+    cursor: pointer;
+}
+
+.removePetButton {
+    right: -120px;
 }
