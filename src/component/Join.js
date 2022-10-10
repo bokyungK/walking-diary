@@ -82,19 +82,19 @@ function Join({ history }) {
                 <div className={styles.formSection}>
                     <div className={styles.formItem}>
                         <label className={styles.itemLabel} htmlFor='userId'>ID</label>
-                        <input onChange={handleInfoRules} ref={userId} className={styles.itemInput} id='userId' type='text' maxlength='15'/>
+                        <input onChange={handleInfoRules} ref={userId} className={styles.itemInput} id='userId' type='text' maxLength='15'/>
                     </div>
                     <div className={styles.formItem}>                       
                         <label className={styles.itemLabel} htmlFor='userPw'>PW</label>
-                        <input onChange={handleInfoRules} ref={userPw} className={styles.itemInput} id='userPw' type='password' autocomplete="off" maxlength='15'/>
+                        <input onChange={handleInfoRules} ref={userPw} className={styles.itemInput} id='userPw' type='password' autoComplete="off" maxLength='15'/>
                     </div>
                     <div className={styles.formItem}>
                         <label className={styles.itemLabel} htmlFor='userName'>이름</label>
-                        <input onChange={handleInfoRules} ref={userName} className={styles.itemInput} id='userName' type='text' maxlength='10'/>
+                        <input onChange={handleInfoRules} ref={userName} className={styles.itemInput} id='userName' type='text' maxLength='10'/>
                     </div>
                     <div className={styles.formItem}>
                         <label className={styles.itemLabel} htmlFor='userPetName'>반려견 이름</label>
-                        <input onChange={handleInfoRules} ref={userPetName} className={styles.itemInput} id='userPetName' type='text' maxlength='10'/>
+                        <input onChange={handleInfoRules} ref={userPetName} className={styles.itemInput} id='userPetName' type='text' maxLength='10'/>
                     </div>
                 </div>
                 <Buttons buttonName={buttonName} cancelLink={cancelLink} handleFormSubmit={handleFormSubmit} disabled />
