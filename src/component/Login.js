@@ -25,9 +25,15 @@ function Login({ setLoginState }) {
                 if (res.data === 'Success') {
                     setLoginState(true);
                     history.push("/");
-                } else {
-                    setNotice('ID나 PW가 틀렸습니다');
+                    return;
                 }
+                if (res.data === 'Fail_id') {
+                    setNotice('ID가 존재하지 않습니다');
+                }
+                if (res.data === 'Fail_pw') {
+                    setNotice('PW가 틀렸습니다');
+                }
+                setDisplay('flex');
             })
         }
     }
