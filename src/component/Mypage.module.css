@@ -62,3 +62,11 @@
 .removePetButton {
     right: -120px;
 }
+
+.additionalTab {
+    width: 200px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+}

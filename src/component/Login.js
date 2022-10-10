@@ -20,9 +20,10 @@ function Login({ setLoginState }) {
             setNotice('모든 정보를 입력하세요');
             setDisplay('flex');
         } else {
-            axios.post('http://localhost:3001/login', userInfo)
+            axios.post('http://localhost:3001/login', userInfo, { withCredentials: true })
             .then(res => {
                 if (res.data === 'Success') {
+                    console.log(res);
                     setLoginState(true);
                     history.push("/");
                     return;
@@ -37,7 +38,6 @@ function Login({ setLoginState }) {
             })
         }
     }
-
     return (
         <div className={styles.Login}>
             <div className={styles.notice} style={{ display: `${display}` }}>

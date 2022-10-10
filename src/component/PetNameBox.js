@@ -1,11 +1,11 @@
 import React from "react";
 import styles from "./Mypage.module.css";
 
-function PetNameBox ({ handleAddPetName, handleRemovePetName, defaultBox, appendPetNameBox }) {
+function PetNameBox ({ handleAddPetName, handleRemovePetName, defaultBox, appendPetNameBox, userPetName }) {
     return (
         <div className={styles.formItem}>
             <label className={styles.itemLabel}>반려견 이름</label>
-            <input className={styles.itemInput}></input>
+            <input className={styles.itemInput} type='text' defaultValue={userPetName} />
             {
                 defaultBox && <>
                     <button className={styles.addPetButton} onClick={handleAddPetName} type='button'>추가</button>
