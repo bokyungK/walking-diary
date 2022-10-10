@@ -9,6 +9,7 @@ function Login({ setLoginState }) {
     const [notice, setNotice] = React.useState('');
     const [display, setDisplay] = React.useState('none');
     const history = useHistory();
+    
     function handleFormSubmit() {
         const userInfo = {
             userId: userId.current.value,
@@ -45,7 +46,7 @@ function Login({ setLoginState }) {
                     </div>
                     <div>
                         <label className={styles.label} htmlFor='userPw'>PW</label>
-                        <input ref={userPw} className={styles.input} id='userPw' type='password' autocomplete="off" />
+                        <input ref={userPw} className={styles.input} id='userPw' type='password' autoComplete="off" />
                     </div>
                 </div>
                 <button onClick={handleFormSubmit} className={styles.loginButton} type="button">LOGIN</button>

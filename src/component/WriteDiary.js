@@ -17,19 +17,19 @@ function WriteDiary() {
     return (
         <section className={styles.WriteDiary}>    
             <form>
-                <label className={styles.attachmentLabel} for='image-attach'>영역을 눌러 사진을 첨부하세요!</label>
+                <label className={styles.attachmentLabel} htmlFor='image-attach'>영역을 눌러 사진을 첨부하세요!</label>
                 <input className={styles.attachmentInput} type='file' id='image-attach'/>
                 <div className={styles.diaryInfo}>
                     <input ref={dateInput} className={styles.infoItem} type='date' value={dateInput.value} disabled />
                     <fieldset className={`${styles.infoItem} ${styles.weatherRadio}`}>
                             <input type='radio' id='sunny' name='weather-radio' value='sunny' />
-                            <label for='sunny'>☀</label>
+                            <label htmlFor='sunny'>☀</label>
                             <input type='radio' id='cloudy' name='weather-radio' value='cloudy' />
-                            <label for='cloudy'>☁</label>
+                            <label htmlFor='cloudy'>☁</label>
                             <input type='radio' id='rainy'  name='weather-radio' value='rainy' />
-                            <label for='rainy'>☂</label>
+                            <label htmlFor='rainy'>☂</label>
                             <input type='radio' id='snowy'  name='weather-radio' value='snowy' />
-                            <label for='snowy'>☃</label>
+                            <label htmlFor='snowy'>☃</label>
                     </fieldset>
                     <select className={styles.infoItem}>
                         <option>인삼이</option>
