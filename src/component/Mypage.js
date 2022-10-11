@@ -1,11 +1,13 @@
 import React from "react";
+import { useHistory } from 'react-router-dom';
 import axios from "axios";
 import styles from "./Mypage.module.css";
 import Buttons from "./Buttons.js"
 import PetNameBox from "./PetNameBox.js";
 
-function Mypage() {
+function Mypage({ loginState, setLoginState }) {
     const defaultBox = true;
+    const history = useHistory();
     const buttonName = {
         cancel: '취소',
         submit: '변경'
@@ -25,13 +27,32 @@ function Mypage() {
     const [userName, setUserName] = React.useState();
     const [userId, setUserId] = React.useState();
     const [userPetName, setUserPetName] = React.useState();
-    axios.get('http://localhost:3001/info', { withCredentials: true })
-    .then(res => {
-        const data = res.data;
-        setUserName(data[0].name);
-        setUserId(data[0].id);
-        setUserPetName(data[0].dog_name);
-    });
+
+    if (loginState) {
+        axios.get('http://localhost:3001/info', { withCredentials: true })
+        .then(res => {
+            const data = res.data;
+            setUserName(data[0].name);
+            setUserId(data[0].id);
+            setUserPetName(data[0].dog_name);
+        });
+    }
+    function handleWithdrawal() {
+        axios.get('http://localhost:3001/withdrawal', { withCredentials: true })
+        .then(res => {
+            console.log(res.data);
+            setLoginState(false);
+            history.push("/");
+        });
+    }
+    function handleLogout() {
+        axios.get('http://localhost:3001/logout', { withCredentials: true })
+        .then(res => {
+            console.log(res.data);
+            setLoginState(false);
+            history.push("/login");
+        });
+    }
     return (
         <div className={styles.Mypage}>
             <h2 className={styles.infoTitle}>마이페이지</h2>
@@ -52,8 +73,8 @@ function Mypage() {
                     <PetNameBox defaultBox={defaultBox} handleAddPetName={handleAddPetName} handleRemovePetName={handleRemovePetName} appendPetNameBox={appendPetNameBox} userPetName={userPetName} setUserPetName= {setUserPetName} />
                     {   appendPetNameBox.length > 0 ? appendPetNameBox.map((item) => { return item }) : ''  }
                     <div className={styles.additionalTab}>
-                        <button className={`button ${styles.withdrawal}`} type='button'>회원탈퇴</button>
-                        <button className={`button ${styles.logout}`} type='button'>로그아웃</button>
+                        <button onClick={handleWithdrawal} className={`button ${styles.withdrawal}`} type='button'>회원탈퇴</button>
+                        <button onClick={handleLogout} className={`button ${styles.logout}`} type='button'>로그아웃</button>
                     </div>
                 </div>
                 <Buttons buttonName={buttonName} cancelLink={cancelLink} />

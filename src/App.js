@@ -41,7 +41,7 @@ function App() {
       <Route path="/" exact={true} component={Banner} />
       <Route path="/login" render={() => <Login setLoginState={setLoginState} />} />
       <Route path="/join" component={Join} />
-      <Route path="/mypage" component={Mypage} />
+      <Route path="/mypage" render={() => <Mypage loginState={loginState} setLoginState={setLoginState} />} />
       <Route path="/mydiary" component={MyDiary} />
       <Route path="/detail-diary" component={DetailedDiary} />
       <Route path="/write-diary" component={WriteDiary} />

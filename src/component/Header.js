@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Header.module.css';
 
-function Header({loginState, backgroundOpacity}) {
+function Header({ loginState, backgroundOpacity }) {
     const backgroundStyle = {
         backgroundColor: `rgba(255, 255, 255, ${backgroundOpacity})`,
     }

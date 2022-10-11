@@ -23,7 +23,6 @@ function Login({ setLoginState }) {
             axios.post('http://localhost:3001/login', userInfo, { withCredentials: true })
             .then(res => {
                 if (res.data === 'Success') {
-                    console.log(res);
                     setLoginState(true);
                     history.push("/");
                     return;
