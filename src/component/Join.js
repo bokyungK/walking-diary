@@ -4,8 +4,9 @@ import Buttons from './Buttons.js';
 import styles from './Join.module.css';
 
 function Join({ history }) {
-    const [display, setDisplay] = React.useState('none');
     const [notice, setNotice] = React.useState('');
+    const [noticeIcon, setNoticeIcon] = React.useState('warning.png');
+    const [display, setDisplay] = React.useState('none');
     const buttonName = {
         cancel: '취소',
         submit: '가입'
@@ -16,14 +17,12 @@ function Join({ history }) {
     const userId = useRef();
     const userPw = useRef();
     const userName = useRef();
-    const userPetName = useRef();
-    const userArr = [userId, userPw, userName, userPetName];
+    const userArr = [userId, userPw, userName];
     const regExp = {
         userId: [/^[a-z]+[a-z0-9]{4,}$/, 'ID 작성 : 영문과 숫자 조합(5~15자)'], 
         userPw: [/^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,}$/,
                 'PW 작성 : 영문과 숫자, 특수문자 최소 한가지 조합(8~15자)'],
         userName: [/^[가-힣]{1,}$/, '이름 작성 : 한글 사용(1~10자)'],
-        userPetName: [/^[가-힣]{1,}$/, '반려견 이름 작성 : 한글 사용(1~10자)'],
     }
 
     function handleInfoRules(e) {
@@ -47,9 +46,8 @@ function Join({ history }) {
             userId: userId.current.value,
             userPw: userPw.current.value,
             userName: userName.current.value,
-            userPetName: userPetName.current.value, 
         }
-        const condition = userInfo.userId === '' || userInfo.userPw === '' || userInfo.userName === '' || userInfo.userPetName === '';
+        const condition = userInfo.userId === '' || userInfo.userPw === '' || userInfo.userName === '';
         if(condition) {
             setNotice('모든 정보를 입력하세요');
             setDisplay('flex');
@@ -66,10 +64,18 @@ function Join({ history }) {
             axios.post('http://localhost:3001/join', userInfo)
             .then(res => {
                 if (res.data === 'Success') {
-                    history.push("/");
-                } else {
+                    setNotice('가입 성공');
+                    setNoticeIcon('correct.png');
+                    setDisplay('flex');
+                    setTimeout(() => {
+                        history.push("/login");
+                    }, 1000);
+                    return
+                }
+                if (res.data === 'Fail') {
                     setNotice('이미 존재하는 ID 입니다');
                     setDisplay('flex');
+                    return;
                 }
             })
         }
@@ -78,7 +84,7 @@ function Join({ history }) {
         <div className={styles.Join}>
             <h2 className={styles.infoTitle}>회원가입</h2>
             <div className={styles.notice} style={{ display: `${display}` }}>
-                <img src='warning.png' alt='경고 느낌표'></img>
+                <img src={noticeIcon} alt='경고 느낌표'></img>
                 <p>{notice}</p>
             </div>
             <form className={styles.infoForm}>
@@ -94,10 +100,6 @@ function Join({ history }) {
                     <div className={styles.formItem}>
                         <label className={styles.itemLabel} htmlFor='userName'>이름</label>
                         <input onChange={handleInfoRules} ref={userName} className={styles.itemInput} id='userName' type='text' maxLength='10'/>
-                    </div>
-                    <div className={styles.formItem}>
-                        <label className={styles.itemLabel} htmlFor='userPetName'>반려견 이름</label>
-                        <input onChange={handleInfoRules} ref={userPetName} className={styles.itemInput} id='userPetName' type='text' maxLength='10'/>
                     </div>
                 </div>
                 <Buttons buttonName={buttonName} cancelLink={cancelLink} handleFormSubmit={handleFormSubmit} disabled />

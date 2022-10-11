@@ -4,11 +4,12 @@ import { Link, useHistory } from 'react-router-dom';
 import styles from './Login.module.css';
 
 function Login({ setLoginState }) {
+    const history = useHistory();
     const userId = useRef();
     const userPw = useRef();
     const [notice, setNotice] = React.useState('');
+    const [noticeIcon, setNoticeIcon] = React.useState('warning.png');
     const [display, setDisplay] = React.useState('none');
-    const history = useHistory();
     
     function handleFormSubmit() {
         const userInfo = {
@@ -24,14 +25,23 @@ function Login({ setLoginState }) {
             .then(res => {
                 if (res.data === 'Success') {
                     setLoginState(true);
-                    history.push("/");
+                    setNotice('로그인 성공');
+                    setNoticeIcon('correct.png');
+                    setDisplay('flex');
+                    setTimeout(() => {
+                        history.push("/");
+                    }, 1000);
                     return;
                 }
                 if (res.data === 'Fail_id') {
                     setNotice('ID가 존재하지 않습니다');
+                    setNoticeIcon('warning.png');
+                    setDisplay('flex');
                 }
                 if (res.data === 'Fail_pw') {
                     setNotice('PW가 틀렸습니다');
+                    setNoticeIcon('warning.png');
+                    setDisplay('flex');
                 }
                 setDisplay('flex');
             })
@@ -40,7 +50,7 @@ function Login({ setLoginState }) {
     return (
         <div className={styles.Login}>
             <div className={styles.notice} style={{ display: `${display}` }}>
-                <img src='warning.png' alt='경고 느낌표'></img>
+                <img src={noticeIcon} alt='경고 느낌표'></img>
                 <p>{notice}</p>
             </div>
             <form className={styles.loginForm} method='post'>
