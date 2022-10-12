@@ -11,14 +11,6 @@ function Mypage() {
     const inputDogName1 = useRef();
     const inputDogName2 = useRef();
     const inputDogName3 = useRef();
-    const buttonName = {
-        cancel: '취소',
-        submit: '저장'
-    }
-    const cancelLink = {
-        path: '/',
-    }
-
     const [userName, setUserName] = React.useState('');
     const [userId, setUserId] = React.useState('');
     const [userDogName1, setUserDogName1] = React.useState('');
@@ -60,7 +52,7 @@ useEffect(() => {
             // 인증 받지 않은 유저
         if (data === 'There is no access_token') {
             localStorage.removeItem('loginState');
-            // history.push('/');
+            history.push('/login');
             return;
         }
             // 인증 받은 유저
@@ -89,11 +81,27 @@ useEffect(() => {
             }
         }
     })
-}, [])
+}, [history, buttonDisplay])
+
+
 
     const [notice, setNotice] = React.useState('');
     const [noticeIcon, setNoticeIcon] = React.useState('warning.png');
     const [display, setDisplay] = React.useState('none');
+
+    function handleInputValue(e) {
+        const isRegExp = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,}$/.test(e.target.value);
+        if (!isRegExp) {
+            e.target.setAttribute('regExp', false);
+            setNotice('PW 작성 : 영문과 숫자, 특수문자 최소 한가지 조합(8~15자)');
+            setNoticeIcon('warning.png');
+            setDisplay('flex');
+            return;
+        }
+        e.target.setAttribute('regExp', true);
+        setDisplay('none');
+    }
+
     function handleFormSubmit() {
         const userInfo = {
             userPw: userPw.current.value,
@@ -151,6 +159,7 @@ useEffect(() => {
             }, 1000);
         });
     }
+
     function handleLogout() {
         axios.get('http://localhost:3001/logout', { withCredentials: true })
         .then(res => {
@@ -163,18 +172,7 @@ useEffect(() => {
             }, 1000);
         });
     }
-    function handleInputValue(e) {
-        const isRegExp = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,}$/.test(e.target.value);
-        if (!isRegExp) {
-            e.target.setAttribute('regExp', false);
-            setNotice('PW 작성 : 영문과 숫자, 특수문자 최소 한가지 조합(8~15자)');
-            setNoticeIcon('warning.png');
-            setDisplay('flex');
-            return;
-        }
-        e.target.setAttribute('regExp', true);
-        setDisplay('none');
-    }
+
     return (
         <div className={styles.Mypage}>
             <h2 className={styles.infoTitle}>마이페이지</h2>
@@ -220,7 +218,7 @@ useEffect(() => {
                         <button onClick={handleLogout} className={`button ${styles.logout}`} type='button'>로그아웃</button>
                     </div>
                 </div>
-                <Buttons handleFormSubmit={handleFormSubmit} buttonName={buttonName} cancelLink={cancelLink} />
+                <Buttons handleFormSubmit={handleFormSubmit} buttonName={{cancel: '취소', submit: '저장'}} cancelLink={{path: '/'}} />
             </form>
         </div>
     )

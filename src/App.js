@@ -33,18 +33,14 @@ function App() {
     };
   }, []);
 
-  // window.onbeforeunload = () => {
-  //   localStorage.removeItem('loginState');
-  // }
-
   return (
   <div ref={wrapper}>
     <Header backgroundOpacity={backgroundOpacity} />
     <main>
       <Route path="/" exact={true} component={Banner} />
-      <Route path="/login" render={() => <Login />} />
+      <Route path="/login" component={Login} />
       <Route path="/join" component={Join} />
-      <Route path="/mypage" render={() => <Mypage />} />
+      <Route path="/mypage" component={Mypage} />
       <Route path="/mydiary" component={MyDiary} />
       <Route path="/detail-diary" component={DetailedDiary} />
       <Route path="/write-diary" component={WriteDiary} />
