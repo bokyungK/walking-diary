@@ -11,9 +11,8 @@ import DetailedDiary from './component/DetailedDiary.js';
 import WriteDiary from './component/WriteDiary.js';
 
 function App() {
-  const [loginState, setLoginState] = React.useState(false);
-  const [backgroundOpacity, setBackgroundOpacity] = React.useState('');
   const wrapper = useRef();
+  const [backgroundOpacity, setBackgroundOpacity] = React.useState('');
 
   useEffect(() => {
     const handleShowHeaderBc = (e) => {
@@ -34,14 +33,18 @@ function App() {
     };
   }, []);
 
+  // window.onbeforeunload = () => {
+  //   localStorage.removeItem('loginState');
+  // }
+
   return (
   <div ref={wrapper}>
-    <Header backgroundOpacity={backgroundOpacity} loginState={loginState} />
+    <Header backgroundOpacity={backgroundOpacity} />
     <main>
       <Route path="/" exact={true} component={Banner} />
-      <Route path="/login" render={() => <Login setLoginState={setLoginState} />} />
+      <Route path="/login" render={() => <Login />} />
       <Route path="/join" component={Join} />
-      <Route path="/mypage" render={() => <Mypage loginState={loginState} setLoginState={setLoginState} />} />
+      <Route path="/mypage" render={() => <Mypage />} />
       <Route path="/mydiary" component={MyDiary} />
       <Route path="/detail-diary" component={DetailedDiary} />
       <Route path="/write-diary" component={WriteDiary} />

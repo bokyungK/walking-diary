@@ -2,7 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Header.module.css';
 
-function Header({ loginState, backgroundOpacity }) {
+function Header({ backgroundOpacity }) {
+    const loginState = localStorage.getItem('loginState');
     const backgroundStyle = {
         backgroundColor: `rgba(255, 255, 255, ${backgroundOpacity})`,
     }
@@ -22,8 +23,8 @@ function Header({ loginState, backgroundOpacity }) {
                     <li className={styles.menuLi}><Link to="/mydiary">내 일기장</Link></li>
                     <li className={styles.menuLi}><Link to="/write-diary">일기 쓰기</Link></li>
                     <li className={styles.menuLi}><Link to={
-                        loginState ? "/mypage" : "/login"
-                    } >{loginState ? '마이페이지' : '로그인'}</Link></li>
+                        Boolean(loginState) ? "/mypage" : "/login"
+                    } >{Boolean(loginState) ? '마이페이지' : '로그인'}</Link></li>
                 </ul>
             </nav>
         </header>

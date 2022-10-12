@@ -13,7 +13,6 @@ function WriteDiary() {
     const dateInput = useRef();
     dateInput.value = new Date().toISOString().slice(0, 10);
     
-    
     return (
         <section className={styles.WriteDiary}>    
             <form>

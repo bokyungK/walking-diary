@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Link, useHistory } from 'react-router-dom';
 import styles from './Login.module.css';
 
-function Login({ setLoginState }) {
+function Login() {
     const history = useHistory();
     const userId = useRef();
     const userPw = useRef();
@@ -24,7 +24,7 @@ function Login({ setLoginState }) {
             axios.post('http://localhost:3001/login', userInfo, { withCredentials: true })
             .then(res => {
                 if (res.data === 'Success') {
-                    setLoginState(true);
+                    localStorage.setItem('loginState', true);
                     setNotice('로그인 성공');
                     setNoticeIcon('correct.png');
                     setDisplay('flex');
