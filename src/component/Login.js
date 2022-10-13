@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import axios from 'axios';
 import { Link, useHistory } from 'react-router-dom';
 import styles from './Login.module.css';
+import Notice from "./Notice";
 
 function Login() {
     const history = useHistory();
@@ -10,13 +11,20 @@ function Login() {
     const [notice, setNotice] = React.useState('');
     const [noticeIcon, setNoticeIcon] = React.useState('warning.png');
     const [display, setDisplay] = React.useState('none');
-    
+
+    function setloginNotice(notice, icon, display) {
+        setNotice(notice);
+        setNoticeIcon(icon);
+        setDisplay(display);
+    }
+
     function handleFormSubmit() {
         const userInfo = {
             userId: userId.current.value,
             userPw: userPw.current.value
         }
         const condition = userInfo.userId === '' || userInfo.userPw === '';
+
         if (condition) {
             setNotice('모든 정보를 입력하세요');
             setDisplay('flex');
@@ -25,34 +33,24 @@ function Login() {
             .then(res => {
                 if (res.data === 'Success') {
                     localStorage.setItem('loginState', true);
-                    setNotice('로그인 성공');
-                    setNoticeIcon('correct.png');
-                    setDisplay('flex');
+                    setloginNotice('로그인 성공', 'correct.png', 'flex')
                     setTimeout(() => {
                         history.push("/");
                     }, 1000);
                     return;
                 }
                 if (res.data === 'Fail_id') {
-                    setNotice('ID가 존재하지 않습니다');
-                    setNoticeIcon('warning.png');
-                    setDisplay('flex');
+                    setloginNotice('ID가 존재하지 않습니다', 'warning.png', 'flex')
                 }
                 if (res.data === 'Fail_pw') {
-                    setNotice('PW가 틀렸습니다');
-                    setNoticeIcon('warning.png');
-                    setDisplay('flex');
+                    setloginNotice('PW가 틀렸습니다', 'correct.png', 'flex')
                 }
-                setDisplay('flex');
             })
         }
     }
     return (
         <div className={styles.Login}>
-            <div className={styles.notice} style={{ display: `${display}` }}>
-                <img src={noticeIcon} alt='경고 느낌표'></img>
-                <p>{notice}</p>
-            </div>
+            <Notice notice={notice} noticeIcon={noticeIcon} display={display} />
             <form className={styles.loginForm} method='post'>
                 <div className={styles.inputContainer}>
                     <div className={styles.inputBoxes}>

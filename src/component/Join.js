@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import axios from 'axios';
 import Buttons from './Buttons.js';
 import styles from './Join.module.css';
+import Notice from "./Notice";
 
 function Join({ history }) {
     const [notice, setNotice] = React.useState('');
@@ -25,6 +26,12 @@ function Join({ history }) {
         userName: [/^[가-힣]{1,}$/, '이름 작성 : 한글 사용(1~10자)'],
     }
 
+    function setloginNotice(notice, icon, display) {
+        setNotice(notice);
+        setNoticeIcon(icon);
+        setDisplay(display);
+    }
+
     function handleInfoRules(e) {
         const getInputId = e.target.id;
         const keys = Object.keys(regExp);
@@ -33,11 +40,11 @@ function Join({ history }) {
 
         if (isRegExp) {
             e.target.setAttribute('regExp', true);
-            setDisplay('none');
+            setloginNotice('', '', 'none');
         } else {
             e.target.setAttribute('regExp', false);
             setNotice(regExp[keys[keyIndex]][1]);
-            setDisplay('flex');
+            setloginNotice(regExp[keys[keyIndex]][1], 'warning.png', 'flex');
         }
     }
 
@@ -49,8 +56,7 @@ function Join({ history }) {
         }
         const condition = userInfo.userId === '' || userInfo.userPw === '' || userInfo.userName === '';
         if(condition) {
-            setNotice('모든 정보를 입력하세요');
-            setDisplay('flex');
+            setloginNotice('모든 정보를 입력하세요', 'warning.png', 'flex');
             return;
         }
         const regExpBooleanArr = userArr.map((item) => {
@@ -58,24 +64,19 @@ function Join({ history }) {
         })
 
         if (regExpBooleanArr.includes("false")) {
-            setNotice('정보를 규칙에 맞게 입력해주세요');
-            setDisplay('flex');
+            setloginNotice('정보를 규칙에 맞게 입력해주세요', 'warning.png', 'flex');
         } else {
             axios.post('http://localhost:3001/join', userInfo)
             .then(res => {
                 if (res.data === 'Success') {
-                    setNotice('가입 성공');
-                    setNoticeIcon('correct.png');
-                    setDisplay('flex');
+                    setloginNotice('가입 성공', 'correct.png', 'flex');
                     setTimeout(() => {
                         history.push("/login");
                     }, 1000);
                     return
                 }
                 if (res.data === 'Fail') {
-                    setNotice('이미 존재하는 ID 입니다');
-                    setDisplay('flex');
-                    return;
+                    setloginNotice('이미 존재하는 ID 입니다', 'warning.png', 'flex');
                 }
             })
         }
@@ -83,10 +84,7 @@ function Join({ history }) {
     return (
         <div className={styles.Join}>
             <h2 className={styles.infoTitle}>회원가입</h2>
-            <div className={styles.notice} style={{ display: `${display}` }}>
-                <img src={noticeIcon} alt='경고 느낌표'></img>
-                <p>{notice}</p>
-            </div>
+            <Notice notice={notice} noticeIcon={noticeIcon} display={display} />
             <form className={styles.infoForm}>
                 <div className={styles.formSection}>
                     <div className={styles.formItem}>

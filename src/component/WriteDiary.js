@@ -2,8 +2,8 @@ import axios from "axios";
 import React, { useRef, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import Buttons from "./Buttons";
-import Notice from "./Notice";
 import styles from "./WriteDiary.module.css";
+import Notice from "./Notice";
 
 function WriteDiary() {
     const history = useHistory();
@@ -46,9 +46,13 @@ function WriteDiary() {
         .then(res => {
             // 토큰 체크하고 없으면 리다이렉트
             const data = res.data;
-            selectedDog.current[0].innerText = data.dog_name_1;
-            selectedDog.current[1].innerText = data.dog_name_2;
-            selectedDog.current[2].innerText = data.dog_name_3;
+            const dogNames = [data.dog_name_1, data.dog_name_2, data.dog_name_3];
+            dogNames.forEach((dogName, idx) => {
+                dogName === undefined ?
+                selectedDog.current[idx].innerText = ''
+                :
+                selectedDog.current[idx].innerText = dogName;
+            })
         })
     })
 

@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import axios from "axios";
 import styles from "./Mypage.module.css";
 import Buttons from "./Buttons.js"
+import Notice from "./Notice";
 
 function Mypage() {
     const history = useHistory();
@@ -84,10 +85,15 @@ useEffect(() => {
 }, [history, buttonDisplay])
 
 
-
     const [notice, setNotice] = React.useState('');
     const [noticeIcon, setNoticeIcon] = React.useState('warning.png');
     const [display, setDisplay] = React.useState('none');
+
+    function setloginNotice(notice, icon, display) {
+        setNotice(notice);
+        setNoticeIcon(icon);
+        setDisplay(display);
+    }
 
     function handleInputValue(e) {
         const isRegExp = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,}$/.test(e.target.value);
@@ -151,9 +157,7 @@ useEffect(() => {
         axios.get('http://localhost:3001/withdrawal', { withCredentials: true })
         .then(res => {
             localStorage.removeItem('loginState');
-            setNotice('탈퇴 완료');
-            setNoticeIcon('goodbye.png');
-            setDisplay('flex');
+            setloginNotice('탈퇴 완료', 'goodbye.png', 'flex');
             setTimeout(() => {
                 history.push("/");
             }, 1000);
@@ -164,9 +168,7 @@ useEffect(() => {
         axios.get('http://localhost:3001/logout', { withCredentials: true })
         .then(res => {
             localStorage.removeItem('loginState');
-            setNotice('로그아웃 완료');
-            setNoticeIcon('goodbye.png');
-            setDisplay('flex');
+            setloginNotice('로그아웃 완료', 'goodbye.png', 'flex');
             setTimeout(() => {
                 history.push("/");
             }, 1000);
@@ -176,10 +178,7 @@ useEffect(() => {
     return (
         <div className={styles.Mypage}>
             <h2 className={styles.infoTitle}>마이페이지</h2>
-            <div className={styles.notice} style={{ display: `${display}` }}>
-                <img src={noticeIcon} alt='경고 느낌표'></img>
-                <p>{notice}</p>
-            </div>
+            <Notice notice={notice} noticeIcon={noticeIcon} display={display} />
             <form className={styles.infoForm}>
                 <div className={styles.formSection}>
                     <div className={styles.formItem}>
