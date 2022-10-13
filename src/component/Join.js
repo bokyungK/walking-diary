@@ -30,7 +30,8 @@ function Join({ history }) {
         setNotice(notice);
         setNoticeIcon(icon);
         setDisplay(display);
-        if (path === true) {
+
+        if (path) {
             setTimeout(() => {
                 history.push(path);
             }, 1000);
