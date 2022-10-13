@@ -89,23 +89,26 @@ useEffect(() => {
     const [noticeIcon, setNoticeIcon] = React.useState('warning.png');
     const [display, setDisplay] = React.useState('none');
 
-    function setloginNotice(notice, icon, display) {
+    function changeNotice(notice, icon, display, path) {
         setNotice(notice);
         setNoticeIcon(icon);
         setDisplay(display);
+        if (path === true) {
+            setTimeout(() => {
+                history.push(path);
+            }, 1000);
+        }
     }
 
     function handleInputValue(e) {
         const isRegExp = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,}$/.test(e.target.value);
         if (!isRegExp) {
             e.target.setAttribute('regExp', false);
-            setNotice('PW 작성 : 영문과 숫자, 특수문자 최소 한가지 조합(8~15자)');
-            setNoticeIcon('warning.png');
-            setDisplay('flex');
+            changeNotice('PW 작성 : 영문과 숫자, 특수문자 최소 한가지 조합(8~15자)', 'warning.png', 'flex', false);
             return;
         }
         e.target.setAttribute('regExp', true);
-        setDisplay('none');
+        changeNotice('', '', 'none', false);
     }
 
     function handleFormSubmit() {
@@ -118,38 +121,22 @@ useEffect(() => {
         }
         
         if (userInfo.userPw === '') {
-            setNotice('비밀번호를 입력하세요');
-            setDisplay('flex');
+            changeNotice('비밀번호를 입력하세요', 'warning.png', 'flex', false);
             return;
         }
+
         if (userInfo.userNewPw !== '' && userNewPw.current.attributes.regExp.value === 'false') {
-                setNotice('새 비밀번호가 규칙에 어긋납니다');
-                setDisplay('flex');
-                return;
+            changeNotice('새 비밀번호가 규칙에 어긋납니다', 'warning.png', 'flex', false);
+            return;
         }
-        if (userDogName2 === '') {
-            
-        }
+
         axios.post('http://localhost:3001/info', userInfo, { withCredentials: true })
         .then(res => {
             if (res.data === 'Success') {
-                setNotice('저장되었습니다');
-                setNoticeIcon('correct.png');
-                setDisplay('flex');
-                setTimeout(() => {
-                    window.location.replace("/mypage")
-                }, 1000);
+                changeNotice('저장되었습니다', 'correnct.png', 'flex', "/mypage");
                 return;
             }
-            if (res.data === 'Nothing') {
-                setNotice('변경할 정보를 입력하세요');
-                setNoticeIcon('warning.png');
-                setDisplay('flex');
-                return;
-            }
-            setNotice('비밀번호가 틀렸습니다');
-            setNoticeIcon('warning.png');
-            setDisplay('flex');
+            changeNotice('비밀번호가 틀렸습니다', 'warning.png', 'flex', false);
         });
     }
 
@@ -157,10 +144,7 @@ useEffect(() => {
         axios.get('http://localhost:3001/withdrawal', { withCredentials: true })
         .then(res => {
             localStorage.removeItem('loginState');
-            setloginNotice('탈퇴 완료', 'goodbye.png', 'flex');
-            setTimeout(() => {
-                history.push("/");
-            }, 1000);
+            changeNotice('탈퇴 완료', 'goodbye.png', 'flex', "/");
         });
     }
 
@@ -168,10 +152,7 @@ useEffect(() => {
         axios.get('http://localhost:3001/logout', { withCredentials: true })
         .then(res => {
             localStorage.removeItem('loginState');
-            setloginNotice('로그아웃 완료', 'goodbye.png', 'flex');
-            setTimeout(() => {
-                history.push("/");
-            }, 1000);
+            changeNotice('로그아웃 완료', 'goodbye.png', 'flex', "/");
         });
     }
 

@@ -12,10 +12,15 @@ function Login() {
     const [noticeIcon, setNoticeIcon] = React.useState('warning.png');
     const [display, setDisplay] = React.useState('none');
 
-    function setloginNotice(notice, icon, display) {
+    function changeNotice(notice, icon, display, path) {
         setNotice(notice);
         setNoticeIcon(icon);
         setDisplay(display);
+        if (path === true) {
+            setTimeout(() => {
+                history.push(path);
+            }, 1000);
+        }
     }
 
     function handleFormSubmit() {
@@ -33,17 +38,14 @@ function Login() {
             .then(res => {
                 if (res.data === 'Success') {
                     localStorage.setItem('loginState', true);
-                    setloginNotice('로그인 성공', 'correct.png', 'flex')
-                    setTimeout(() => {
-                        history.push("/");
-                    }, 1000);
+                    changeNotice('로그인 성공', 'correct.png', 'flex', "/")
                     return;
                 }
                 if (res.data === 'Fail_id') {
-                    setloginNotice('ID가 존재하지 않습니다', 'warning.png', 'flex')
+                    changeNotice('ID가 존재하지 않습니다', 'warning.png', 'flex', false)
                 }
                 if (res.data === 'Fail_pw') {
-                    setloginNotice('PW가 틀렸습니다', 'correct.png', 'flex')
+                    changeNotice('PW가 틀렸습니다', 'correct.png', 'flex', false)
                 }
             })
         }

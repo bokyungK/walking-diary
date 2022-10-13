@@ -26,10 +26,15 @@ function Join({ history }) {
         userName: [/^[가-힣]{1,}$/, '이름 작성 : 한글 사용(1~10자)'],
     }
 
-    function setloginNotice(notice, icon, display) {
+    function changeNotice(notice, icon, display, path) {
         setNotice(notice);
         setNoticeIcon(icon);
         setDisplay(display);
+        if (path === true) {
+            setTimeout(() => {
+                history.push(path);
+            }, 1000);
+        }
     }
 
     function handleInfoRules(e) {
@@ -40,11 +45,11 @@ function Join({ history }) {
 
         if (isRegExp) {
             e.target.setAttribute('regExp', true);
-            setloginNotice('', '', 'none');
+            changeNotice('', '', 'none', false);
         } else {
             e.target.setAttribute('regExp', false);
             setNotice(regExp[keys[keyIndex]][1]);
-            setloginNotice(regExp[keys[keyIndex]][1], 'warning.png', 'flex');
+            changeNotice(regExp[keys[keyIndex]][1], 'warning.png', 'flex', false);
         }
     }
 
@@ -56,7 +61,7 @@ function Join({ history }) {
         }
         const condition = userInfo.userId === '' || userInfo.userPw === '' || userInfo.userName === '';
         if(condition) {
-            setloginNotice('모든 정보를 입력하세요', 'warning.png', 'flex');
+            changeNotice('모든 정보를 입력하세요', 'warning.png', 'flex', false);
             return;
         }
         const regExpBooleanArr = userArr.map((item) => {
@@ -64,19 +69,16 @@ function Join({ history }) {
         })
 
         if (regExpBooleanArr.includes("false")) {
-            setloginNotice('정보를 규칙에 맞게 입력해주세요', 'warning.png', 'flex');
+            changeNotice('정보를 규칙에 맞게 입력해주세요', 'warning.png', 'flex', false);
         } else {
             axios.post('http://localhost:3001/join', userInfo)
             .then(res => {
                 if (res.data === 'Success') {
-                    setloginNotice('가입 성공', 'correct.png', 'flex');
-                    setTimeout(() => {
-                        history.push("/login");
-                    }, 1000);
+                    changeNotice('가입 성공', 'correct.png', 'flex', "/login");
                     return
                 }
                 if (res.data === 'Fail') {
-                    setloginNotice('이미 존재하는 ID 입니다', 'warning.png', 'flex');
+                    changeNotice('이미 존재하는 ID 입니다', 'warning.png', 'flex', false);
                 }
             })
         }

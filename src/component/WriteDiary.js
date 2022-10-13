@@ -60,10 +60,15 @@ function WriteDiary() {
     const [noticeIcon, setNoticeIcon] = React.useState('warning.png');
     const [display, setDisplay] = React.useState('none');
 
-    function setloginNotice(notice, icon, display) {
+    function changeNotice(notice, icon, display, path) {
         setNotice(notice);
         setNoticeIcon(icon);
         setDisplay(display);
+        if (path === true) {
+            setTimeout(() => {
+                history.push(path);
+            }, 1000);
+        }
     }
 
     function handleFormSubmit() {
@@ -79,7 +84,7 @@ function WriteDiary() {
         };
 
         if (img === '' || userInfo.selectedDog === ''  || userInfo.title === '' || userInfo.content === '') {
-            setloginNotice('모든 항목을 입력해주세요', 'warning.png', 'flex');
+            changeNotice('모든 항목을 입력해주세요', 'warning.png', 'flex', false);
             return;
         }
 
@@ -91,16 +96,10 @@ function WriteDiary() {
         .then(res => {
             const data = res.data;
             if(data === 'There is no access_token' || data === 'This is not a valid token') {
-                setloginNotice('로그인이 만료되었습니다', 'warning.png', 'flex')
-                setTimeout(() => {
-                    history.push("/mypage");
-                }, 1000);
+                changeNotice('로그인이 만료되었습니다', 'warning.png', 'flex', "/mypage")
                 return
             }
-            setloginNotice('저장 성공', 'correct.png', 'flex');
-            setTimeout(() => {
-                history.push("/detail-diary");
-            }, 1000);
+            changeNotice('저장 성공', 'correct.png', 'flex', "/detail-diary");
         })
     }
 
