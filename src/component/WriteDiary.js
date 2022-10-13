@@ -1,44 +1,147 @@
-import React, { useRef } from "react";
+import axios from "axios";
+import React, { useRef, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import Buttons from "./Buttons";
+import Notice from "./Notice";
 import styles from "./WriteDiary.module.css";
 
 function WriteDiary() {
-    const buttonName = {
-        cancel: '취소',
-        submit: '저장'
+    const history = useHistory();
+    const imageAttach = useRef();;
+    const date = useRef();
+    date.value = new Date().toISOString().slice(0, 10);
+    const sunny = useRef();
+    const cloudy = useRef();
+    const rainy = useRef();
+    const snowy = useRef();
+    const weathers = [sunny, cloudy, rainy, snowy];
+    const selectedDog = useRef();
+    const title = useRef();
+    const content = useRef();
+    const [img, setImg] = React.useState('');
+    const [imageSrc, setImageSrc] = React.useState('');
+
+    function handleImagePreview(fileBlob) {
+        const reader = new FileReader();
+        reader.readAsDataURL(fileBlob);
+        return new Promise((resolve) => {
+          reader.onload = () => {
+            setImageSrc(reader.result);
+            resolve();
+          };
+        });
     }
-    const cancelLink = {
-        path: '/MyDiary'
+
+    function getTime() {
+        const today = new Date();   
+        const hours = ('0' + today.getHours()).slice(-2); 
+        const minutes = ('0' + today.getMinutes()).slice(-2);
+        const seconds = ('0' + today.getSeconds()).slice(-2); 
+        const timeString = hours + ':' + minutes  + ':' + seconds;
+        return timeString;
     }
-    const dateInput = useRef();
-    dateInput.value = new Date().toISOString().slice(0, 10);
     
+    useEffect(() => {
+        axios.get('http://localhost:3001/get-dogs', { withCredentials: true })
+        .then(res => {
+            // 토큰 체크하고 없으면 리다이렉트
+            const data = res.data;
+            selectedDog.current[0].innerText = data.dog_name_1;
+            selectedDog.current[1].innerText = data.dog_name_2;
+            selectedDog.current[2].innerText = data.dog_name_3;
+        })
+    })
+
+    const [notice, setNotice] = React.useState('');
+    const [noticeIcon, setNoticeIcon] = React.useState('warning.png');
+    const [display, setDisplay] = React.useState('none');
+
+    function setloginNotice(notice, icon, display) {
+        setNotice(notice);
+        setNoticeIcon(icon);
+        setDisplay(display);
+    }
+
+    function handleFormSubmit() {
+        const weather = weathers.filter((item) => {
+            return item.current.checked === true;
+        })
+        const userInfo = {
+            date: [date.value, getTime()],
+            weather: weather[0].current.value,
+            selectedDog: selectedDog.current.value,
+            title: title.current.value,
+            content: content.current.value,
+        };
+
+        if (img === '' || userInfo.selectedDog === ''  || userInfo.title === '' || userInfo.content === '') {
+            setloginNotice('모든 항목을 입력해주세요', 'warning.png', 'flex');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('img', img);
+        formData.append('info', JSON.stringify(userInfo));
+
+        axios.post('http://localhost:3001/write-diary', formData, { withCredentials: true })
+        .then(res => {
+            const data = res.data;
+            if(data === 'There is no access_token' || data === 'This is not a valid token') {
+                setloginNotice('로그인이 만료되었습니다', 'warning.png', 'flex')
+                setTimeout(() => {
+                    history.push("/mypage");
+                }, 1000);
+                return
+            }
+            setloginNotice('저장 성공', 'correct.png', 'flex');
+            setTimeout(() => {
+                history.push("/detail-diary");
+            }, 1000);
+        })
+    }
+
     return (
         <section className={styles.WriteDiary}>    
-            <form>
-                <label className={styles.attachmentLabel} htmlFor='image-attach'>영역을 눌러 사진을 첨부하세요!</label>
-                <input className={styles.attachmentInput} type='file' id='image-attach'/>
+            <Notice notice={notice} noticeIcon={noticeIcon} display={display} />
+            <form encType='multipart/form-data'>
+                <label className={styles.attachmentLabel} htmlFor='image-attach'>
+                    <span>영역을 눌러 사진을 첨부하세요!</span>
+                {
+                    imageSrc && <>
+                        <img className={styles.previewImage} src={imageSrc} alt='첨부 이미지 미리보기' />,
+                        <button onClick={(e) => {
+                            e.preventDefault();
+                            imageAttach.current.value = '';
+                            setImageSrc('');
+                        }} type='button'><img src='cancel.png' alt='첨부 이미지 삭제 버튼' /></button>
+                    </>
+                }
+                </label>
+                <input ref={imageAttach} onChange={(e) => {
+                    handleImagePreview(e.target.files[0]);
+                    setImg(e.target.files[0]);
+                    }} className={styles.attachmentInput} id='image-attach' type='file' accept='image/*' />
                 <div className={styles.diaryInfo}>
-                    <input ref={dateInput} className={styles.infoItem} type='date' value={dateInput.value} disabled />
+                    <input ref={date} className={styles.infoItem} type='date' value={date.value} disabled />
                     <fieldset className={`${styles.infoItem} ${styles.weatherRadio}`}>
-                            <input type='radio' id='sunny' name='weather-radio' value='sunny' />
+                            <input ref={sunny} type='radio' id='sunny' name='weather-radio' value='sunny' defaultChecked />
                             <label htmlFor='sunny'>☀</label>
-                            <input type='radio' id='cloudy' name='weather-radio' value='cloudy' />
+                            <input ref={cloudy} type='radio' id='cloudy' name='weather-radio' value='cloudy' />
                             <label htmlFor='cloudy'>☁</label>
-                            <input type='radio' id='rainy'  name='weather-radio' value='rainy' />
+                            <input ref={rainy} type='radio' id='rainy'  name='weather-radio' value='rainy' />
                             <label htmlFor='rainy'>☂</label>
-                            <input type='radio' id='snowy'  name='weather-radio' value='snowy' />
+                            <input ref={snowy} type='radio' id='snowy'  name='weather-radio' value='snowy' />
                             <label htmlFor='snowy'>☃</label>
                     </fieldset>
-                    <select className={styles.infoItem}>
-                        <option>인삼이</option>
-                        <option>산삼이</option>
-                        <option>홍삼이</option>
+                    <select ref={selectedDog} className={styles.infoItem}>
+                        <option></option>
+                        <option></option>
+                        <option></option>
                     </select>
                 </div>
-                <input className={`${styles.writingInfo} ${styles.titleInfo}`} type='text' placeholder='제목을 입력하세요'/>
-                <textarea className={`${styles.writingInfo} ${styles.contentInfo}`} placeholder='일기를 입력하세요'></textarea>
-                <Buttons buttonName={buttonName} cancelLink={cancelLink} />
+                <input ref={title} className={`${styles.writingInfo} ${styles.titleInfo}`} type='text' placeholder='제목을 입력하세요' maxLength='30' />
+                <textarea ref={content} className={`${styles.writingInfo} ${styles.contentInfo}`} placeholder='일기를 입력하세요' maxLength='500' ></textarea>
+                <Buttons buttonName={{ cancel: '취소', submit: '저장' }} cancelLink={{ path: '/MyDiary' }} handleFormSubmit={handleFormSubmit} />
             </form>
         </section>
     )
