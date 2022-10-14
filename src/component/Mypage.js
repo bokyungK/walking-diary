@@ -119,9 +119,9 @@ useEffect(() => {
         const userInfo = {
             userPw: userPw.current.value,
             userNewPw: userNewPw.current.value,
-            userDogName1: inputDogName1.current.value,
-            userDogName2: inputDogName2.current.value,
-            userDogName3: inputDogName3.current.value,
+            userDogName1: [inputDogName1.current.value, userDogName1 === inputDogName1.current.value ? true : false],
+            userDogName2: [inputDogName2.current.value, userDogName2 === inputDogName2.current.value ? true : false],
+            userDogName3: [inputDogName3.current.value, userDogName3 === inputDogName3.current.value ? true : false],
         }
         
         if (userInfo.userPw === '') {
@@ -134,16 +134,11 @@ useEffect(() => {
             return;
         }
 
-        const condition = userDogName1 === userInfo.userDogName1 &&
-         userDogName2 === userInfo.userDogName2 &&
-         userDogName3 === userInfo.userDogName3;
-
-        console.log(condition);
-        
-        // if (condition) {
-        //     changeNotice('새 비밀번호가 규칙에 어긋납니다', 'warning.png', 'flex', false);
-        //     return;
-        // }
+        const condition = userInfo.userDogName1[1] && userInfo.userDogName2[1] && userInfo.userDogName3[1];
+        if (condition && userInfo.userNewPw === '') {
+            changeNotice('변경된 정보가 없습니다', 'warning.png', 'flex', false);
+            return;
+        }
 
         axios.post('http://localhost:3001/info', userInfo, { withCredentials: true })
         .then(res => {

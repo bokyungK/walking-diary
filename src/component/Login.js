@@ -53,7 +53,7 @@ function Login() {
                     changeNotice('ID가 존재하지 않습니다', 'warning.png', 'flex', false)
                 }
                 if (res.data === 'Fail_pw') {
-                    changeNotice('PW가 틀렸습니다', 'correct.png', 'flex', false)
+                    changeNotice('PW가 틀렸습니다', 'warning.png', 'flex', false)
                 }
             })
         }
