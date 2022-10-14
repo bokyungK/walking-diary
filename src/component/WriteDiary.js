@@ -9,7 +9,7 @@ function WriteDiary() {
     const history = useHistory();
     const imageAttach = useRef();;
     const date = useRef();
-    date.value = new Date().toISOString().slice(0, 10);
+    date.value = `${new Date().getFullYear()}-${new Date().getMonth() + 1 < 10 ? '0' + (new Date().getMonth() + 1) : new Date().getMonth() + 1}-${new Date().getDate() < 10 ? '0' + new Date().getDate() : new Date().getDate()}`;
     const sunny = useRef();
     const cloudy = useRef();
     const rainy = useRef();

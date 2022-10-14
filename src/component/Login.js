@@ -1,11 +1,10 @@
 import React, { useRef } from 'react';
 import axios from 'axios';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styles from './Login.module.css';
 import Notice from "./Notice";
 
-function Login() {
-    const history = useHistory();
+function Login({ history }) {
     const userId = useRef();
     const userPw = useRef();
     const [notice, setNotice] = React.useState('');

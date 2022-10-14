@@ -50,6 +50,23 @@
     outline: none;
 }
 
+.weatherRadio input[type=radio] {
+    display: none;
+}
+
+.weatherRadio input[type=radio] + label {
+    font-size: 1.5rem;
+    color: darkgray;
+}
+
+.weatherRadio input[type=radio] + label:not(:last-child) {
+    margin-right: 1rem;
+}
+
+.weatherRadio input[type=radio]:checked + label {
+    color: black;
+}
+
 .diaryTitle {
     width: 100%;
     background-color: white;
@@ -67,6 +84,7 @@
     padding: 0 1rem;
     line-height: 2rem;
     border: 3px solid #997000;
+    border-bottom: 1px solid #997000;
     margin-bottom: 3rem;
     background: repeating-linear-gradient(white, white 30px, #997000 30px, #997000 33px);
     border-radius: 10px;
