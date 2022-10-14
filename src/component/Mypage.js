@@ -98,6 +98,13 @@ useEffect(() => {
             setTimeout(() => {
                 history.push(path);
             }, 1000);
+            return;
+        }
+
+        if (path === 0) {
+            setTimeout(() => {
+                history.go(path);
+            }, 1000);
         }
     }
 
@@ -134,7 +141,7 @@ useEffect(() => {
         axios.post('http://localhost:3001/info', userInfo, { withCredentials: true })
         .then(res => {
             if (res.data === 'Success') {
-                changeNotice('저장되었습니다', 'correnct.png', 'flex', "/mypage");
+                changeNotice('저장되었습니다', 'correct.png', 'flex', 0);
                 return;
             }
             changeNotice('비밀번호가 틀렸습니다', 'warning.png', 'flex', false);
@@ -142,8 +149,17 @@ useEffect(() => {
     }
 
     function handleWithdrawal() {
+        if (userPw.current.value === '') {
+            changeNotice('비밀번호를 입력해주세요', 'goodbye.png', 'flex', "/");
+            return;
+        }
+
         axios.get('http://localhost:3001/withdrawal', { withCredentials: true })
         .then(res => {
+            const data = res.data;
+            if (data === 'Fail') {
+                changeNotice('비밀번호가 틀렸습니다', 'warning.png', 'flex', false);
+            }
             localStorage.removeItem('loginState');
             changeNotice('탈퇴 완료', 'goodbye.png', 'flex', "/");
         });
