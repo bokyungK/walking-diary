@@ -70,19 +70,15 @@ useEffect(() => {
             }
             if (data.dog_name_2 !== '') {
                 setUserDogName2(data.dog_name_2);
-                const copyArr = [...buttonDisplay];
-                copyArr[0] = 'block';
-                setButtonDisplay(copyArr);
+                handleAddPetName();
             }
             if (data.dog_name_3 !== '') {
                 setUserDogName3(data.dog_name_3);
-                const copyArr = [...buttonDisplay];
-                copyArr[1] = 'block';
-                setButtonDisplay(copyArr);
+                handleAddPetName();
             }
         }
     })
-}, [history, buttonDisplay])
+}, [history, handleAddPetName])
 
 
     const [notice, setNotice] = React.useState('');
@@ -137,6 +133,17 @@ useEffect(() => {
             changeNotice('새 비밀번호가 규칙에 어긋납니다', 'warning.png', 'flex', false);
             return;
         }
+
+        const condition = userDogName1 === userInfo.userDogName1 &&
+         userDogName2 === userInfo.userDogName2 &&
+         userDogName3 === userInfo.userDogName3;
+
+        console.log(condition);
+        
+        // if (condition) {
+        //     changeNotice('새 비밀번호가 규칙에 어긋납니다', 'warning.png', 'flex', false);
+        //     return;
+        // }
 
         axios.post('http://localhost:3001/info', userInfo, { withCredentials: true })
         .then(res => {
@@ -208,7 +215,7 @@ useEffect(() => {
                     <div className={styles.formItem} style={{display: `${buttonDisplay[1]}`}}>
                         <label className={styles.itemLabel}>반려견 이름</label>
                         <input ref={inputDogName3} className={styles.itemInput} type='text' defaultValue={userDogName3} />
-                        <button className={styles.addPetButton} onClick={handleRemovePetName} custom-attribute='3' type='button'>삭제</button>
+                        <button className={styles.addPetButton} onClick={(e) => {handleRemovePetName(e)}} custom-attribute='3' type='button'>삭제</button>
                     </div>
                     <div className={styles.additionalTab}>
                         <button onClick={handleWithdrawal} className={`button ${styles.withdrawal}`} type='button'>회원탈퇴</button>
