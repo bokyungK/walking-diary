@@ -1,11 +1,13 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from 'react-router-dom';
 import styles from './MyDiary.module.css';
 import Notice from './Notice';
 
 function MyDiary({ notice, noticeIcon, display, changeNotice, setDiaryInfo, star, setStar }) {
     const history = useHistory();
+    const favoriteSlider = useRef();
+    const sliderSection = useRef();
     const [cards, setCards] = useState([{
         title: '',
         date: '',
@@ -72,12 +74,45 @@ useEffect(() => {
     })
 }, [changeNotice]);
 
+const [startX, setStartX] = useState(0);
+const [currentX, setCurrentX] = useState(0);
+
+function startSlider(e) {
+    setStartX(e.clientX);
+}
+
+function moveSlider(e) {
+    if (e.screenX === 0) {
+        return;
+    }
+    const previousMoveDist = parseInt(favoriteSlider.current.attributes.movedist.value);
+    setCurrentX(previousMoveDist + (e.clientX - startX));
+    favoriteSlider.current.style.transform = `translateX(${currentX}px)`;
+}
+
+function endSlider(e) {
+    if (currentX > 0) {
+        favoriteSlider.current.style.transform = `translateX(0)`;
+        favoriteSlider.current.attributes.movedist.value = 0;
+        return
+    }
+    const sliderSectionWidth = sliderSection.current.clientWidth;
+    const favoriteSliderWidth = favoriteSlider.current.clientWidth;
+    const subWidth = -(favoriteSliderWidth - sliderSectionWidth);
+    if (sliderSectionWidth > favoriteSliderWidth + currentX) {
+        favoriteSlider.current.style.transform = `translateX(${subWidth}px)`;
+        favoriteSlider.current.attributes.movedist.value = subWidth;
+        return;
+    }
+    favoriteSlider.current.attributes.movedist.value = currentX;
+}
+
     return (
         <div className={styles.MyDiary}>
             <Notice notice={notice} noticeIcon={noticeIcon} display={display} />
-            <section className={`${styles.mydiarySection} ${styles.favoriteSection}`}>
+            <section ref={sliderSection} className={`${styles.mydiarySection} ${styles.favoriteSection}`}>
                 <h2 className={styles.sectionTitle}>즐겨찾기</h2>
-                <ul className={styles.favorites}>
+                <ul ref={favoriteSlider} onDragStart={startSlider} onDrag={moveSlider} onDragEnd={endSlider} className={styles.favorites} movedist='0'>
                     {
                         favoriteCards[0].title !== '' ? favoriteCards.map((item) => {
                         return (
@@ -91,14 +126,14 @@ useEffect(() => {
                                 imageName: item.imageName,
                                 starred: item.starred,
                                 imageSrc: item.imageSrc,
-                            })}} className={styles.favoriteItem}>
+                            })}} className={styles.favoriteItem} key={item.imageName}>
                             <img src={item.imageSrc} alt='산책 사진'/>
                             <div>
                                 <div>🦴제목🦴 {item.title}</div>
                                 <div>🦴날짜🦴 {item.date}</div>
                                 <div>with {item.dogName}</div>
                             </div>
-                        </li>) }) : <span>즐겨찾기에 등록된 일기가 없습니다!</span>
+                        </li>)}) : <span>즐겨찾기에 등록된 일기가 없습니다!</span>
                     }
                 </ul>
             </section>
@@ -125,7 +160,7 @@ useEffect(() => {
                                     imageName: item.imageName,
                                     starred: item.starred,
                                     imageSrc: item.imageSrc,
-                                })}} className={styles.diary}>
+                                })}} className={styles.diary} key={item.imageName}>
                                 <img src={item.imageSrc} alt='산책 사진'/>
                                 <div>
                                     <div>🦴제목🦴 {item.title}</div>

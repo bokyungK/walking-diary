@@ -9,6 +9,7 @@ body {
   height: 100%;
   font-weight: bold;
   background-image: url(../public/background.png);
+  /* user-select: none; */
 }
 
 a { 
@@ -19,6 +20,8 @@ a {
 a:hover { 
   color: #F0CA61;
 }
+
+/* user-select: none; */
 
 main {
   width: 100%;
