@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Route, useHistory } from 'react-router-dom';
+import { Route, useHistory, useLocation } from 'react-router-dom';
 import './App.css';
 import Header from './component/Header.js';
 import Banner from './component/Banner.js';
@@ -12,6 +12,7 @@ import WriteDiary from './component/WriteDiary.js';
 
 function App() {
   const history = useHistory();
+  const location = useLocation();
   const wrapper = useRef();
   const [backgroundOpacity, setBackgroundOpacity] = useState('');
   const [diaryInfo, setDiaryInfo] = useState({
@@ -33,13 +34,9 @@ function App() {
  function handleStarImage() {
   if (star.src === 'filled_star.png') {
       setStar({...star, src: 'empty_star.png', starred: ''});
-      // axios로 백엔드에 스타 컬럼 빈 값으로 변경해주기
-      // 지금 별이 켜져 있을 때
   } else {
       setStar({...star, src: 'filled_star.png', starred: true});
-      // 지금 별이 꺼져 있을 때
   }
-  // axios로 백엔드에 스타 컬럼 true로 변경해주기
 }
 
 
@@ -88,6 +85,13 @@ function App() {
     }
 }
 
+  const [checkLocation, setCheckLocation] = useState(false);
+  useEffect(() => {
+    if (location.pathname !== '/detail-diary') {
+      setCheckLocation(false);
+    }
+  }, [checkLocation, setCheckLocation, location.pathname])
+
   return (
   <div ref={wrapper}>
     <Header backgroundOpacity={backgroundOpacity} />
@@ -101,7 +105,9 @@ function App() {
          setDiaryInfo={setDiaryInfo} star={star} setStar={setStar} />} />
       <Route path="/detail-diary" render={() =>
          <DetailedDiary diaryInfo={diaryInfo} setDiaryInfo={setDiaryInfo}
-         notice={notice} noticeIcon={noticeIcon} display={display} changeNotice={changeNotice} star={star} setStar={setStar} handleStarImage={handleStarImage} /> } />
+         notice={notice} noticeIcon={noticeIcon} display={display} changeNotice={changeNotice}
+         star={star} setStar={setStar} handleStarImage={handleStarImage} checkLocation={checkLocation}
+         setCheckLocation={setCheckLocation} /> } />
       <Route path="/write-diary" component={WriteDiary} />
     </main>
   </div>
