@@ -5,7 +5,7 @@ import styles from './DetailedDiary.module.css';
 import Notice from './Notice';
 import Buttons from './Buttons';
 
-function DetailedDiary({ notice, noticeIcon, display, changeNotice, diaryInfo, star, handleStarImage, checkLocation, setCheckLocation } ) {
+function DetailedDiary({ notice, noticeIcon, display, changeNotice, diaryInfo, setDiaryInfo, star, handleStarImage, checkLocation, setCheckLocation } ) {
     const history = useHistory();
     const sunny = useRef();
     const cloudy = useRef();
@@ -13,68 +13,30 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, diaryInfo, s
     const snowy = useRef();
     const selectedDog = useRef();
 
+    // read
     useEffect(() => {
-        if (star.starred === diaryInfo.starred) {
-            return;
-        }
-        axios.post('http://localhost:3001/starred', {...star, imageName: diaryInfo.imageName}, { withCredentials: true })
-    }, [star, diaryInfo.starred, diaryInfo.imageName]);
+        const currentDiary = localStorage.getItem('imageName');
+        axios.post('http://localhost:3001/get-diary', { imageName: currentDiary }, { withCredentials: true })
+        .then(res => {
+            const data = res.data;
+            setDiaryInfo({
+                ...data,
+                date: data.date.slice(0, 10),
+                imageName: data.image_name,
+                imageSrc: `http://localhost:3001/${data.id}/${data.image_name}`,
+                dogName: data.dog_name,
+            });
 
-    useEffect(() => {
-        const weathers = [sunny, cloudy, rainy, snowy];
-        weathers.forEach((item) => {
-            if (item.current.value === diaryInfo.weather) {
-                item.current.checked = true;
-            } else {
-            }
+            const weathers = [sunny, cloudy, rainy, snowy];
+            weathers.forEach((item) => {
+                if (item.current.value === diaryInfo.weather) {
+                    item.current.checked = true;
+                }
+            })
         })
-
-    }, [diaryInfo.weather, checkLocation])
+    }, [setDiaryInfo, diaryInfo.weather, checkLocation])
 
     // update
-    const imageAttach = useRef();
-    const [imageSrc, setImageSrc] = React.useState('');
-    const [img, setImg] = React.useState('');
-
-    function handleImagePreview(fileBlob) {
-        const reader = new FileReader();
-        reader.readAsDataURL(fileBlob);
-        return new Promise((resolve) => {
-          reader.onload = () => {
-            setImageSrc(reader.result);
-            resolve();
-          };
-        });
-    }
-    
-    function handleDiaryUpdate() {
-        setCheckLocation(true);
-    }
-
-    const title = useRef();
-    const content = useRef();
-
-    function handleFormSubmit() {
-        const weathers = [sunny, cloudy, rainy, snowy];
-        const weather = weathers.filter((item) => item.current.checked === true);
-
-        const newDiaryInfo = {
-            weather: weather[0].current.value,
-            dogName: selectedDog.current.value,
-            title: title.current.value,
-            content: content.current.value,
-            imageName: diaryInfo.imageName,
-        }
-
-        axios.post('http://localhost:3001/update-diary', newDiaryInfo, { withCredentials: true })
-        .then((res) => {
-            const data = res.data;
-            if (data === 'Success') {
-                changeNotice('변경되었습니다', 'correct.png', 'flex', '/detail-diary');
-                setCheckLocation(false);
-            }
-        })
-    }
 
     useEffect(() => {
         if (checkLocation) {
@@ -99,6 +61,59 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, diaryInfo, s
         }
     }, [checkLocation])
 
+    const imageAttach = useRef();
+    const [imageSrc, setImageSrc] = React.useState('');
+    const [img, setImg] = React.useState('');
+
+    function handleImagePreview(fileBlob) {
+        const reader = new FileReader();
+        reader.readAsDataURL(fileBlob);
+        return new Promise((resolve) => {
+            reader.onload = () => {
+            setImageSrc(reader.result);
+            resolve();
+            };
+        });
+    }
+
+    function handleDiaryUpdate() {
+        setCheckLocation(true);
+    }
+
+    const title = useRef();
+    const content = useRef();
+
+    function handleFormSubmit() {
+        const weathers = [sunny, cloudy, rainy, snowy];
+        const weather = weathers.filter((item) => item.current.checked === true);
+        const newDiaryInfo = {
+            weather: weather[0].current.value,
+            dogName: selectedDog.current.value,
+            title: title.current.value,
+            content: content.current.value,
+            imageName: diaryInfo.imageName,
+        }
+        const postData = [];
+
+        if (img === '') {
+            postData.push(newDiaryInfo);
+        } else {
+            const formData = new FormData();
+            formData.append('img', img);
+            formData.append('info', JSON.stringify(newDiaryInfo));
+            postData.push(formData);
+        }
+
+        axios.post('http://localhost:3001/update-diary', postData[0], { withCredentials: true })
+        .then((res) => {
+            const data = res.data;
+            if (data === 'Success') {
+                changeNotice('변경되었습니다', 'correct.png', 'flex', '/detail-diary');
+                setCheckLocation(false);
+            }
+        })
+    }
+
     // delete
     function handleDiaryDelete() {
         axios.post('http://localhost:3001/delete-diary', diaryInfo, { withCredentials: true })
@@ -109,6 +124,14 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, diaryInfo, s
             }
         })
     }
+
+    // control star state
+    useEffect(() => {
+        if (star.starred === diaryInfo.starred) {
+            return;
+        }
+        axios.post('http://localhost:3001/starred', {...star, imageName: diaryInfo.imageName}, { withCredentials: true })
+    }, [star, diaryInfo.starred, diaryInfo.imageName]);
 
     return (
     <section className={styles.DetailedDiary}>
@@ -135,6 +158,7 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, diaryInfo, s
                                 e.preventDefault();
                                 imageAttach.current.value = '';
                                 setImageSrc('');
+                                setImg('');
                             }} type='button'><img src='cancel.png' alt='첨부 이미지 삭제 버튼' /></button>
                         </>
                     }

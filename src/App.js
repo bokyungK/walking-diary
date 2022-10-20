@@ -39,7 +39,6 @@ function App() {
   }
 }
 
-
   useEffect(() => {
     const handleShowHeaderBc = (e) => {
       const wrapperHeight = wrapper.current.clientHeight;
@@ -102,7 +101,7 @@ function App() {
       <Route path="/mypage" component={Mypage} />
       <Route path="/mydiary" render={() =>
          <MyDiary notice={notice} noticeIcon={noticeIcon} display={display} changeNotice={changeNotice} 
-         setDiaryInfo={setDiaryInfo} star={star} setStar={setStar} />} />
+         star={star} setStar={setStar} />} />
       <Route path="/detail-diary" render={() =>
          <DetailedDiary diaryInfo={diaryInfo} setDiaryInfo={setDiaryInfo}
          notice={notice} noticeIcon={noticeIcon} display={display} changeNotice={changeNotice}

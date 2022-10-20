@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import styles from './MyDiary.module.css';
 import Notice from './Notice';
 
-function MyDiary({ notice, noticeIcon, display, changeNotice, setDiaryInfo, star, setStar }) {
+function MyDiary({ notice, noticeIcon, display, changeNotice, star, setStar }) {
     const history = useHistory();
     const favoriteSlider = useRef();
     const sliderSection = useRef();
@@ -25,7 +25,7 @@ function MyDiary({ notice, noticeIcon, display, changeNotice, setDiaryInfo, star
         } else {
             setStar({...star, src: 'empty_star.png', starred: 'false'});
         }
-        setDiaryInfo(diaryInfo);
+        localStorage.setItem('imageName', diaryInfo.imageName);
         history.push('/detail-diary');
     }
 
