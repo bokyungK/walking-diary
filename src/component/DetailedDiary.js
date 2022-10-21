@@ -32,14 +32,15 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLocatio
                 starred: data.starred,
             })
 
+            const currentWeather = data.weather;
             const weathers = [sunny, cloudy, rainy, snowy];
             weathers.forEach((item) => {
-                if (item.current.value === diaryInfo.weather) {
+                if (item.current.value === currentWeather) {
                     item.current.checked = true;
                 }
             })
         })
-        }, [setDiaryInfo, diaryInfo.weather, changeNotice])
+        }, [checkLocation])
 
     // update
 
@@ -50,7 +51,9 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLocatio
             axios.get('http://localhost:3001/get-dogs', { withCredentials: true })
             .then(res => {
                 const data = res.data;
+                const currentDogName = data.dogName;
                 const dogNames = [data.dog_name_1, data.dog_name_2, data.dog_name_3];
+
                 dogNames.forEach((dogName, idx) => {
                     if (dogName === '') {
                         selectedDog.current[idx].innerText = ''
@@ -58,20 +61,21 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLocatio
                         selectedDog.current[idx].innerText = dogName;
                     }
 
-                    if (dogName === diaryInfo.dogName) {
+                    if (dogName === currentDogName) {
                         selectedDog.current.value = dogName;
                     }
                 })
 
+                const currentWeather = data.weather;
                 const weathers = [sunny, cloudy, rainy, snowy];
                 weathers.forEach((item) => {
-                    if (item.current.value === diaryInfo.weather) {
+                    if (item.current.value === currentWeather) {
                         item.current.checked = true;
                     }
                 })
             })
         }
-    }, [checkLocation, diaryInfo.dogName, diaryInfo.weather, diaryInfo.imageSrc])
+    }, [checkLocation])
 
     const imageAttach = useRef();
     const [imageSrc, setImageSrc] = React.useState('');

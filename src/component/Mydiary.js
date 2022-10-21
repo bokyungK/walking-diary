@@ -19,6 +19,7 @@ function MyDiary({ notice, noticeIcon, display, changeNotice }) {
         date: '',
         dogName: '',
     }]);
+    const mounted = useRef(false);
 
     function handleOpenDiary(imageName) {
         localStorage.setItem('imageName', imageName);
@@ -32,6 +33,8 @@ useEffect(() => {
         return;
     }
 
+    const order = localStorage.getItem('order');
+    console.log(order);
     axios.get("http://localhost:3001/diary", { withCredentials: true })
     .then(res => {
         const data = res.data;
@@ -69,26 +72,13 @@ useEffect(() => {
         const clearData = Object.values(data).filter((name) => name !== '');
         setDogNames(clearData);
     })
-}, [changeNotice, setCards, setFavoriteCards]);
+}, []);
 
     // control order
+
     function handleOrderSelect(e) {
         const order = e.target.value;
         localStorage.setItem('order', order);
-        axios.post('http://localhost:3001/order', {order: order}, { withCredentials: true })
-        .then(res => {
-            const data = res.data;
-            const dataArr = data.map((item) => {
-                return {
-                    date: item.date.slice(0, 10),
-                    title: item.title,
-                    dogName: item.dog_name,
-                    imageName: item.image_name,
-                    imageSrc: `http://localhost:3001/${item.id}/${item.image_name}`,
-                }
-            })
-            setCards(dataArr);
-        })
     }
 
     // favorite slider
