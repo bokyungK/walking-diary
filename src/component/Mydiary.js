@@ -19,66 +19,92 @@ function MyDiary({ notice, noticeIcon, display, changeNotice }) {
         date: '',
         dogName: '',
     }]);
-    const mounted = useRef(false);
 
     function handleOpenDiary(imageName) {
         localStorage.setItem('imageName', imageName);
         history.push('/detail-diary');
     }
 
-useEffect(() => {
-    const loginState = localStorage.getItem('loginState');
-    if (!loginState) {
-        changeNotice('로그인 후 사용하세요', 'warning.png', 'flex', "/login");
-        return;
-    }
-
-    const order = localStorage.getItem('order');
-    console.log(order);
-    axios.get("http://localhost:3001/diary", { withCredentials: true })
-    .then(res => {
-        const data = res.data;
-        if (data === 'There is no access_token' || data === 'This is not a valid token') {
-            changeNotice('로그인이 만료되었습니다', 'warning.png', 'flex', "/login");
+    useEffect(() => {
+        const loginState = localStorage.getItem('loginState');
+        if (!loginState) {
+            changeNotice('로그인 후 사용하세요', 'warning.png', 'flex', "/login");
             return;
         }
-        if (data[0] !== '') {
-            const starredData = data[0].map((item) => {
-                return { 
-                    date: item.date.slice(0, 10),
-                    dogName: item.dog_name,               
-                    title: item.title,
-                    imageName: item.image_name,
-                    imageSrc: `http://localhost:3001/${item.id}/${item.image_name}`,
-            }})
-            setFavoriteCards(starredData);
-        }
-        if (data[1].length > 0) {
-            const diaryData = data[1].map((item) => {
+
+        const getOrder = localStorage.getItem('order');
+        axios.post("http://localhost:3001/diaries", { order: getOrder }, { withCredentials: true })
+        .then(res => {
+            const data = res.data;
+            if (data === 'There is no access_token' || data === 'This is not a valid token') {
+                changeNotice('로그인이 만료되었습니다', 'warning.png', 'flex', "/login");
+                return;
+            }
+
+            if (data[0] !== '') {
+                const starredData = data[0].map((item) => {
+                    return { 
+                        date: item.date.slice(0, 10),
+                        dogName: item.dog_name,               
+                        title: item.title,
+                        imageName: item.image_name,
+                        imageSrc: `http://localhost:3001/${item.id}/${item.image_name}`,
+                }})
+                setFavoriteCards(starredData);
+            }
+
+            if (data[1].length > 0) {
+                const diaryData = data[1].map((item) => {
                 return {
                     date: item.date.slice(0, 10),
                     dogName: item.dog_name,
                     title: item.title,
                     imageName: item.image_name,
                     imageSrc: `http://localhost:3001/${item.id}/${item.image_name}`,
-            }})
-            setCards(diaryData);
-        }
-    })
+                }})
+                setCards(diaryData);
+            }
+        })
 
-    axios.get('http://localhost:3001/get-dogs', { withCredentials: true })
-    .then(res => {
-        const data = res.data;
-        const clearData = Object.values(data).filter((name) => name !== '');
-        setDogNames(clearData);
-    })
-}, []);
+        axios.get('http://localhost:3001/get-dogs', { withCredentials: true })
+        .then(res => {
+            const data = res.data;
+            const clearData = Object.values(data).filter((name) => name !== '');
+            setDogNames(clearData);
+        })
+    }, []);
 
     // control order
 
+    // useEffect(() => {
+    //     const getOrder = localStorage.getItem('order');
+    //     if (getOrder) {
+    //     }
+    // }, [])
+    
+    const target = useRef();
     function handleOrderSelect(e) {
         const order = e.target.value;
         localStorage.setItem('order', order);
+
+        if (order === '정렬 방식') {
+            return;
+        }
+
+        axios.post('http://localhost:3001/order', {order: order}, { withCredentials: true })
+        .then(res => {
+            const data = res.data;
+            const dataArr = data.map((item) => {
+                return {
+                    date: item.date.slice(0, 10),
+                    title: item.title,
+                    dogName: item.dog_name,
+                    imageName: item.image_name,
+                    imageSrc: `http://localhost:3001/${item.id}/${item.image_name}`,
+                }
+            })
+            setCards(dataArr);
+        })
     }
 
     // favorite slider
@@ -137,7 +163,7 @@ useEffect(() => {
             </section>
             <section className={`${styles.mydiarySection} ${styles.diarySection}`}>
                 <h2 className={styles.sectionTitle}>일기 보관함</h2>
-                <select onChange={handleOrderSelect} className={styles.diarySort} name='sort'>
+                <select ref={target} onChange={handleOrderSelect} className={styles.diarySort} name='sort'>
                     <option className={styles.sortOption}>정렬 방식</option>
                     <option className={styles.sortOption}>최신 순서</option>
                     <option className={styles.sortOption}>오래된 순서</option>
