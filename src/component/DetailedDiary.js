@@ -1,31 +1,36 @@
 import axios from 'axios';
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from "react-router-dom";
 import styles from './DetailedDiary.module.css';
 import Notice from './Notice';
 import Buttons from './Buttons';
 
-function DetailedDiary({ notice, noticeIcon, display, changeNotice, diaryInfo, setDiaryInfo, star, handleStarImage, checkLocation, setCheckLocation } ) {
+function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLocation, setCheckLocation } ) {
     const history = useHistory();
     const sunny = useRef();
     const cloudy = useRef();
     const rainy = useRef();
     const snowy = useRef();
     const selectedDog = useRef();
+    const [diaryInfo, setDiaryInfo] = useState('');
 
     // read
     useEffect(() => {
         const currentDiary = localStorage.getItem('imageName');
         axios.post('http://localhost:3001/get-diary', { imageName: currentDiary }, { withCredentials: true })
-        .then(res => {
+        .then((res) => {
             const data = res.data;
+        
             setDiaryInfo({
-                ...data,
                 date: data.date.slice(0, 10),
+                weather: data.weather,
+                dogName: data.dog_name,
+                title: data.title,
+                content: data.content,
                 imageName: data.image_name,
                 imageSrc: `http://localhost:3001/${data.id}/${data.image_name}`,
-                dogName: data.dog_name,
-            });
+                starred: data.starred,
+            })
 
             const weathers = [sunny, cloudy, rainy, snowy];
             weathers.forEach((item) => {
@@ -34,7 +39,7 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, diaryInfo, s
                 }
             })
         })
-    }, [setDiaryInfo, diaryInfo.weather, checkLocation])
+        }, [setDiaryInfo, diaryInfo.weather, changeNotice])
 
     // update
 
@@ -55,6 +60,13 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, diaryInfo, s
 
                     if (dogName === diaryInfo.dogName) {
                         selectedDog.current.value = dogName;
+                    }
+                })
+
+                const weathers = [sunny, cloudy, rainy, snowy];
+                weathers.forEach((item) => {
+                    if (item.current.value === diaryInfo.weather) {
+                        item.current.checked = true;
                     }
                 })
             })
@@ -126,18 +138,25 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, diaryInfo, s
     }
 
     // control star state
-    useEffect(() => {
-        if (star.starred === diaryInfo.starred) {
-            return;
-        }
-        axios.post('http://localhost:3001/starred', {...star, imageName: diaryInfo.imageName}, { withCredentials: true })
-    }, [star, diaryInfo.starred, diaryInfo.imageName]);
+    function handleStarImage() {
+        const starred = [];
+        const reverseState = diaryInfo.starred === 0 ? 1 : 0;
+        const imageName = localStorage.getItem('imageName');
+
+        setDiaryInfo({...diaryInfo, starred: reverseState});
+        starred.push(reverseState);
+
+        axios.post('http://localhost:3001/starred', {starred: starred[0], imageName: imageName}, { withCredentials: true })
+        .then((res) => {
+            // console.log(res.data);
+        })
+    }
 
     return (
     <section className={styles.DetailedDiary}>
         <Notice notice={notice} noticeIcon={noticeIcon} display={display} />
         <div className={styles.crudIcon}>
-            <button onClick={handleStarImage} className={styles.icons}><img className={styles.iconImages} src={star.src} alt='즐겨찾기 버튼'/></button>
+            <button onClick={handleStarImage} className={styles.icons}><img className={styles.iconImages} src={diaryInfo.starred ? 'filled_star.png':'empty_star.png'} alt='즐겨찾기 버튼'/></button>
             <button onClick={handleDiaryUpdate} className={styles.icons}><img className={styles.iconImages} src='edit.png' alt='수정 버튼' /></button>
             <button onClick={handleDiaryDelete} className={styles.icons}><img className={styles.iconImages} src='delete.png' alt='삭제 버튼' /></button>
             <button onClick={() => history.push("/mydiary")} className={styles.icons}><img className={styles.iconImages} src='cancel.png' alt='뒤로가기 버튼'/></button>

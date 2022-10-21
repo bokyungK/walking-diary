@@ -15,29 +15,6 @@ function App() {
   const location = useLocation();
   const wrapper = useRef();
   const [backgroundOpacity, setBackgroundOpacity] = useState('');
-  const [diaryInfo, setDiaryInfo] = useState({
-    date: '',
-    weather: '',
-    dogName: '',
-    title: '',
-    content: '',
-    imageName: '',
-    starred: '',
-    imageSrc: '',
-  });
-
-  const [star, setStar] = React.useState({
-    src: 'empty_star.png',
-    starred: '',
- });
-
- function handleStarImage() {
-  if (star.src === 'filled_star.png') {
-      setStar({...star, src: 'empty_star.png', starred: ''});
-  } else {
-      setStar({...star, src: 'filled_star.png', starred: true});
-  }
-}
 
   useEffect(() => {
     const handleShowHeaderBc = (e) => {
@@ -100,13 +77,10 @@ function App() {
       <Route path="/join" component={Join} />
       <Route path="/mypage" component={Mypage} />
       <Route path="/mydiary" render={() =>
-         <MyDiary notice={notice} noticeIcon={noticeIcon} display={display} changeNotice={changeNotice} 
-         star={star} setStar={setStar} />} />
+         <MyDiary notice={notice} noticeIcon={noticeIcon} display={display} changeNotice={changeNotice} />} />
       <Route path="/detail-diary" render={() =>
-         <DetailedDiary diaryInfo={diaryInfo} setDiaryInfo={setDiaryInfo}
-         notice={notice} noticeIcon={noticeIcon} display={display} changeNotice={changeNotice}
-         star={star} setStar={setStar} handleStarImage={handleStarImage} checkLocation={checkLocation}
-         setCheckLocation={setCheckLocation} /> } />
+         <DetailedDiary notice={notice} noticeIcon={noticeIcon} display={display} changeNotice={changeNotice}
+         checkLocation={checkLocation} setCheckLocation={setCheckLocation} /> } />
       <Route path="/write-diary" component={WriteDiary} />
     </main>
   </div>

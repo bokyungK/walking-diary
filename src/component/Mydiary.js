@@ -4,10 +4,11 @@ import { useHistory } from 'react-router-dom';
 import styles from './MyDiary.module.css';
 import Notice from './Notice';
 
-function MyDiary({ notice, noticeIcon, display, changeNotice, star, setStar }) {
+function MyDiary({ notice, noticeIcon, display, changeNotice }) {
     const history = useHistory();
     const favoriteSlider = useRef();
     const sliderSection = useRef();
+    const [dogNames, setDogNames] = useState([]);
     const [cards, setCards] = useState([{
         title: '',
         date: '',
@@ -19,13 +20,8 @@ function MyDiary({ notice, noticeIcon, display, changeNotice, star, setStar }) {
         dogName: '',
     }]);
 
-    function handleOpenDiary(diaryInfo) {
-        if (diaryInfo.starred === 'true') {
-            setStar({...star, src: 'filled_star.png', starred: 'true'});
-        } else {
-            setStar({...star, src: 'empty_star.png', starred: 'false'});
-        }
-        localStorage.setItem('imageName', diaryInfo.imageName);
+    function handleOpenDiary(imageName) {
+        localStorage.setItem('imageName', imageName);
         history.push('/detail-diary');
     }
 
@@ -47,65 +43,87 @@ useEffect(() => {
             const starredData = data[0].map((item) => {
                 return { 
                     date: item.date.slice(0, 10),
-                    weather: item.weather,
                     dogName: item.dog_name,               
                     title: item.title,
-                    content: item.content,
                     imageName: item.image_name,
-                    starred: item.starred,
                     imageSrc: `http://localhost:3001/${item.id}/${item.image_name}`,
             }})
             setFavoriteCards(starredData);
         }
         if (data[1].length > 0) {
             const diaryData = data[1].map((item) => {
-                return { 
+                return {
                     date: item.date.slice(0, 10),
-                    weather: item.weather,
-                    dogName: item.dog_name,               
+                    dogName: item.dog_name,
                     title: item.title,
-                    content: item.content,
                     imageName: item.image_name,
-                    starred: item.starred,
                     imageSrc: `http://localhost:3001/${item.id}/${item.image_name}`,
             }})
             setCards(diaryData);
         }
     })
-}, [changeNotice]);
 
-const [startX, setStartX] = useState(0);
-const [currentX, setCurrentX] = useState(0);
+    axios.get('http://localhost:3001/get-dogs', { withCredentials: true })
+    .then(res => {
+        const data = res.data;
+        const clearData = Object.values(data).filter((name) => name !== '');
+        setDogNames(clearData);
+    })
+}, [changeNotice, setCards, setFavoriteCards]);
 
-function startSlider(e) {
-    setStartX(e.clientX);
-}
-
-function moveSlider(e) {
-    if (e.screenX === 0) {
-        return;
+    // control order
+    function handleOrderSelect(e) {
+        const order = e.target.value;
+        localStorage.setItem('order', order);
+        axios.post('http://localhost:3001/order', {order: order}, { withCredentials: true })
+        .then(res => {
+            const data = res.data;
+            const dataArr = data.map((item) => {
+                return {
+                    date: item.date.slice(0, 10),
+                    title: item.title,
+                    dogName: item.dog_name,
+                    imageName: item.image_name,
+                    imageSrc: `http://localhost:3001/${item.id}/${item.image_name}`,
+                }
+            })
+            setCards(dataArr);
+        })
     }
-    const previousMoveDist = parseInt(favoriteSlider.current.attributes.movedist.value);
-    setCurrentX(previousMoveDist + (e.clientX - startX));
-    favoriteSlider.current.style.transform = `translateX(${currentX}px)`;
-}
 
-function endSlider(e) {
-    if (currentX > 0) {
-        favoriteSlider.current.style.transform = `translateX(0)`;
-        favoriteSlider.current.attributes.movedist.value = 0;
-        return
+    // favorite slider
+    const [startX, setStartX] = useState(0);
+    const [currentX, setCurrentX] = useState(0);
+
+    function startSlider(e) {
+        setStartX(e.clientX);
     }
-    const sliderSectionWidth = sliderSection.current.clientWidth;
-    const favoriteSliderWidth = favoriteSlider.current.clientWidth;
-    const subWidth = -(favoriteSliderWidth - sliderSectionWidth);
-    if (sliderSectionWidth > favoriteSliderWidth + currentX) {
-        favoriteSlider.current.style.transform = `translateX(${subWidth}px)`;
-        favoriteSlider.current.attributes.movedist.value = subWidth;
-        return;
+
+    function moveSlider(e) {
+        if (e.screenX === 0) {
+            return;
+        }
+        const previousMoveDist = parseInt(favoriteSlider.current.attributes.movedist.value);
+        setCurrentX(previousMoveDist + (e.clientX - startX));
+        favoriteSlider.current.style.transform = `translateX(${currentX}px)`;
     }
-    favoriteSlider.current.attributes.movedist.value = currentX;
-}
+
+    function endSlider(e) {
+        if (currentX > 0) {
+            favoriteSlider.current.style.transform = `translateX(0)`;
+            favoriteSlider.current.attributes.movedist.value = 0;
+            return
+        }
+        const sliderSectionWidth = sliderSection.current.clientWidth;
+        const favoriteSliderWidth = favoriteSlider.current.clientWidth;
+        const subWidth = -(favoriteSliderWidth - sliderSectionWidth);
+        if (sliderSectionWidth > favoriteSliderWidth + currentX) {
+            favoriteSlider.current.style.transform = `translateX(${subWidth}px)`;
+            favoriteSlider.current.attributes.movedist.value = subWidth;
+            return;
+        }
+        favoriteSlider.current.attributes.movedist.value = currentX;
+    }
 
     return (
         <div className={styles.MyDiary}>
@@ -116,17 +134,7 @@ function endSlider(e) {
                     {
                         favoriteCards[0].title !== '' ? favoriteCards.map((item) => {
                         return (
-                        <li onClick={() => {
-                            handleOpenDiary({
-                                date: item.date,
-                                weather: item.weather,
-                                dogName: item.dogName,
-                                title: item.title,
-                                content: item.content,
-                                imageName: item.imageName,
-                                starred: item.starred,
-                                imageSrc: item.imageSrc,
-                            })}} className={styles.favoriteItem} key={item.imageName}>
+                        <li onClick={() => handleOpenDiary(item.imageName)} className={styles.favoriteItem} key={item.imageName}>
                             <img src={item.imageSrc} alt='산책 사진'/>
                             <div>
                                 <div>🦴제목🦴 {item.title}</div>
@@ -139,28 +147,25 @@ function endSlider(e) {
             </section>
             <section className={`${styles.mydiarySection} ${styles.diarySection}`}>
                 <h2 className={styles.sectionTitle}>일기 보관함</h2>
-                <select className={styles.diarySort} name='sort'>
+                <select onChange={handleOrderSelect} className={styles.diarySort} name='sort'>
                     <option className={styles.sortOption}>정렬 방식</option>
-                    <option className={styles.sortOption}>최근순서</option>
-                    <option className={styles.sortOption}>날짜순서</option>
-                    <option className={styles.sortOption}>강아지</option>
+                    <option className={styles.sortOption}>최신 순서</option>
+                    <option className={styles.sortOption}>오래된 순서</option>
+                    {
+                        dogNames.length > 0 ?
+                            dogNames.map(name => {
+                                    return <option className={styles.sortOption} key={name}>{name}</option>
+                            })
+                        :
+                            ''
+                    }
                 </select>
                 <div className={styles.diaryContainer}>
                     <ul className={styles.diaries}>
                         {
                             cards[0].title !== '' ? cards.map((item) => {
                             return (
-                            <li onClick={() => {
-                                handleOpenDiary({
-                                    date: item.date,
-                                    weather: item.weather,
-                                    dogName: item.dogName,
-                                    title: item.title,
-                                    content: item.content,
-                                    imageName: item.imageName,
-                                    starred: item.starred,
-                                    imageSrc: item.imageSrc,
-                                })}} className={styles.diary} key={item.imageName}>
+                            <li onClick={() => handleOpenDiary(item.imageName)} className={styles.diary} key={item.imageName}>
                                 <img src={item.imageSrc} alt='산책 사진'/>
                                 <div>
                                     <div>🦴제목🦴 {item.title}</div>
@@ -170,12 +175,6 @@ function endSlider(e) {
                             </li>) }) : <span>작성된 일기가 없습니다!</span>
                         }
                     </ul>
-                    {/* <button className={`${styles.diaryButton} ${styles.leftButton}`} type='button'>
-                        <img className={styles.buttonImage} src='images/previous.png' />
-                    </button>
-                    <button className={`${styles.diaryButton} ${styles.rightButton}`} type='button'>
-                        <img className={styles.buttonImage} src='images/next.png' />
-                    </button> */}
                 </div>
             </section>
         </div>
