@@ -106,8 +106,11 @@ function WriteDiary() {
             if(data === 'There is no access_token' || data === 'This is not a valid token') {
                 changeNotice('로그인이 만료되었습니다', 'warning.png', 'flex', "/mypage")
                 return
+
             }
+            localStorage.setItem('imageName', data);
             changeNotice('저장 성공', 'correct.png', 'flex', "/detail-diary");
+
         })
     }
 

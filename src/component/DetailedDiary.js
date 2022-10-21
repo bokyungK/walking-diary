@@ -71,7 +71,7 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLocatio
                 })
             })
         }
-    }, [checkLocation])
+    }, [checkLocation, diaryInfo.dogName, diaryInfo.weather, diaryInfo.imageSrc])
 
     const imageAttach = useRef();
     const [imageSrc, setImageSrc] = React.useState('');
@@ -140,7 +140,7 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLocatio
     // control star state
     function handleStarImage() {
         const starred = [];
-        const reverseState = diaryInfo.starred === 0 ? 1 : 0;
+        const reverseState = diaryInfo.starred !== 1 ? 1 : 0;
         const imageName = localStorage.getItem('imageName');
 
         setDiaryInfo({...diaryInfo, starred: reverseState});
