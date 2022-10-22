@@ -73,7 +73,7 @@
 }
 
 .diarySort {
-    width: 90px;
+    width: max-content;
     height: 30px;
     margin-bottom: 1rem;
     font-weight: bold;

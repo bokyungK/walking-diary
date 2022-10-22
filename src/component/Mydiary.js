@@ -8,6 +8,7 @@ function MyDiary({ notice, noticeIcon, display, changeNotice }) {
     const history = useHistory();
     const favoriteSlider = useRef();
     const sliderSection = useRef();
+    const orderBox = useRef();
     const [dogNames, setDogNames] = useState([]);
     const [cards, setCards] = useState([{
         title: '',
@@ -64,6 +65,7 @@ function MyDiary({ notice, noticeIcon, display, changeNotice }) {
                 }})
                 setCards(diaryData);
             }
+
         })
 
         axios.get('http://localhost:3001/get-dogs', { withCredentials: true })
@@ -72,24 +74,24 @@ function MyDiary({ notice, noticeIcon, display, changeNotice }) {
             const clearData = Object.values(data).filter((name) => name !== '');
             setDogNames(clearData);
         })
+        .then(() => {
+            const getOrder = localStorage.getItem('order');
+
+            if (getOrder) {
+                orderBox.current.value = getOrder;
+            }
+        })
     }, []);
 
     // control order
-
-    // useEffect(() => {
-    //     const getOrder = localStorage.getItem('order');
-    //     if (getOrder) {
-    //     }
-    // }, [])
-    
-    const target = useRef();
     function handleOrderSelect(e) {
         const order = e.target.value;
-        localStorage.setItem('order', order);
 
         if (order === '정렬 방식') {
             return;
         }
+
+        localStorage.setItem('order', order);
 
         axios.post('http://localhost:3001/order', {order: order}, { withCredentials: true })
         .then(res => {
@@ -141,6 +143,19 @@ function MyDiary({ notice, noticeIcon, display, changeNotice }) {
         favoriteSlider.current.attributes.movedist.value = currentX;
     }
 
+// show more data when scrolling
+// useEffect(() => {
+//     function showMoreData() {
+//         console.log()
+//     }
+
+//     window.addEventListener('scroll', showMoreData);
+
+//     return () => {
+//     window.removeEventListener('scroll', showMoreData);
+//     };
+// }, []);
+
     return (
         <div className={styles.MyDiary}>
             <Notice notice={notice} noticeIcon={noticeIcon} display={display} />
@@ -163,7 +178,7 @@ function MyDiary({ notice, noticeIcon, display, changeNotice }) {
             </section>
             <section className={`${styles.mydiarySection} ${styles.diarySection}`}>
                 <h2 className={styles.sectionTitle}>일기 보관함</h2>
-                <select ref={target} onChange={handleOrderSelect} className={styles.diarySort} name='sort'>
+                <select ref={orderBox} onChange={handleOrderSelect} className={styles.diarySort} name='sort' >
                     <option className={styles.sortOption}>정렬 방식</option>
                     <option className={styles.sortOption}>최신 순서</option>
                     <option className={styles.sortOption}>오래된 순서</option>

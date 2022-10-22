@@ -18,18 +18,15 @@ function App() {
 
   useEffect(() => {
     const handleShowHeaderBc = (e) => {
-      const wrapperHeight = wrapper.current.clientHeight;
-      const windowHeight = e.currentTarget.innerHeight;
-      const scrollHeight = wrapperHeight - windowHeight;
-      const scrollPosition = e.currentTarget.scrollY;
+      const browserHeight = e.target.scrollingElement.clientHeight;
+      const documentHeight = e.target.scrollingElement.scrollHeight;
+      const scrollHeight = documentHeight - browserHeight;
+      const scrollPosition = e.target.scrollingElement.scrollTop;
 
-      if (scrollPosition / scrollHeight <= 1) {
-        setBackgroundOpacity(scrollPosition / scrollHeight);
-      } else {
-        setBackgroundOpacity(1);
-      }
+      setBackgroundOpacity((scrollPosition / scrollHeight).toFixed(1));
     }
     window.addEventListener('scroll', handleShowHeaderBc);
+
     return () => {
     window.removeEventListener('scroll', handleShowHeaderBc);
     };
