@@ -8,9 +8,8 @@ function MyDiary({ notice, noticeIcon, display, changeNotice }) {
     const history = useHistory();
     const favoriteSlider = useRef();
     const sliderSection = useRef();
-    const orderBox = useRef();
-    // const getOrder = localStorage.getItem('order');
-    // const [order, setOrder] = useState(getOrder);
+    const getOrder = localStorage.getItem('order');
+    const [order, setOrder] = useState(getOrder);
     const [dogNames, setDogNames] = useState([]);
     const [cards, setCards] = useState([{
         title: '',
@@ -43,56 +42,44 @@ function MyDiary({ notice, noticeIcon, display, changeNotice }) {
                 return;
             }
 
-            const getData = (callBack = '') => {
-                if (data === 'Nothing') {
-                    return;
-                }
-                    // favorite cards
-                    const starredData = [];
-                    data.forEach((item) => {
-                        if (item.starred === 1) {
-                            starredData.push({
-                                date: item.date.slice(0, 10),
-                                dogName: item.dog_name,               
-                                title: item.title,
-                                imageName: item.image_name,
-                                imageSrc: `http://localhost:3001/${item.id}/${item.image_name}`
-                            })
-                        }
-                    })
-                    setFavoriteCards(starredData);
-    
-                    // cards
-                    const diaryData = data.map((item) => {
-                    return {
-                        date: item.date.slice(0, 10),
-                        dogName: item.dog_name,
-                        title: item.title,
-                        imageName: item.image_name,
-                        imageSrc: `http://localhost:3001/${item.id}/${item.image_name}`,
-                    }})
-                    const controlledData = callBack !== ''? callBack(diaryData) : diaryData;
-                    setCards(controlledData);
-            }
-
-            const getOrder = localStorage.getItem('order');
-            switch(getOrder) {
-                case null || '오래된 순서':
-                    getData();
-                    break;
-                case '최신 순서':
-                    const reverseData = (diaryData) => {
-                        return diaryData.reverse();
-                    }
-                    getData(reverseData);
-                    break;
-                default:
-                    const getSpecificDog = (diaryData) => {
-                        return diaryData.filter((diary) => {
-                            return diary.dogName === getOrder;
+            if (data !== 'Nothing') {
+                // favorite cards
+                const starredData = [];
+                data.forEach((item) => {
+                    if (item.starred === 1) {
+                        starredData.push({
+                            date: item.date.slice(0, 10),
+                            dogName: item.dog_name,               
+                            title: item.title,
+                            imageName: item.image_name,
+                            imageSrc: `http://localhost:3001/${item.id}/${item.image_name}`
                         })
                     }
-                    getData(getSpecificDog);
+                })
+                setFavoriteCards(starredData);
+
+                // cards
+                const diaryData = data.map((item) => {
+                return {
+                    date: item.date.slice(0, 10),
+                    dogName: item.dog_name,
+                    title: item.title,
+                    imageName: item.image_name,
+                    imageSrc: `http://localhost:3001/${item.id}/${item.image_name}`,
+                }})
+
+                switch(getOrder) {
+                    case null || '오래된 순서':
+                        setCards(diaryData);
+                        break;
+                    case '최신 순서':
+                        setCards(diaryData.reverse());
+                        break;
+                    default:
+                        setCards(diaryData.filter((data) => {
+                            return data.dogName === getOrder;
+                        }));
+                }
             }
         })
 
@@ -102,22 +89,12 @@ function MyDiary({ notice, noticeIcon, display, changeNotice }) {
             const clearData = Object.values(data).filter((name) => name !== '');
             setDogNames(clearData);
         })
-        .then(() => {
-            const getOrder = localStorage.getItem('order');
-
-            if (getOrder) {
-                orderBox.current.value = getOrder;
-            }
-        })
     }, []);
 
     // control order
-
-    // useEffect(() => {
-
-    // }, [order])
     function handleOrderSelect(e) {
         const order = e.target.value;
+        setOrder(order);
 
         if (order === '정렬 방식') {
             return;
@@ -229,7 +206,7 @@ function MyDiary({ notice, noticeIcon, display, changeNotice }) {
             </section>
             <section className={`${styles.mydiarySection} ${styles.diarySection}`}>
                 <h2 className={styles.sectionTitle}>일기 보관함</h2>
-                <select ref={orderBox} onChange={handleOrderSelect} className={styles.diarySort} name='sort' >
+                <select onChange={handleOrderSelect} className={styles.diarySort} name='sort' value={order}>
                     <option className={styles.sortOption}>정렬 방식</option>
                     <option className={styles.sortOption}>최신 순서</option>
                     <option className={styles.sortOption}>오래된 순서</option>
