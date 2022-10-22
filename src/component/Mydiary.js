@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useHistory } from 'react-router-dom';
 import styles from './MyDiary.module.css';
 import Notice from './Notice';
@@ -9,6 +9,8 @@ function MyDiary({ notice, noticeIcon, display, changeNotice }) {
     const favoriteSlider = useRef();
     const sliderSection = useRef();
     const orderBox = useRef();
+    // const getOrder = localStorage.getItem('order');
+    // const [order, setOrder] = useState(getOrder);
     const [dogNames, setDogNames] = useState([]);
     const [cards, setCards] = useState([{
         title: '',
@@ -33,8 +35,7 @@ function MyDiary({ notice, noticeIcon, display, changeNotice }) {
             return;
         }
 
-        const getOrder = localStorage.getItem('order');
-        axios.post("http://localhost:3001/diaries", { order: getOrder }, { withCredentials: true })
+        axios.get("http://localhost:3001/diaries", { withCredentials: true })
         .then(res => {
             const data = res.data;
             if (data === 'There is no access_token' || data === 'This is not a valid token') {
@@ -42,30 +43,57 @@ function MyDiary({ notice, noticeIcon, display, changeNotice }) {
                 return;
             }
 
-            if (data[0] !== '') {
-                const starredData = data[0].map((item) => {
-                    return { 
+            const getData = (callBack = '') => {
+                if (data === 'Nothing') {
+                    return;
+                }
+                    // favorite cards
+                    const starredData = [];
+                    data.forEach((item) => {
+                        if (item.starred === 1) {
+                            starredData.push({
+                                date: item.date.slice(0, 10),
+                                dogName: item.dog_name,               
+                                title: item.title,
+                                imageName: item.image_name,
+                                imageSrc: `http://localhost:3001/${item.id}/${item.image_name}`
+                            })
+                        }
+                    })
+                    setFavoriteCards(starredData);
+    
+                    // cards
+                    const diaryData = data.map((item) => {
+                    return {
                         date: item.date.slice(0, 10),
-                        dogName: item.dog_name,               
+                        dogName: item.dog_name,
                         title: item.title,
                         imageName: item.image_name,
                         imageSrc: `http://localhost:3001/${item.id}/${item.image_name}`,
-                }})
-                setFavoriteCards(starredData);
+                    }})
+                    const controlledData = callBack !== ''? callBack(diaryData) : diaryData;
+                    setCards(controlledData);
             }
 
-            if (data[1].length > 0) {
-                const diaryData = data[1].map((item) => {
-                return {
-                    date: item.date.slice(0, 10),
-                    dogName: item.dog_name,
-                    title: item.title,
-                    imageName: item.image_name,
-                    imageSrc: `http://localhost:3001/${item.id}/${item.image_name}`,
-                }})
-                setCards(diaryData);
+            const getOrder = localStorage.getItem('order');
+            switch(getOrder) {
+                case null || '오래된 순서':
+                    getData();
+                    break;
+                case '최신 순서':
+                    const reverseData = (diaryData) => {
+                        return diaryData.reverse();
+                    }
+                    getData(reverseData);
+                    break;
+                default:
+                    const getSpecificDog = (diaryData) => {
+                        return diaryData.filter((diary) => {
+                            return diary.dogName === getOrder;
+                        })
+                    }
+                    getData(getSpecificDog);
             }
-
         })
 
         axios.get('http://localhost:3001/get-dogs', { withCredentials: true })
@@ -84,6 +112,10 @@ function MyDiary({ notice, noticeIcon, display, changeNotice }) {
     }, []);
 
     // control order
+
+    // useEffect(() => {
+
+    // }, [order])
     function handleOrderSelect(e) {
         const order = e.target.value;
 
@@ -93,7 +125,7 @@ function MyDiary({ notice, noticeIcon, display, changeNotice }) {
 
         localStorage.setItem('order', order);
 
-        axios.post('http://localhost:3001/order', {order: order}, { withCredentials: true })
+        axios.get('http://localhost:3001/diaries', { withCredentials: true })
         .then(res => {
             const data = res.data;
             const dataArr = data.map((item) => {
@@ -105,7 +137,19 @@ function MyDiary({ notice, noticeIcon, display, changeNotice }) {
                     imageSrc: `http://localhost:3001/${item.id}/${item.image_name}`,
                 }
             })
-            setCards(dataArr);
+
+            switch(order) {
+                case null || '오래된 순서':
+                    setCards(dataArr);
+                    break;
+                case '최신 순서':
+                    setCards(dataArr.reverse());
+                    break;
+                default:
+                    setCards(dataArr.filter((data) => {
+                        return data.dogName === order;
+                    }));
+            }
         })
     }
 
@@ -143,18 +187,25 @@ function MyDiary({ notice, noticeIcon, display, changeNotice }) {
         favoriteSlider.current.attributes.movedist.value = currentX;
     }
 
-// show more data when scrolling
-// useEffect(() => {
-//     function showMoreData() {
-//         console.log()
-//     }
-
-//     window.addEventListener('scroll', showMoreData);
-
-//     return () => {
-//     window.removeEventListener('scroll', showMoreData);
-//     };
-// }, []);
+    // show more data when scrolling
+    useEffect(() => {
+        const showMoreData = (e) => {
+          const browserHeight = e.target.scrollingElement.clientHeight;
+          const documentHeight = e.target.scrollingElement.scrollHeight;
+          const scrollHeight = documentHeight - browserHeight;
+          const scrollPosition = e.target.scrollingElement.scrollTop;
+            
+          if (scrollHeight === scrollPosition) {
+            console.log(true);
+          }
+        }
+        
+        window.addEventListener('scroll', showMoreData);
+    
+        return () => {
+        window.removeEventListener('scroll', showMoreData);
+        };
+      }, []);
 
     return (
         <div className={styles.MyDiary}>
