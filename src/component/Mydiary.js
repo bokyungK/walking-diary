@@ -42,7 +42,6 @@ function MyDiary({ notice, noticeIcon, display, changeNotice }) {
                 return;
             }
 
-            console.log(data);
             if (data !== 'Nothing') {
                 // favorite cards
                 const starredData = [];

@@ -1,6 +1,7 @@
 .Mypage {
     height: calc( 100vh - 80px);
     display: flex;
+    position: relative;
     flex-direction: column;
     justify-content: center;
 }

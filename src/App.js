@@ -65,6 +65,8 @@ function App() {
     }
   }, [checkLocation, setCheckLocation, location.pathname])
 
+  const [checkMessage, setCheckMessage] = useState({ display: 'none' });
+
   return (
   <div ref={wrapper}>
     <Header backgroundOpacity={backgroundOpacity} />
@@ -72,12 +74,14 @@ function App() {
       <Route path="/" exact={true} component={Banner} />
       <Route path="/login" component={Login} />
       <Route path="/join" component={Join} />
-      <Route path="/mypage" component={Mypage} />
+      <Route path="/mypage" render={() => <Mypage
+       checkMessage={checkMessage} setCheckMessage={setCheckMessage} /> } />
       <Route path="/mydiary" render={() =>
          <MyDiary notice={notice} noticeIcon={noticeIcon} display={display} changeNotice={changeNotice} />} />
       <Route path="/detail-diary" render={() =>
          <DetailedDiary notice={notice} noticeIcon={noticeIcon} display={display} changeNotice={changeNotice}
-         checkLocation={checkLocation} setCheckLocation={setCheckLocation} /> } />
+         checkLocation={checkLocation} setCheckLocation={setCheckLocation} checkMessage={checkMessage}
+         setCheckMessage={setCheckMessage} /> } />
       <Route path="/write-diary" component={WriteDiary} />
     </main>
   </div>

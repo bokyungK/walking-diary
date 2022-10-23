@@ -3,9 +3,10 @@ import { useHistory } from 'react-router-dom';
 import axios from "axios";
 import styles from "./Mypage.module.css";
 import Buttons from "./Buttons.js"
-import Notice from "./Notice";
+import Notice from "./Notice.js";
+import CheckMessage from './CheckMessage.js';
 
-function Mypage() {
+function Mypage({ checkMessage, setCheckMessage }) {
     const history = useHistory();
     const userPw = useRef();
     const userNewPw = useRef();
@@ -36,6 +37,7 @@ function Mypage() {
         copyArr[countBlock] = 'block';
         setButtonDisplay(copyArr);
     }
+    
     function handleRemovePetName(e) {
         const getButtonNum = parseInt(e.target.getAttribute('custom-attribute'));
         const copyArr = [...buttonDisplay];
@@ -152,11 +154,12 @@ useEffect(() => {
 
     function handleWithdrawal() {
         if (userPw.current.value === '') {
-            changeNotice('비밀번호를 입력해주세요', 'goodbye.png', 'flex', "/");
+            changeNotice('비밀번호를 입력해주세요', 'goodbye.png', 'flex', false);
+            setCheckMessage({ display: 'none' });
             return;
         }
 
-        axios.get('http://localhost:3001/withdrawal', { withCredentials: true })
+        axios.post('http://localhost:3001/withdrawal', { userPw: userPw.current.value }, { withCredentials: true })
         .then(res => {
             const data = res.data;
             if (data === 'Fail') {
@@ -164,6 +167,7 @@ useEffect(() => {
             }
             localStorage.removeItem('loginState');
             changeNotice('탈퇴 완료', 'goodbye.png', 'flex', "/");
+            setCheckMessage({ display: 'none' });
         });
     }
 
@@ -213,10 +217,14 @@ useEffect(() => {
                         <button className={styles.addPetButton} onClick={(e) => {handleRemovePetName(e)}} custom-attribute='3' type='button'>삭제</button>
                     </div>
                     <div className={styles.additionalTab}>
-                        <button onClick={handleWithdrawal} className={`button ${styles.withdrawal}`} type='button'>회원탈퇴</button>
+                        <button onClick={() => {
+                            setCheckMessage({ display: 'block' });
+                        }} className={`button ${styles.withdrawal}`} type='button'>회원탈퇴</button>
                         <button onClick={handleLogout} className={`button ${styles.logout}`} type='button'>로그아웃</button>
                     </div>
                 </div>
+                <CheckMessage checkMessage={checkMessage} setCheckMessage={setCheckMessage} handleWithdrawal={handleWithdrawal}
+                 option={{ cancel: '취소', submit: '탈퇴' }} />
                 <Buttons handleFormSubmit={handleFormSubmit} buttonName={{cancel: '취소', submit: '저장'}} cancelLink={{path: '/'}} />
             </form>
         </div>

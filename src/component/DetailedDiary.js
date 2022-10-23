@@ -4,8 +4,9 @@ import { useHistory } from "react-router-dom";
 import styles from './DetailedDiary.module.css';
 import Notice from './Notice';
 import Buttons from './Buttons';
+import CheckMessage from './CheckMessage.js';
 
-function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLocation, setCheckLocation } ) {
+function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLocation, setCheckLocation, checkMessage, setCheckMessage } ) {
     const history = useHistory();
     const sunny = useRef();
     const cloudy = useRef();
@@ -124,6 +125,7 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLocatio
             const data = res.data;
             if (data === 'Success') {
                 changeNotice('삭제되었습니다', 'correct.png', 'flex', '/mydiary');
+                setCheckMessage({ display: 'none' });
             }
         })
     }
@@ -149,7 +151,9 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLocatio
         <div className={styles.crudIcon}>
             <button onClick={handleStarImage} className={styles.icons}><img className={styles.iconImages} src={diaryInfo.starred ? 'filled_star.png':'empty_star.png'} alt='즐겨찾기 버튼'/></button>
             <button onClick={handleDiaryUpdate} className={styles.icons}><img className={styles.iconImages} src='edit.png' alt='수정 버튼' /></button>
-            <button onClick={handleDiaryDelete} className={styles.icons}><img className={styles.iconImages} src='delete.png' alt='삭제 버튼' /></button>
+            <button onClick={() => {
+                setCheckMessage({ display: 'block' });
+            }} className={styles.icons}><img className={styles.iconImages} src='delete.png' alt='삭제 버튼' /></button>
             <button onClick={() => history.push("/mydiary")} className={styles.icons}><img className={styles.iconImages} src='cancel.png' alt='뒤로가기 버튼'/></button>
         </div>
         {
@@ -222,6 +226,8 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLocatio
                 <p className={styles.diaryContent}>{diaryInfo.content}</p>
             </>
         }
+        <CheckMessage checkMessage={checkMessage} setCheckMessage={setCheckMessage} handleShowMessage={handleDiaryDelete}
+         option={{ cancel: '취소', submit: '삭제' }} />
     </section>
     )
 }
