@@ -46,11 +46,14 @@ button:hover {
 }
 
 .notice {
-  width: 100%;
-  display: flex;
-  justify-content: center;
   line-height: 30px;
   margin-bottom: 0.5rem;
+}
+
+.notice > div {
+  width: max-content;
+  margin: 0 auto;
+  display: flex;
 }
 
 .notice img {

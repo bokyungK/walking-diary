@@ -1,12 +1,9 @@
 import axios from "axios";
 import React, { useRef, useEffect } from "react";
-import { useHistory } from "react-router-dom";
 import Buttons from "./Buttons";
 import styles from "./WriteDiary.module.css";
-import Notice from "./Notice";
 
-function WriteDiary() {
-    const history = useHistory();
+function WriteDiary({ changeNotice, checkLogin }) {
     const imageAttach = useRef();;
     const date = useRef();
     date.value = `${new Date().getFullYear()}-${new Date().getMonth() + 1 < 10 ? '0' + (new Date().getMonth() + 1) : new Date().getMonth() + 1}-${new Date().getDate() < 10 ? '0' + new Date().getDate() : new Date().getDate()}`;
@@ -42,6 +39,10 @@ function WriteDiary() {
     }
     
     useEffect(() => {
+        if (checkLogin()) {
+            return;
+        }
+
         axios.get('http://localhost:3001/get-dogs', { withCredentials: true })
         .then(res => {
             // 토큰 체크하고 없으면 리다이렉트
@@ -56,29 +57,6 @@ function WriteDiary() {
         })
     })
 
-    const [notice, setNotice] = React.useState('');
-    const [noticeIcon, setNoticeIcon] = React.useState('warning.png');
-    const [display, setDisplay] = React.useState('none');
-
-    function changeNotice(notice, icon, display, path) {
-        setNotice(notice);
-        setNoticeIcon(icon);
-        setDisplay(display);
-        
-        if (path) {
-            setTimeout(() => {
-                history.push(path);
-            }, 1000);
-            return;
-        }
-
-        if (path === 0) {
-            setTimeout(() => {
-                history.go(path);
-            }, 1000);
-        }
-    }
-
     function handleFormSubmit() {
         const weather = weathers.filter((item) => {
             return item.current.checked === true;
@@ -92,7 +70,7 @@ function WriteDiary() {
         };
 
         if (img === '' || userInfo.selectedDog === ''  || userInfo.title === '' || userInfo.content === '') {
-            changeNotice('모든 항목을 입력해주세요', 'warning.png', 'flex', false);
+            changeNotice('모든 항목을 입력해주세요', 'warning.png', 'flex', 'none');
             return;
         }
 
@@ -116,7 +94,7 @@ function WriteDiary() {
 
     return (
         <section className={styles.WriteDiary}>    
-            <Notice notice={notice} noticeIcon={noticeIcon} display={display} />
+            {/* <Notice noticeOption={noticeOption} /> */}
             <form encType='multipart/form-data'>
                 <label className={styles.attachmentLabel} htmlFor='image-attach'>
                     <span>영역을 눌러 사진을 첨부하세요!</span>

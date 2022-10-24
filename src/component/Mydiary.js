@@ -2,9 +2,8 @@ import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from 'react-router-dom';
 import styles from './MyDiary.module.css';
-import Notice from './Notice';
 
-function MyDiary({ notice, noticeIcon, display, changeNotice }) {
+function MyDiary({ changeNotice, checkLogin }) {
     const history = useHistory();
     const favoriteSlider = useRef();
     const sliderSection = useRef();
@@ -28,9 +27,7 @@ function MyDiary({ notice, noticeIcon, display, changeNotice }) {
     }
 
     useEffect(() => {
-        const loginState = localStorage.getItem('loginState');
-        if (!loginState) {
-            changeNotice('로그인 후 사용하세요', 'warning.png', 'flex', "/login");
+        if (checkLogin()) {
             return;
         }
 
@@ -42,7 +39,7 @@ function MyDiary({ notice, noticeIcon, display, changeNotice }) {
                 return;
             }
 
-            if (data !== 'Nothing') {
+            if (data[0] !== 'Nothing') {
                 // favorite cards
                 const starredData = [];
                 data[0].forEach((item) => {
@@ -57,17 +54,19 @@ function MyDiary({ notice, noticeIcon, display, changeNotice }) {
                     }
                 })
                 setFavoriteCards(starredData);
+            }
 
+            if (data[1] !== 'Nothing') {
                 // cards
                 const diaryData = data[1].map((item) => {
-                return {
-                    date: item.date.slice(0, 10),
-                    dogName: item.dog_name,
-                    title: item.title,
-                    imageName: item.image_name,
-                    imageSrc: `http://localhost:3001/${item.id}/${item.image_name}`,
-                }})
-                setCards(diaryData);
+                    return {
+                        date: item.date.slice(0, 10),
+                        dogName: item.dog_name,
+                        title: item.title,
+                        imageName: item.image_name,
+                        imageSrc: `http://localhost:3001/${item.id}/${item.image_name}`,
+                    }})
+                    setCards(diaryData);
             }
         })
 
@@ -183,7 +182,7 @@ function MyDiary({ notice, noticeIcon, display, changeNotice }) {
 
     return (
         <div className={styles.MyDiary}>
-            <Notice notice={notice} noticeIcon={noticeIcon} display={display} />
+            {/* <Notice noticeOption={noticeOption} /> */}
             <section ref={sliderSection} className={`${styles.mydiarySection} ${styles.favoriteSection}`}>
                 <h2 className={styles.sectionTitle}>즐겨찾기</h2>
                 <ul ref={favoriteSlider} onDragStart={startSlider} onDrag={moveSlider} onDragEnd={endSlider} className={styles.favorites} movedist='0'>

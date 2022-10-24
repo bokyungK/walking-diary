@@ -9,6 +9,7 @@ import Mypage from './component/Mypage.js';
 import MyDiary from './component/MyDiary.js';
 import DetailedDiary from './component/DetailedDiary.js';
 import WriteDiary from './component/WriteDiary.js';
+import Notice from './component/Notice';
 
 function App() {
   const history = useHistory();
@@ -34,26 +35,31 @@ function App() {
 
   const [notice, setNotice] = useState('');
   const [noticeIcon, setNoticeIcon] = useState('warning.png');
-  const [display, setDisplay] = useState('none');
+  const [display, setDisplay] = useState('none')
 
   function changeNotice(notice, icon, display, path) {
     setNotice(notice);
     setNoticeIcon(icon);
     setDisplay(display);
     
+    // Move other path
     if (path) {
+      setTimeout(() => {
+        history.push(path);
+        // reset
+        setNotice('');
+        setNoticeIcon('');
+        setDisplay('none');
+      }, 1000);
+      return;
+  }
+
+    // Do not move
+    if (!path) {
         setTimeout(() => {
           setNotice('');
           setNoticeIcon('');
           setDisplay('none');
-          history.push(path);
-        }, 1000);
-        return;
-    }
-
-    if (path === 0) {
-        setTimeout(() => {
-            history.go(path);
         }, 1000);
     }
 }
@@ -67,22 +73,32 @@ function App() {
 
   const [checkMessage, setCheckMessage] = useState({ display: 'none' });
 
+  function checkLogin() {
+    const loginState = localStorage.getItem('loginState');
+    if (!loginState) {
+      changeNotice('로그인 후 사용하세요', 'warning.png', 'flex', "/login");
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   return (
   <div ref={wrapper}>
     <Header backgroundOpacity={backgroundOpacity} />
     <main>
+      <Notice notice={notice} noticeIcon={noticeIcon} display={display} />
+
       <Route path="/" exact={true} component={Banner} />
       <Route path="/login" component={Login} />
       <Route path="/join" component={Join} />
-      <Route path="/mypage" render={() => <Mypage
+      <Route path="/mypage" render={() => <Mypage changeNotice={changeNotice} checkLogin={checkLogin}
        checkMessage={checkMessage} setCheckMessage={setCheckMessage} /> } />
-      <Route path="/mydiary" render={() =>
-         <MyDiary notice={notice} noticeIcon={noticeIcon} display={display} changeNotice={changeNotice} />} />
+      <Route path="/mydiary" render={() => <MyDiary changeNotice={changeNotice} checkLogin={checkLogin} />} />
       <Route path="/detail-diary" render={() =>
-         <DetailedDiary notice={notice} noticeIcon={noticeIcon} display={display} changeNotice={changeNotice}
-         checkLocation={checkLocation} setCheckLocation={setCheckLocation} checkMessage={checkMessage}
-         setCheckMessage={setCheckMessage} /> } />
-      <Route path="/write-diary" component={WriteDiary} />
+         <DetailedDiary changeNotice={changeNotice} checkLogin={checkLogin} checkLocation={checkLocation}
+          setCheckLocation={setCheckLocation} checkMessage={checkMessage} setCheckMessage={setCheckMessage} /> } />
+      <Route path="/write-diary" render={() => <WriteDiary changeNotice={changeNotice} checkLogin={checkLogin} />} />
     </main>
   </div>
   )

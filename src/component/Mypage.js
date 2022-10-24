@@ -3,10 +3,9 @@ import { useHistory } from 'react-router-dom';
 import axios from "axios";
 import styles from "./Mypage.module.css";
 import Buttons from "./Buttons.js"
-import Notice from "./Notice.js";
 import CheckMessage from './CheckMessage.js';
 
-function Mypage({ checkMessage, setCheckMessage }) {
+function Mypage({ changeNotice, checkLogin, checkMessage, setCheckMessage }) {
     const history = useHistory();
     const userPw = useRef();
     const userNewPw = useRef();
@@ -48,63 +47,48 @@ function Mypage({ checkMessage, setCheckMessage }) {
         userDogNames[getButtonNum - 1]('');
     }
 
-useEffect(() => {
-    axios.get('http://localhost:3001/info', { withCredentials: true })
-    .then(res => {
-        const data = res.data;
-            // 인증 받지 않은 유저
-        if (data === 'There is no access_token') {
-            localStorage.removeItem('loginState');
-            history.push('/login');
+    useEffect(() => {
+        if (checkLogin()) {
             return;
         }
-            // 인증 받은 유저
-        if (Object.keys(data).length === 2) {
-            setUserName(data.name);
-            setUserId(data.id);
-        } else {
-            setUserName(data.name);
-            setUserId(data.id);
-            if (data.dog_name_1 !== '') {
-                setUserDogName1(data.dog_name_1);
+        
+        axios.get('http://localhost:3001/info', { withCredentials: true })
+        .then(res => {
+            const data = res.data;
+                // 인증 받지 않은 유저
+            if (data === 'There is no access_token') {
+                localStorage.removeItem('loginState');
+                history.push('/login');
+                return;
+            }
+                // 인증 받은 유저
+            if (Object.keys(data).length === 2) {
+                setUserName(data.name);
+                setUserId(data.id);
             } else {
-                setUserDogName1('');
+                setUserName(data.name);
+                setUserId(data.id);
+                if (data.dog_name_1 !== '') {
+                    setUserDogName1(data.dog_name_1);
+                } else {
+                    setUserDogName1('');
+                }
+                if (data.dog_name_2 !== '') {
+                    setUserDogName2(data.dog_name_2);
+                    handleAddPetName();
+                }
+                if (data.dog_name_3 !== '') {
+                    setUserDogName3(data.dog_name_3);
+                    handleAddPetName();
+                }
             }
-            if (data.dog_name_2 !== '') {
-                setUserDogName2(data.dog_name_2);
-                handleAddPetName();
-            }
-            if (data.dog_name_3 !== '') {
-                setUserDogName3(data.dog_name_3);
-                handleAddPetName();
-            }
-        }
-    })
-}, [history, handleAddPetName])
+        })
+    }, [history, handleAddPetName])
 
 
     const [notice, setNotice] = React.useState('');
     const [noticeIcon, setNoticeIcon] = React.useState('warning.png');
     const [display, setDisplay] = React.useState('none');
-
-    function changeNotice(notice, icon, display, path) {
-        setNotice(notice);
-        setNoticeIcon(icon);
-        setDisplay(display);
-        
-        if (path) {
-            setTimeout(() => {
-                history.push(path);
-            }, 1000);
-            return;
-        }
-
-        if (path === 0) {
-            setTimeout(() => {
-                history.go(path);
-            }, 1000);
-        }
-    }
 
     function handleInputValue(e) {
         const isRegExp = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,}$/.test(e.target.value);
@@ -182,7 +166,7 @@ useEffect(() => {
     return (
         <div className={styles.Mypage}>
             <h2 className={styles.infoTitle}>마이페이지</h2>
-            <Notice notice={notice} noticeIcon={noticeIcon} display={display} />
+            {/* <Notice noticeOption={noticeOption} /> */}
             <form className={styles.infoForm}>
                 <div className={styles.formSection}>
                     <div className={styles.formItem}>
@@ -223,7 +207,7 @@ useEffect(() => {
                         <button onClick={handleLogout} className={`button ${styles.logout}`} type='button'>로그아웃</button>
                     </div>
                 </div>
-                <CheckMessage checkMessage={checkMessage} setCheckMessage={setCheckMessage} handleWithdrawal={handleWithdrawal}
+                <CheckMessage checkMessage={checkMessage} setCheckMessage={setCheckMessage} handleShowMessage={handleWithdrawal}
                  option={{ cancel: '취소', submit: '탈퇴' }} />
                 <Buttons handleFormSubmit={handleFormSubmit} buttonName={{cancel: '취소', submit: '저장'}} cancelLink={{path: '/'}} />
             </form>
