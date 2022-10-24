@@ -4,8 +4,9 @@ import axios from "axios";
 import styles from "./Mypage.module.css";
 import Buttons from "./Buttons.js"
 import CheckMessage from './CheckMessage.js';
+import Notice from './Notice.js';
 
-function Mypage({ changeNotice, checkLogin, checkMessage, setCheckMessage }) {
+function Mypage({ rule, ruleIcon, ruleDisplay, showRules, checkLogin, checkMessage, setCheckMessage }) {
     const history = useHistory();
     const userPw = useRef();
     const userNewPw = useRef();
@@ -85,20 +86,15 @@ function Mypage({ changeNotice, checkLogin, checkMessage, setCheckMessage }) {
         })
     }, [history, handleAddPetName])
 
-
-    const [notice, setNotice] = React.useState('');
-    const [noticeIcon, setNoticeIcon] = React.useState('warning.png');
-    const [display, setDisplay] = React.useState('none');
-
     function handleInputValue(e) {
         const isRegExp = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,}$/.test(e.target.value);
         if (!isRegExp) {
             e.target.setAttribute('regExp', false);
-            changeNotice('PW 작성 : 영문과 숫자, 특수문자 최소 한가지 조합(8~15자)', 'warning.png', 'flex', false);
+            showRules('PW 작성 : 영문과 숫자, 특수문자 최소 한가지 조합(8~15자)', 'warning.png', 'flex', false);
             return;
         }
         e.target.setAttribute('regExp', true);
-        changeNotice('', '', 'none', false);
+        showRules('', '', 'none', false);
     }
 
     function handleFormSubmit() {
@@ -111,34 +107,34 @@ function Mypage({ changeNotice, checkLogin, checkMessage, setCheckMessage }) {
         }
         
         if (userInfo.userPw === '') {
-            changeNotice('비밀번호를 입력하세요', 'warning.png', 'flex', false);
+            showRules('비밀번호를 입력하세요', 'warning.png', 'flex', false);
             return;
         }
 
         if (userInfo.userNewPw !== '' && userNewPw.current.attributes.regExp.value === 'false') {
-            changeNotice('새 비밀번호가 규칙에 어긋납니다', 'warning.png', 'flex', false);
+            showRules('새 비밀번호가 규칙에 어긋납니다', 'warning.png', 'flex', false);
             return;
         }
 
         const condition = userInfo.userDogName1[1] && userInfo.userDogName2[1] && userInfo.userDogName3[1];
         if (condition && userInfo.userNewPw === '') {
-            changeNotice('변경된 정보가 없습니다', 'warning.png', 'flex', false);
+            showRules('변경된 정보가 없습니다', 'warning.png', 'flex', false);
             return;
         }
 
         axios.post('http://localhost:3001/info', userInfo, { withCredentials: true })
         .then(res => {
             if (res.data === 'Success') {
-                changeNotice('저장되었습니다', 'correct.png', 'flex', 0);
+                showRules('저장되었습니다', 'correct.png', 'flex', 0);
                 return;
             }
-            changeNotice('비밀번호가 틀렸습니다', 'warning.png', 'flex', false);
+            showRules('비밀번호가 틀렸습니다', 'warning.png', 'flex', false);
         });
     }
 
     function handleWithdrawal() {
         if (userPw.current.value === '') {
-            changeNotice('비밀번호를 입력해주세요', 'goodbye.png', 'flex', false);
+            showRules('비밀번호를 입력해주세요', 'goodbye.png', 'flex', false);
             setCheckMessage({ display: 'none' });
             return;
         }
@@ -147,10 +143,10 @@ function Mypage({ changeNotice, checkLogin, checkMessage, setCheckMessage }) {
         .then(res => {
             const data = res.data;
             if (data === 'Fail') {
-                changeNotice('비밀번호가 틀렸습니다', 'warning.png', 'flex', false);
+                showRules('비밀번호가 틀렸습니다', 'warning.png', 'flex', false);
             }
             localStorage.removeItem('loginState');
-            changeNotice('탈퇴 완료', 'goodbye.png', 'flex', "/");
+            showRules('탈퇴 완료', 'goodbye.png', 'flex', "/");
             setCheckMessage({ display: 'none' });
         });
     }
@@ -158,15 +154,17 @@ function Mypage({ changeNotice, checkLogin, checkMessage, setCheckMessage }) {
     function handleLogout() {
         axios.get('http://localhost:3001/logout', { withCredentials: true })
         .then(res => {
-            localStorage.removeItem('loginState');
-            changeNotice('로그아웃 완료', 'goodbye.png', 'flex', "/");
+            showRules('로그아웃 완료', 'goodbye.png', 'flex', "/");
+            setTimeout(() => {
+                localStorage.removeItem('loginState');
+            }, 1000)
         });
     }
 
     return (
         <div className={styles.Mypage}>
             <h2 className={styles.infoTitle}>마이페이지</h2>
-            {/* <Notice noticeOption={noticeOption} /> */}
+            <Notice message={rule} icon={ruleIcon} display={ruleDisplay} />
             <form className={styles.infoForm}>
                 <div className={styles.formSection}>
                     <div className={styles.formItem}>

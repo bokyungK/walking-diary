@@ -2,12 +2,9 @@ import React, { useRef } from 'react';
 import axios from 'axios';
 import Buttons from './Buttons.js';
 import styles from './Join.module.css';
-import Notice from "./Notice";
+import Notice from './Notice.js';
 
-function Join({ history }) {
-    const [notice, setNotice] = React.useState('');
-    const [noticeIcon, setNoticeIcon] = React.useState('warning.png');
-    const [display, setDisplay] = React.useState('none');
+function Join({ rule, ruleIcon, ruleDisplay, showRules }) {
     const buttonName = {
         cancel: '취소',
         submit: '가입'
@@ -26,25 +23,6 @@ function Join({ history }) {
         userName: [/^[가-힣]{1,}$/, '이름 작성 : 한글 사용(1~10자)'],
     }
 
-    function changeNotice(notice, icon, display, path) {
-        setNotice(notice);
-        setNoticeIcon(icon);
-        setDisplay(display);
-        
-        if (path) {
-            setTimeout(() => {
-                history.push(path);
-            }, 1000);
-            return;
-        }
-
-        if (path === 0) {
-            setTimeout(() => {
-                history.go(path);
-            }, 1000);
-        }
-    }
-
     function handleInfoRules(e) {
         const getInputId = e.target.id;
         const keys = Object.keys(regExp);
@@ -53,11 +31,10 @@ function Join({ history }) {
 
         if (isRegExp) {
             e.target.setAttribute('regExp', true);
-            changeNotice('', '', 'none', false);
+            showRules('', '', 'none', false);
         } else {
             e.target.setAttribute('regExp', false);
-            setNotice(regExp[keys[keyIndex]][1]);
-            changeNotice(regExp[keys[keyIndex]][1], 'warning.png', 'flex', false);
+            showRules(regExp[keys[keyIndex]][1], 'warning.png', 'flex', '');
         }
     }
 
@@ -69,7 +46,7 @@ function Join({ history }) {
         }
         const condition = userInfo.userId === '' || userInfo.userPw === '' || userInfo.userName === '';
         if(condition) {
-            changeNotice('모든 정보를 입력하세요', 'warning.png', 'flex', false);
+            showRules('모든 정보를 입력하세요', 'warning.png', 'flex', false);
             return;
         }
         const regExpBooleanArr = userArr.map((item) => {
@@ -77,16 +54,16 @@ function Join({ history }) {
         })
 
         if (regExpBooleanArr.includes("false")) {
-            changeNotice('정보를 규칙에 맞게 입력해주세요', 'warning.png', 'flex', false);
+            showRules('정보를 규칙에 맞게 입력해주세요', 'warning.png', 'flex', false);
         } else {
             axios.post('http://localhost:3001/join', userInfo)
             .then(res => {
                 if (res.data === 'Success') {
-                    changeNotice('가입 성공', 'correct.png', 'flex', "/login");
+                    showRules('가입 성공', 'correct.png', 'flex', "/login");
                     return
                 }
                 if (res.data === 'Fail') {
-                    changeNotice('이미 존재하는 ID 입니다', 'warning.png', 'flex', false);
+                    showRules('이미 존재하는 ID 입니다', 'warning.png', 'flex', false);
                 }
             })
         }
@@ -94,7 +71,7 @@ function Join({ history }) {
     return (
         <div className={styles.Join}>
             <h2 className={styles.infoTitle}>회원가입</h2>
-            <Notice notice={notice} noticeIcon={noticeIcon} display={display} />
+            <Notice message={rule} icon={ruleIcon} display={ruleDisplay} />
             <form className={styles.infoForm}>
                 <div className={styles.formSection}>
                     <div className={styles.formItem}>

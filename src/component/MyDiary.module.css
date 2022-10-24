@@ -1,7 +1,8 @@
 /* Mydiary */
 .MyDiary {
-    height: 100%;
+    width: max-content;
     margin: 0 auto;
+    height: 100%;
 }
 
 .mydiarySection {

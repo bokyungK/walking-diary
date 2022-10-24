@@ -1,11 +1,11 @@
 import React from 'react';
 
-function Notice({ notice, noticeIcon, display }) {
+function Notice({ message, icon, display }) {
     return (
         <div className='notice' style={{ display: display }}>
             <div>
-                <img src={noticeIcon} alt='경고 느낌표' />
-                <p>{notice}</p>
+                <img src={icon} alt='경고 느낌표' />
+                <p>{message}</p>
             </div>
         </div>
     )

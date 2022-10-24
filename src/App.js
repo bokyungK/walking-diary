@@ -42,27 +42,39 @@ function App() {
     setNoticeIcon(icon);
     setDisplay(display);
     
+    if (path) {
+      setTimeout(() => {
+        history.push(path);
+      }, 1000);
+    }
+    setTimeout(() => {
+      // reset
+      setNotice('');
+      setNoticeIcon('');
+      setDisplay('none');
+    }, 1000);
+  }
+
+  const [rule, setRule] = useState('');
+  const [ruleIcon, setRuleIcon] = useState('warning.png');
+  const [ruleDisplay, setRuleDisplay] = useState('none')
+
+  function showRules(notice, icon, display, path) {
+    setRule(notice);
+    setRuleIcon(icon);
+    setRuleDisplay(display);
+    
     // Move other path
     if (path) {
       setTimeout(() => {
         history.push(path);
-        // reset
-        setNotice('');
-        setNoticeIcon('');
-        setDisplay('none');
+        setRule('');
+        setRuleIcon('');
+        setRuleDisplay('none');
       }, 1000);
-      return;
-  }
-
-    // Do not move
-    if (!path) {
-        setTimeout(() => {
-          setNotice('');
-          setNoticeIcon('');
-          setDisplay('none');
-        }, 1000);
+      return
     }
-}
+  }
 
   const [checkLocation, setCheckLocation] = useState(false);
   useEffect(() => {
@@ -87,13 +99,16 @@ function App() {
   <div ref={wrapper}>
     <Header backgroundOpacity={backgroundOpacity} />
     <main>
-      <Notice notice={notice} noticeIcon={noticeIcon} display={display} />
+      <Notice message={notice} icon={noticeIcon} display={display} />
 
       <Route path="/" exact={true} component={Banner} />
-      <Route path="/login" component={Login} />
-      <Route path="/join" component={Join} />
+      <Route path="/login" render={() => <Login changeNotice={changeNotice}
+       rule={rule} ruleIcon={ruleIcon} ruleDisplay={ruleDisplay} showRules={showRules} />} />
+      <Route path="/join" render={() => <Join changeNotice={changeNotice}
+       rule={rule} ruleIcon={ruleIcon} ruleDisplay={ruleDisplay} showRules={showRules}/>} />
       <Route path="/mypage" render={() => <Mypage changeNotice={changeNotice} checkLogin={checkLogin}
-       checkMessage={checkMessage} setCheckMessage={setCheckMessage} /> } />
+       checkMessage={checkMessage} setCheckMessage={setCheckMessage}
+       rule={rule} ruleIcon={ruleIcon} ruleDisplay={ruleDisplay} showRules={showRules} /> } />
       <Route path="/mydiary" render={() => <MyDiary changeNotice={changeNotice} checkLogin={checkLogin} />} />
       <Route path="/detail-diary" render={() =>
          <DetailedDiary changeNotice={changeNotice} checkLogin={checkLogin} checkLocation={checkLocation}
