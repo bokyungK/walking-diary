@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from 'react-router-dom';
 import styles from './MyDiary.module.css';
 
-function MyDiary({ changeNotice, checkLogin }) {
+function MyDiary({ checkLogin, checkCookie }) {
     const history = useHistory();
     const favoriteSlider = useRef();
     const sliderSection = useRef();
@@ -34,8 +34,8 @@ function MyDiary({ changeNotice, checkLogin }) {
         axios.post("http://localhost:3001/diaries", { order: getOrder }, { withCredentials: true })
         .then(res => {
             const data = res.data;
-            if (data === 'There is no access_token' || data === 'This is not a valid token') {
-                changeNotice('로그인이 만료되었습니다', 'warning.png', 'flex', "/login");
+
+            if (checkCookie(data, '/login')) {
                 return;
             }
 
@@ -92,6 +92,11 @@ function MyDiary({ changeNotice, checkLogin }) {
         axios.post('http://localhost:3001/order', { order: order }, { withCredentials: true })
         .then(res => {
             const data = res.data;
+            
+            if (checkCookie(data, '/login')) {
+                return;
+            }
+
             const dataArr = data.map((item) => {
                 return {
                     date: item.date.slice(0, 10),
@@ -123,18 +128,23 @@ function MyDiary({ changeNotice, checkLogin }) {
     }
 
     function endSlider(e) {
+        const sliderSectionWidth = sliderSection.current.clientWidth;
+        const favoriteSliderWidth = favoriteSlider.current.clientWidth;
         if (currentX > 0) {
             favoriteSlider.current.style.transform = `translateX(0)`;
             favoriteSlider.current.attributes.movedist.value = 0;
             return
         }
-        const sliderSectionWidth = sliderSection.current.clientWidth;
-        const favoriteSliderWidth = favoriteSlider.current.clientWidth;
+
         const subWidth = -(favoriteSliderWidth - sliderSectionWidth);
         if (sliderSectionWidth > favoriteSliderWidth + currentX) {
+            if (sliderSectionWidth >= favoriteSliderWidth) {
+                favoriteSlider.current.style.transform = `translateX(0)`;
+                favoriteSlider.current.attributes.movedist.value = 0;
+                return
+            }
             favoriteSlider.current.style.transform = `translateX(${subWidth}px)`;
             favoriteSlider.current.attributes.movedist.value = subWidth;
-            return;
         }
         favoriteSlider.current.attributes.movedist.value = currentX;
     }
@@ -155,6 +165,11 @@ function MyDiary({ changeNotice, checkLogin }) {
                 axios.post('http://localhost:3001/more-diaries', { share: share, order: getOrder }, { withCredentials: true })
                 .then(res => {
                     const data = res.data;
+
+                    if (checkCookie(data, '/login')) {
+                        return;
+                    }
+                    
                     if (data === 'Nothing') {
                         return;
                     }
@@ -182,7 +197,6 @@ function MyDiary({ changeNotice, checkLogin }) {
 
     return (
         <div className={styles.MyDiary}>
-            {/* <Notice noticeOption={noticeOption} /> */}
             <section ref={sliderSection} className={`${styles.mydiarySection} ${styles.favoriteSection}`}>
                 <h2 className={styles.sectionTitle}>즐겨찾기</h2>
                 <ul ref={favoriteSlider} onDragStart={startSlider} onDrag={moveSlider} onDragEnd={endSlider} className={styles.favorites} movedist='0'>

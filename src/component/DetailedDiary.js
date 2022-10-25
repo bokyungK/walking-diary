@@ -5,7 +5,7 @@ import styles from './DetailedDiary.module.css';
 import Buttons from './Buttons';
 import CheckMessage from './CheckMessage.js';
 
-function DetailedDiary({ changeNotice, checkLogin, checkLocation, setCheckLocation, checkMessage, setCheckMessage } ) {
+function DetailedDiary({ changeNotice, checkLogin, checkCookie, checkLocation, setCheckLocation, checkMessage, setCheckMessage } ) {
     const history = useHistory();
     const sunny = useRef();
     const cloudy = useRef();
@@ -24,6 +24,10 @@ function DetailedDiary({ changeNotice, checkLogin, checkLocation, setCheckLocati
         axios.post('http://localhost:3001/get-diary', { imageName: currentDiary }, { withCredentials: true })
         .then((res) => {
             const data = res.data;
+
+            if (checkCookie(data, '/login')) {
+                return;
+            }
         
             setDiaryInfo({
                 date: data.date.slice(0, 10),
@@ -55,6 +59,11 @@ function DetailedDiary({ changeNotice, checkLogin, checkLocation, setCheckLocati
             axios.get('http://localhost:3001/get-dogs', { withCredentials: true })
             .then(res => {
                 const data = res.data;
+
+                if (checkCookie(data, '/login')) {
+                    return;
+                }
+
                 const dogNames = [data.dog_name_1, data.dog_name_2, data.dog_name_3];
                 dogNames.forEach((dogName, idx) => {
                     if (dogName === '') {
@@ -114,6 +123,11 @@ function DetailedDiary({ changeNotice, checkLogin, checkLocation, setCheckLocati
         axios.post('http://localhost:3001/update-diary', postData[0], { withCredentials: true })
         .then((res) => {
             const data = res.data;
+
+            if (checkCookie(data, '/login')) {
+                return;
+            }
+
             if (data === 'Success') {
                 changeNotice('변경되었습니다', 'correct.png', 'flex', false);
                 setCheckLocation(false);
@@ -126,6 +140,12 @@ function DetailedDiary({ changeNotice, checkLogin, checkLocation, setCheckLocati
         axios.post('http://localhost:3001/delete-diary', diaryInfo, { withCredentials: true })
         .then(res => {
             const data = res.data;
+
+            
+            if (checkCookie(data, '/login')) {
+                return;
+            }
+
             if (data === 'Success') {
                 changeNotice('삭제되었습니다', 'correct.png', 'flex', '/mydiary');
                 setCheckMessage({ display: 'none' });
@@ -143,14 +163,18 @@ function DetailedDiary({ changeNotice, checkLogin, checkLocation, setCheckLocati
         starred.push(reverseState);
 
         axios.post('http://localhost:3001/starred', {starred: starred[0], imageName: imageName}, { withCredentials: true })
+        
         .then((res) => {
-            // console.log(res.data);
+            const data = res.data;
+            
+            if (checkCookie(data, '/login')) {
+                return;
+            }
         })
     }
 
     return (
     <section className={styles.DetailedDiary}>
-        {/* <Notice noticeOption={noticeOption} /> */}
         <div className={styles.crudIcon}>
             <button onClick={handleStarImage} className={styles.icons}><img className={styles.iconImages} src={diaryInfo.starred ? 'filled_star.png':'empty_star.png'} alt='즐겨찾기 버튼'/></button>
             <button onClick={handleDiaryUpdate} className={styles.icons}><img className={styles.iconImages} src='edit.png' alt='수정 버튼' /></button>

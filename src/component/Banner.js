@@ -2,9 +2,9 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import styles from './Banner.module.css'
 
-function Banner() {
+function Banner({ checkCookie }) {
     const loginState = localStorage.getItem('loginState');
-    const [calender, setCalender] = useState([]);
+    const [calendar, setCalendar] = useState([]);
     const days = ['일', '월', '화', '수', '목', '금', '토'];
     const [writedDate, setWritedDate] = useState('');
 
@@ -16,10 +16,18 @@ function Banner() {
 
     useEffect(() => {
         if (loginState) {
-            axios.get('http://localhost:3001/calender', { withCredentials: true })
+            axios.get('http://localhost:3001/calendar', { withCredentials: true })
             .then((res) => {
-                // 아무 일기도 작성하지 않았을 경우 처리
                 const data = res.data;
+
+                if (checkCookie(data, false)) {
+                    return;
+                }
+
+                if (data === 'Nothing') {
+                    return;
+                }
+
                 const writedArr = [];
 
                 data.forEach((item) => {
@@ -57,7 +65,7 @@ function Banner() {
             }
         }
         
-        setCalender(dateArr);
+        setCalendar(dateArr);
     }, [])
 
     return (
@@ -78,7 +86,7 @@ function Banner() {
                             </thead>
                             <tbody>
                                 {
-                                    calender.map((arr, idx) => {
+                                    calendar.map((arr, idx) => {
                                         return <tr key={`week-${idx + 1}`}>
                                             {
                                                 arr.map((num) => {

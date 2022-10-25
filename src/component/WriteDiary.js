@@ -3,7 +3,7 @@ import React, { useRef, useEffect } from "react";
 import Buttons from "./Buttons";
 import styles from "./WriteDiary.module.css";
 
-function WriteDiary({ changeNotice, checkLogin }) {
+function WriteDiary({ changeNotice, checkLogin, checkCookie }) {
     const imageAttach = useRef();;
     const date = useRef();
     date.value = `${new Date().getFullYear()}-${new Date().getMonth() + 1 < 10 ? '0' + (new Date().getMonth() + 1) : new Date().getMonth() + 1}-${new Date().getDate() < 10 ? '0' + new Date().getDate() : new Date().getDate()}`;
@@ -45,8 +45,11 @@ function WriteDiary({ changeNotice, checkLogin }) {
 
         axios.get('http://localhost:3001/get-dogs', { withCredentials: true })
         .then(res => {
-            // 토큰 체크하고 없으면 리다이렉트
             const data = res.data;
+
+            if (checkCookie(data, '/login')) {
+                return;
+            }
             const dogNames = [data.dog_name_1, data.dog_name_2, data.dog_name_3];
             dogNames.forEach((dogName, idx) => {
                 dogName === undefined ?
@@ -55,7 +58,7 @@ function WriteDiary({ changeNotice, checkLogin }) {
                 selectedDog.current[idx].innerText = dogName;
             })
         })
-    })
+    }, [])
 
     function handleFormSubmit() {
         const weather = weathers.filter((item) => {
@@ -70,7 +73,7 @@ function WriteDiary({ changeNotice, checkLogin }) {
         };
 
         if (img === '' || userInfo.selectedDog === ''  || userInfo.title === '' || userInfo.content === '') {
-            changeNotice('모든 항목을 입력해주세요', 'warning.png', 'flex', 'none');
+            changeNotice('모든 항목을 입력해주세요', 'warning.png', 'flex', false);
             return;
         }
 
@@ -81,20 +84,17 @@ function WriteDiary({ changeNotice, checkLogin }) {
         axios.post('http://localhost:3001/write-diary', formData, { withCredentials: true })
         .then(res => {
             const data = res.data;
-            if(data === 'There is no access_token' || data === 'This is not a valid token') {
-                changeNotice('로그인이 만료되었습니다', 'warning.png', 'flex', "/mypage")
-                return
 
+            if (checkCookie(data, '/login')) {
+                return;
             }
             localStorage.setItem('imageName', data);
             changeNotice('저장 성공', 'correct.png', 'flex', "/detail-diary");
-
         })
     }
 
     return (
         <section className={styles.WriteDiary}>    
-            {/* <Notice noticeOption={noticeOption} /> */}
             <form encType='multipart/form-data'>
                 <label className={styles.attachmentLabel} htmlFor='image-attach'>
                     <span>영역을 눌러 사진을 첨부하세요!</span>

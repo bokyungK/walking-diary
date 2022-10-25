@@ -6,7 +6,7 @@ import Buttons from "./Buttons.js"
 import CheckMessage from './CheckMessage.js';
 import Notice from './Notice.js';
 
-function Mypage({ rule, ruleIcon, ruleDisplay, showRules, checkLogin, checkMessage, setCheckMessage }) {
+function Mypage({ rule, ruleIcon, ruleDisplay, showRules, checkLogin, checkMessage, setCheckMessage, checkCookie }) {
     const history = useHistory();
     const userPw = useRef();
     const userNewPw = useRef();
@@ -24,15 +24,18 @@ function Mypage({ rule, ruleIcon, ruleDisplay, showRules, checkLogin, checkMessa
         const countBlock = buttonDisplay.filter((item) => {
             return item === 'block';
         }).length;
+
         if (countBlock === 2) {
             return;
         }
+
         if (countBlock === 1 && buttonDisplay[1] === 'block') {
             const copyArr = [...buttonDisplay];
             copyArr[countBlock - 1] = 'block';
             setButtonDisplay(copyArr);
             return;
         }
+        
         const copyArr = [...buttonDisplay];
         copyArr[countBlock] = 'block';
         setButtonDisplay(copyArr);
@@ -56,13 +59,11 @@ function Mypage({ rule, ruleIcon, ruleDisplay, showRules, checkLogin, checkMessa
         axios.get('http://localhost:3001/info', { withCredentials: true })
         .then(res => {
             const data = res.data;
-                // 인증 받지 않은 유저
-            if (data === 'There is no access_token') {
-                localStorage.removeItem('loginState');
-                history.push('/login');
+
+            if (checkCookie(data, '/login')) {
                 return;
             }
-                // 인증 받은 유저
+
             if (Object.keys(data).length === 2) {
                 setUserName(data.name);
                 setUserId(data.id);
@@ -124,8 +125,14 @@ function Mypage({ rule, ruleIcon, ruleDisplay, showRules, checkLogin, checkMessa
 
         axios.post('http://localhost:3001/info', userInfo, { withCredentials: true })
         .then(res => {
-            if (res.data === 'Success') {
-                showRules('저장되었습니다', 'correct.png', 'flex', 0);
+            const data = res.data;
+
+            if (checkCookie(data, '/login')) {
+                return;
+            }
+
+            if (data === 'Success') {
+                showRules('저장되었습니다', 'correct.png', 'flex', false);
                 return;
             }
             showRules('비밀번호가 틀렸습니다', 'warning.png', 'flex', false);
@@ -142,6 +149,10 @@ function Mypage({ rule, ruleIcon, ruleDisplay, showRules, checkLogin, checkMessa
         axios.post('http://localhost:3001/withdrawal', { userPw: userPw.current.value }, { withCredentials: true })
         .then(res => {
             const data = res.data;
+
+            if (checkCookie(data, '/login')) {
+                return;
+            }
             if (data === 'Fail') {
                 showRules('비밀번호가 틀렸습니다', 'warning.png', 'flex', false);
             }
@@ -154,6 +165,11 @@ function Mypage({ rule, ruleIcon, ruleDisplay, showRules, checkLogin, checkMessa
     function handleLogout() {
         axios.get('http://localhost:3001/logout', { withCredentials: true })
         .then(res => {
+            const data = res.data;
+
+            if (checkCookie(data, '/login')) {
+                return;
+            }
             showRules('로그아웃 완료', 'goodbye.png', 'flex', "/");
             setTimeout(() => {
                 localStorage.removeItem('loginState');

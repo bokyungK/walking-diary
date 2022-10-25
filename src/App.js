@@ -15,7 +15,7 @@ function App() {
   const history = useHistory();
   const location = useLocation();
   const wrapper = useRef();
-  const [backgroundOpacity, setBackgroundOpacity] = useState('');
+  const [backgroundOpacity, setBackgroundOpacity] = useState(0);
 
   useEffect(() => {
     const handleShowHeaderBc = (e) => {
@@ -48,7 +48,6 @@ function App() {
       }, 1000);
     }
     setTimeout(() => {
-      // reset
       setNotice('');
       setNoticeIcon('');
       setDisplay('none');
@@ -63,8 +62,7 @@ function App() {
     setRule(notice);
     setRuleIcon(icon);
     setRuleDisplay(display);
-    
-    // Move other path
+
     if (path) {
       setTimeout(() => {
         history.push(path);
@@ -72,7 +70,6 @@ function App() {
         setRuleIcon('');
         setRuleDisplay('none');
       }, 1000);
-      return
     }
   }
 
@@ -95,25 +92,42 @@ function App() {
     }
   }
 
+  function checkCookie(data, path, option) {
+    if (data === 'There is no access_token' || data === 'This is not a valid token') {
+      if (option === 'rule') {
+        showRules('로그인이 만료되었습니다', 'warning.png', 'flex', path);
+      } else {
+        changeNotice('로그인이 만료되었습니다', 'warning.png', 'flex', path);
+      }
+      localStorage.removeItem('loginState');
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   return (
   <div ref={wrapper}>
     <Header backgroundOpacity={backgroundOpacity} />
     <main>
       <Notice message={notice} icon={noticeIcon} display={display} />
 
-      <Route path="/" exact={true} component={Banner} />
+      <Route path="/" exact={true} render={() => <Banner checkCookie={checkCookie} />} />
       <Route path="/login" render={() => <Login changeNotice={changeNotice}
        rule={rule} ruleIcon={ruleIcon} ruleDisplay={ruleDisplay} showRules={showRules} />} />
       <Route path="/join" render={() => <Join changeNotice={changeNotice}
        rule={rule} ruleIcon={ruleIcon} ruleDisplay={ruleDisplay} showRules={showRules}/>} />
       <Route path="/mypage" render={() => <Mypage changeNotice={changeNotice} checkLogin={checkLogin}
-       checkMessage={checkMessage} setCheckMessage={setCheckMessage}
+       checkMessage={checkMessage} setCheckMessage={setCheckMessage} checkCookie={checkCookie}
        rule={rule} ruleIcon={ruleIcon} ruleDisplay={ruleDisplay} showRules={showRules} /> } />
-      <Route path="/mydiary" render={() => <MyDiary changeNotice={changeNotice} checkLogin={checkLogin} />} />
+      <Route path="/mydiary" render={() => <MyDiary changeNotice={changeNotice} checkLogin={checkLogin}
+        checkCookie={checkCookie} />} />
       <Route path="/detail-diary" render={() =>
          <DetailedDiary changeNotice={changeNotice} checkLogin={checkLogin} checkLocation={checkLocation}
-          setCheckLocation={setCheckLocation} checkMessage={checkMessage} setCheckMessage={setCheckMessage} /> } />
-      <Route path="/write-diary" render={() => <WriteDiary changeNotice={changeNotice} checkLogin={checkLogin} />} />
+          setCheckLocation={setCheckLocation} checkMessage={checkMessage} setCheckMessage={setCheckMessage}
+          checkCookie={checkCookie} /> } />
+      <Route path="/write-diary" render={() => <WriteDiary changeNotice={changeNotice} checkLogin={checkLogin}
+       showRules={showRules} checkCookie={checkCookie} />} />
     </main>
   </div>
   )
