@@ -8,6 +8,7 @@
     transform: translate(-50%, -50%);
     border-radius: 10px;
     box-shadow: 1px 1px 3px 3px rgba(0, 0, 0, 0.3);
+    z-index: 1;
 }
 
 .CheckMessage > div {

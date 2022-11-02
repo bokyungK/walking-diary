@@ -1,9 +1,10 @@
 import axios from "axios";
 import React, { useRef, useEffect } from "react";
 import Buttons from "./Buttons";
+import Notice from './Notice.js';
 import styles from "./WriteDiary.module.css";
 
-function WriteDiary({ changeNotice, checkLogin, checkCookie }) {
+function WriteDiary({ notice, noticeIcon, display, changeNotice, checkLogin, checkCookie }) {
     const imageAttach = useRef();;
     const date = useRef();
     date.value = `${new Date().getFullYear()}-${new Date().getMonth() + 1 < 10 ? '0' + (new Date().getMonth() + 1) : new Date().getMonth() + 1}-${new Date().getDate() < 10 ? '0' + new Date().getDate() : new Date().getDate()}`;
@@ -73,7 +74,7 @@ function WriteDiary({ changeNotice, checkLogin, checkCookie }) {
         };
 
         if (img === '' || userInfo.selectedDog === ''  || userInfo.title === '' || userInfo.content === '') {
-            changeNotice('모든 항목을 입력해주세요', 'warning.png', 'flex', false);
+            changeNotice('모든 항목을 입력해주세요', 'warning.png', 'flex', 0);
             return;
         }
 
@@ -95,6 +96,7 @@ function WriteDiary({ changeNotice, checkLogin, checkCookie }) {
 
     return (
         <section className={styles.WriteDiary}>    
+            <Notice message={notice} icon={noticeIcon} display={display} />
             <form encType='multipart/form-data'>
                 <label className={styles.attachmentLabel} htmlFor='image-attach'>
                     <span>영역을 눌러 사진을 첨부하세요!</span>

@@ -4,7 +4,7 @@ import Buttons from './Buttons.js';
 import styles from './Join.module.css';
 import Notice from './Notice.js';
 
-function Join({ rule, ruleIcon, ruleDisplay, showRules }) {
+function Join({ notice, noticeIcon, display, changeNotice }) {
     const buttonName = {
         cancel: '취소',
         submit: '가입'
@@ -31,10 +31,10 @@ function Join({ rule, ruleIcon, ruleDisplay, showRules }) {
 
         if (isRegExp) {
             e.target.setAttribute('regExp', true);
-            showRules('', '', 'none', false);
+            changeNotice('', '', 'none', 0);
         } else {
             e.target.setAttribute('regExp', false);
-            showRules(regExp[keys[keyIndex]][1], 'warning.png', 'flex', '');
+            changeNotice(regExp[keys[keyIndex]][1], 'warning.png', 'flex', 0);
         }
     }
 
@@ -46,7 +46,7 @@ function Join({ rule, ruleIcon, ruleDisplay, showRules }) {
         }
         const condition = userInfo.userId === '' || userInfo.userPw === '' || userInfo.userName === '';
         if(condition) {
-            showRules('모든 정보를 입력하세요', 'warning.png', 'flex', false);
+            changeNotice('모든 정보를 입력하세요', 'warning.png', 'flex', 0);
             return;
         }
         const regExpBooleanArr = userArr.map((item) => {
@@ -54,16 +54,16 @@ function Join({ rule, ruleIcon, ruleDisplay, showRules }) {
         })
 
         if (regExpBooleanArr.includes("false")) {
-            showRules('정보를 규칙에 맞게 입력해주세요', 'warning.png', 'flex', false);
+            changeNotice('정보를 규칙에 맞게 입력해주세요', 'warning.png', 'flex', 0);
         } else {
             axios.post('http://localhost:3001/join', userInfo)
             .then(res => {
                 if (res.data === 'Success') {
-                    showRules('가입 성공', 'correct.png', 'flex', "/login");
+                    changeNotice('가입 성공', 'correct.png', 'flex', "/login");
                     return
                 }
                 if (res.data === 'Fail') {
-                    showRules('이미 존재하는 ID 입니다', 'warning.png', 'flex', false);
+                    changeNotice('이미 존재하는 ID 입니다', 'warning.png', 'flex', 0);
                 }
             })
         }
@@ -71,7 +71,7 @@ function Join({ rule, ruleIcon, ruleDisplay, showRules }) {
     return (
         <div className={styles.Join}>
             <h2 className={styles.infoTitle}>회원가입</h2>
-            <Notice message={rule} icon={ruleIcon} display={ruleDisplay} />
+            <Notice message={notice} icon={noticeIcon} display={display} />
             <form className={styles.infoForm}>
                 <div className={styles.formSection}>
                     <div className={styles.formItem}>

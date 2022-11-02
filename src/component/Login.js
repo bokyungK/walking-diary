@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import styles from './Login.module.css';
 import Notice from './Notice.js';
 
-function Login({ rule, ruleIcon, ruleDisplay, showRules }) {
+function Login({ notice, noticeIcon, display, changeNotice }) {
     const userId = useRef();
     const userPw = useRef();
 
@@ -16,27 +16,27 @@ function Login({ rule, ruleIcon, ruleDisplay, showRules }) {
         const condition = userInfo.userId === '' || userInfo.userPw === '';
 
         if (condition) {
-            showRules('모든 정보를 입력하세요', 'warning.png', 'flex', false);
+            changeNotice('모든 정보를 입력하세요', 'warning.png', 'flex', 0);
         } else {
             axios.post('http://localhost:3001/login', userInfo, { withCredentials: true })
             .then(res => {
                 if (res.data === 'Success') {
                     localStorage.setItem('loginState', true);
-                    showRules('로그인 성공', 'correct.png', 'flex', "/")
+                    changeNotice('로그인 성공', 'correct.png', 'flex', "/")
                     return;
                 }
                 if (res.data === 'Fail_id') {
-                    showRules('ID가 존재하지 않습니다', 'warning.png', 'flex', false)
+                    changeNotice('ID가 존재하지 않습니다', 'warning.png', 'flex', 0)
                 }
                 if (res.data === 'Fail_pw') {
-                    showRules('PW가 틀렸습니다', 'warning.png', 'flex', false)
+                    changeNotice('PW가 틀렸습니다', 'warning.png', 'flex', 0)
                 }
             })
         }
     }
     return (
         <div className={styles.Login}>
-            <Notice message={rule} icon={ruleIcon} display={ruleDisplay} />
+            <Notice message={notice} icon={noticeIcon} display={display} />
             <form className={styles.loginForm} method='post'>
                 <div className={styles.inputContainer}>
                     <div className={styles.inputBoxes}>

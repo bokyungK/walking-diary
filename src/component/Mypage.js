@@ -6,7 +6,7 @@ import Buttons from "./Buttons.js"
 import CheckMessage from './CheckMessage.js';
 import Notice from './Notice.js';
 
-function Mypage({ rule, ruleIcon, ruleDisplay, showRules, checkLogin, checkMessage, setCheckMessage, checkCookie }) {
+function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMessage, setCheckMessage, checkCookie }) {
     const history = useHistory();
     const userPw = useRef();
     const userNewPw = useRef();
@@ -91,11 +91,11 @@ function Mypage({ rule, ruleIcon, ruleDisplay, showRules, checkLogin, checkMessa
         const isRegExp = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,}$/.test(e.target.value);
         if (!isRegExp) {
             e.target.setAttribute('regExp', false);
-            showRules('PW 작성 : 영문과 숫자, 특수문자 최소 한가지 조합(8~15자)', 'warning.png', 'flex', false);
+            changeNotice('PW 작성 : 영문과 숫자, 특수문자 최소 한가지 조합(8~15자)', 'warning.png', 'flex', 0);
             return;
         }
         e.target.setAttribute('regExp', true);
-        showRules('', '', 'none', false);
+        changeNotice('', '', 'none', 0);
     }
 
     function handleFormSubmit() {
@@ -108,18 +108,18 @@ function Mypage({ rule, ruleIcon, ruleDisplay, showRules, checkLogin, checkMessa
         }
         
         if (userInfo.userPw === '') {
-            showRules('비밀번호를 입력하세요', 'warning.png', 'flex', false);
+            changeNotice('비밀번호를 입력하세요', 'warning.png', 'flex', 0);
             return;
         }
 
         if (userInfo.userNewPw !== '' && userNewPw.current.attributes.regExp.value === 'false') {
-            showRules('새 비밀번호가 규칙에 어긋납니다', 'warning.png', 'flex', false);
+            changeNotice('새 비밀번호가 규칙에 어긋납니다', 'warning.png', 'flex', 0);
             return;
         }
 
         const condition = userInfo.userDogName1[1] && userInfo.userDogName2[1] && userInfo.userDogName3[1];
         if (condition && userInfo.userNewPw === '') {
-            showRules('변경된 정보가 없습니다', 'warning.png', 'flex', false);
+            changeNotice('변경된 정보가 없습니다', 'warning.png', 'flex', 0);
             return;
         }
 
@@ -132,16 +132,16 @@ function Mypage({ rule, ruleIcon, ruleDisplay, showRules, checkLogin, checkMessa
             }
 
             if (data === 'Success') {
-                showRules('저장되었습니다', 'correct.png', 'flex', false);
+                changeNotice('저장되었습니다', 'correct.png', 'flex', 1);
                 return;
             }
-            showRules('비밀번호가 틀렸습니다', 'warning.png', 'flex', false);
+            changeNotice('비밀번호가 틀렸습니다', 'warning.png', 'flex', 0);
         });
     }
 
     function handleWithdrawal() {
         if (userPw.current.value === '') {
-            showRules('비밀번호를 입력해주세요', 'goodbye.png', 'flex', false);
+            changeNotice('비밀번호를 입력해주세요', 'goodbye.png', 'flex', 0);
             setCheckMessage({ display: 'none' });
             return;
         }
@@ -154,10 +154,10 @@ function Mypage({ rule, ruleIcon, ruleDisplay, showRules, checkLogin, checkMessa
                 return;
             }
             if (data === 'Fail') {
-                showRules('비밀번호가 틀렸습니다', 'warning.png', 'flex', false);
+                changeNotice('비밀번호가 틀렸습니다', 'warning.png', 'flex', 0);
             }
             localStorage.removeItem('loginState');
-            showRules('탈퇴 완료', 'goodbye.png', 'flex', "/");
+            changeNotice('탈퇴 완료', 'goodbye.png', 'flex', "/");
             setCheckMessage({ display: 'none' });
         });
     }
@@ -170,7 +170,7 @@ function Mypage({ rule, ruleIcon, ruleDisplay, showRules, checkLogin, checkMessa
             if (checkCookie(data, '/login')) {
                 return;
             }
-            showRules('로그아웃 완료', 'goodbye.png', 'flex', "/");
+            changeNotice('로그아웃 완료', 'goodbye.png', 'flex', "/");
             setTimeout(() => {
                 localStorage.removeItem('loginState');
             }, 1000)
@@ -180,7 +180,7 @@ function Mypage({ rule, ruleIcon, ruleDisplay, showRules, checkLogin, checkMessa
     return (
         <div className={styles.Mypage}>
             <h2 className={styles.infoTitle}>마이페이지</h2>
-            <Notice message={rule} icon={ruleIcon} display={ruleDisplay} />
+            <Notice message={notice} icon={noticeIcon} display={display} />
             <form className={styles.infoForm}>
                 <div className={styles.formSection}>
                     <div className={styles.formItem}>

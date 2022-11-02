@@ -4,8 +4,9 @@ import { useHistory } from "react-router-dom";
 import styles from './DetailedDiary.module.css';
 import Buttons from './Buttons';
 import CheckMessage from './CheckMessage.js';
+import Notice from './Notice.js';
 
-function DetailedDiary({ changeNotice, checkLogin, checkCookie, checkLocation, setCheckLocation, checkMessage, setCheckMessage } ) {
+function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, checkCookie, checkLocation, setCheckLocation, checkMessage, setCheckMessage } ) {
     const history = useHistory();
     const sunny = useRef();
     const cloudy = useRef();
@@ -28,7 +29,7 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie, checkLocation, s
             if (checkCookie(data, '/login')) {
                 return;
             }
-        
+            
             setDiaryInfo({
                 date: data.date.slice(0, 10),
                 weather: data.weather,
@@ -51,7 +52,6 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie, checkLocation, s
         }, [checkLocation])
 
     // update
-
     useEffect(() => {
         if (checkLocation) {
             setImageSrc(diaryInfo.imageSrc);
@@ -77,6 +77,7 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie, checkLocation, s
         }
     }, [checkLocation])
 
+    
     const imageAttach = useRef();
     const [imageSrc, setImageSrc] = React.useState('');
     const [img, setImg] = React.useState('');
@@ -129,7 +130,7 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie, checkLocation, s
             }
 
             if (data === 'Success') {
-                changeNotice('변경되었습니다', 'correct.png', 'flex', false);
+                changeNotice('변경되었습니다', 'correct.png', 'flex', 1);
                 setCheckLocation(false);
             }
         })
@@ -141,7 +142,6 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie, checkLocation, s
         .then(res => {
             const data = res.data;
 
-            
             if (checkCookie(data, '/login')) {
                 return;
             }
@@ -175,6 +175,7 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie, checkLocation, s
 
     return (
     <section className={styles.DetailedDiary}>
+        <Notice message={notice} icon={noticeIcon} display={display} />
         <div className={styles.crudIcon}>
             <button onClick={handleStarImage} className={styles.icons}><img className={styles.iconImages} src={diaryInfo.starred ? 'filled_star.png':'empty_star.png'} alt='즐겨찾기 버튼'/></button>
             <button onClick={handleDiaryUpdate} className={styles.icons}><img className={styles.iconImages} src='edit.png' alt='수정 버튼' /></button>

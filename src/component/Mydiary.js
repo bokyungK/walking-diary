@@ -1,9 +1,11 @@
 import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from 'react-router-dom';
+import Notice from './Notice.js';
 import styles from './MyDiary.module.css';
 
-function MyDiary({ checkLogin, checkCookie }) {
+
+function MyDiary({ notice, noticeIcon, display, checkLogin, checkCookie }) {
     const history = useHistory();
     const favoriteSlider = useRef();
     const sliderSection = useRef();
@@ -197,6 +199,7 @@ function MyDiary({ checkLogin, checkCookie }) {
 
     return (
         <div className={styles.MyDiary}>
+            <Notice message={notice} icon={noticeIcon} display={display} />
             <section ref={sliderSection} className={`${styles.mydiarySection} ${styles.favoriteSection}`}>
                 <h2 className={styles.sectionTitle}>즐겨찾기</h2>
                 <ul ref={favoriteSlider} onDragStart={startSlider} onDrag={moveSlider} onDragEnd={endSlider} className={styles.favorites} movedist='0'>

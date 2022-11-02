@@ -45,18 +45,19 @@ function Banner({ checkCookie }) {
     }, [])
 
     useEffect(() => {
-
-        // get last date from this month
         const previousLastDate = new Date(currentYear, currentMonth - 1, 0).getDate();
         const currentFirstDay = new Date(currentYear, currentMonth - 1, 0).getDay() + 1;
         const currentLastDate = new Date(currentYear, currentMonth, 0).getDate();
+        const calendarLength = currentFirstDay + currentLastDate + 7 - (currentFirstDay + currentLastDate) % 7;
         const dateArr = [];
 
-        for (let i = 0; i < currentLastDate + currentFirstDay; i++) {
+        for (let i = 0; i < calendarLength; i++) {
             const index = Math.floor(i / 7);
             const date = (i + 1) - currentFirstDay;
             const previousDate = previousLastDate - currentFirstDay + (i + 1);
-            const num = date > 0  ? date : previousDate;
+            const num = i < currentFirstDay  ? `${currentMonth - 1}/` + `${previousDate}` :
+            date > currentLastDate ? `${currentMonth + 1}/` + `${date - currentLastDate}` : date;
+
 
             if (dateArr[index] === undefined) {
                 dateArr[index] = [num, ]
@@ -64,7 +65,6 @@ function Banner({ checkCookie }) {
                 dateArr[index].push(num)
             }
         }
-        
         setCalendar(dateArr);
     }, [])
 
@@ -89,13 +89,15 @@ function Banner({ checkCookie }) {
                                     calendar.map((arr, idx) => {
                                         return <tr key={`week-${idx + 1}`}>
                                             {
-                                                arr.map((num) => {
-                                                    return <td key={`current-${num}`}>{
-                                                        writedDate.includes(num) ?
-                                                            <>{num}<img className={styles.attendance} src='attendance.png' alt='출석 도장'/></>
+                                                arr.map((num) => { 
+                                                    return typeof num === 'string' ? 
+                                                    <td className={styles.otherMonth} key={`current-${num}`}>&nbsp;{num}</td>
+                                                    :
+                                                    <td key={`current-${num}`}>{ writedDate.includes(num) ?
+                                                        <>&nbsp;{num}<img className={styles.attendance} src='attendance.png' alt='출석 도장'/></>
                                                         :
-                                                            num
-                                                        }</td>
+                                                        <>&nbsp;{num}</>
+                                                    }</td>
                                                 })
                                             }
                                         </tr>;
