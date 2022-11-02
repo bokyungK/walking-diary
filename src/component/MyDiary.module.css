@@ -134,10 +134,18 @@
     border: #997000 solid 3px;
     border-radius: 10px;
     margin-bottom: 1rem;
-    max-height: 80px;
+    width: 207px;
+    height: 80px;
     overflow: hidden;
     padding: 0.3rem 1rem;
     z-index: 1;
+}
+
+.diary > div > div {
+    width: 169px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .diary > div > div:nth-child(3){

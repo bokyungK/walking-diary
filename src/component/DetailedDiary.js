@@ -6,7 +6,7 @@ import Buttons from './Buttons';
 import CheckMessage from './CheckMessage.js';
 import Notice from './Notice.js';
 
-function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, checkCookie, checkLocation, setCheckLocation, checkMessage, setCheckMessage } ) {
+function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, checkCookie, checkLocation, setCheckLocation, checkMessage, setCheckMessage, setBackgroundOpacity} ) {
     const history = useHistory();
     const sunny = useRef();
     const cloudy = useRef();
@@ -25,7 +25,6 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
         axios.post('http://localhost:3001/get-diary', { imageName: currentDiary }, { withCredentials: true })
         .then((res) => {
             const data = res.data;
-
             if (checkCookie(data, '/login')) {
                 return;
             }
@@ -132,6 +131,7 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
             if (data === 'Success') {
                 changeNotice('변경되었습니다', 'correct.png', 'flex', 1);
                 setCheckLocation(false);
+                setBackgroundOpacity(0);
             }
         })
     }
@@ -231,7 +231,7 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
                 <textarea ref={content} className={`${styles.writingInfo} ${styles.contentInfo}`} placeholder='일기를 입력하세요' maxLength='500' defaultValue={diaryInfo.content}></textarea>
 
                 <Buttons buttonName={{cancel: '취소' ,submit: '변경'}} cancelLink='/detail-diary' handleFormSubmit={handleFormSubmit}
-                 setCheckLocation={setCheckLocation} />
+                 setCheckLocation={setCheckLocation} setBackgroundOpacity={setBackgroundOpacity} />
             </>
             :
             <>

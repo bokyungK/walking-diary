@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Route, useHistory, useLocation } from 'react-router-dom';
+import { Route, useHistory } from 'react-router-dom';
 import './App.css';
 import Header from './component/Header.js';
 import Banner from './component/Banner.js';
@@ -12,9 +12,9 @@ import WriteDiary from './component/WriteDiary.js';
 
 function App() {
   const history = useHistory();
-  const location = useLocation();
   const wrapper = useRef();
   const [backgroundOpacity, setBackgroundOpacity] = useState(0);
+  const [checkLocation, setCheckLocation] = useState(false);
 
   useEffect(() => {
     const handleShowHeaderBc = (e) => {
@@ -79,22 +79,33 @@ function App() {
   }
 
   useEffect(() => {
-    history.listen(() => {
-          if (notice === '') {
-            return;
-          }
-          setNotice('');
-          setNoticeIcon('');
-          setDisplay('none');
-        })
-  }, [history, notice])
+    history.listen((path) => {
+      // check location
+      if (path.pathname !== 'detail-diary') {
+        setCheckLocation(false);
+      }
 
-  const [checkLocation, setCheckLocation] = useState(false);
-  useEffect(() => {
-    if (location.pathname !== '/detail-diary') {
-      setCheckLocation(false);
-    }
-  }, [checkLocation, setCheckLocation, location.pathname])
+      // reset opacity
+      const opacity = backgroundOpacity;
+      if (opacity > 0) {
+        setBackgroundOpacity(0);
+      }
+
+      // reset message box
+      const message = checkMessage;
+      if (message !== {display: 'none'}) {
+        setCheckMessage({display: 'none'});
+      }
+
+      // reset notice
+      if (notice === '') {
+        return;
+      }
+      setNotice('');
+      setNoticeIcon('');
+      setDisplay('none');
+    })
+  }, [history, notice, backgroundOpacity, checkMessage])
 
   return (
   <div ref={wrapper}>
@@ -117,7 +128,8 @@ function App() {
       <Route path="/detail-diary" render={() =>
         <DetailedDiary notice={notice} noticeIcon={noticeIcon} display={display} changeNotice={changeNotice}
         checkLogin={checkLogin} checkLocation={checkLocation} setCheckLocation={setCheckLocation} 
-        checkMessage={checkMessage} setCheckMessage={setCheckMessage} checkCookie={checkCookie} /> } />
+        checkMessage={checkMessage} setCheckMessage={setCheckMessage} checkCookie={checkCookie}
+        setBackgroundOpacity={setBackgroundOpacity} /> } />
       <Route path="/write-diary" render={() =>
        <WriteDiary notice={notice} noticeIcon={noticeIcon} display={display} changeNotice={changeNotice}
        checkLogin={checkLogin} checkCookie={checkCookie} />} />
