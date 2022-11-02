@@ -6,7 +6,9 @@ import Buttons from './Buttons';
 import CheckMessage from './CheckMessage.js';
 import Notice from './Notice.js';
 
-function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, checkCookie, checkLocation, setCheckLocation, checkMessage, setCheckMessage, setBackgroundOpacity} ) {
+function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, checkCookie,
+    checkLocation, setCheckLocation, checkMessage, setCheckMessage, setBackgroundOpacity} ) {
+        
     const history = useHistory();
     const sunny = useRef();
     const cloudy = useRef();
