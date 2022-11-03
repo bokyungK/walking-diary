@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useHistory } from 'react-router-dom';
 import axios from "axios";
 import styles from "./Mypage.module.css";
@@ -6,49 +6,53 @@ import Buttons from "./Buttons.js"
 import CheckMessage from './CheckMessage.js';
 import Notice from './Notice.js';
 
-function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMessage, setCheckMessage, checkCookie }) {
+function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMessage,
+     setCheckMessage, checkCookie }) {
+
     const history = useHistory();
     const userPw = useRef();
     const userNewPw = useRef();
     const inputDogName1 = useRef();
     const inputDogName2 = useRef();
     const inputDogName3 = useRef();
-    const [userName, setUserName] = React.useState('');
-    const [userId, setUserId] = React.useState('');
-    const [userDogName1, setUserDogName1] = React.useState('');
-    const [userDogName2, setUserDogName2] = React.useState('');
-    const [userDogName3, setUserDogName3] = React.useState('');
-    const [buttonDisplay, setButtonDisplay] = React.useState(['none', 'none']);
+    const [userName, setUserName] = useState('');
+    const [userId, setUserId] = useState('');
+    const [userDogName1, setUserDogName1] = useState('');
+    const [userDogName2, setUserDogName2] = useState('');
+    const [userDogName3, setUserDogName3] = useState('');
+    const [buttonDisplay, setButtonDisplay] = useState(['none', 'none']);
+
+    const [dogNames, setDogNames] = useState();
 
     function handleAddPetName() {
-        const countBlock = buttonDisplay.filter((item) => {
-            return item === 'block';
-        }).length;
+        // const countBlock = buttonDisplay.filter((item) => {
+        //     return item === 'block';
+        // }).length;
 
-        if (countBlock === 2) {
-            return;
-        }
+        // if (countBlock === 2) {
+        //     return;
+        // }
 
-        if (countBlock === 1 && buttonDisplay[1] === 'block') {
-            const copyArr = [...buttonDisplay];
-            copyArr[countBlock - 1] = 'block';
-            setButtonDisplay(copyArr);
-            return;
-        }
+        // if (countBlock === 1 && buttonDisplay[1] === 'block') {
+        //     const copyArr = [...buttonDisplay];
+        //     copyArr[countBlock - 1] = 'block';
+        //     setButtonDisplay(copyArr);
+        //     return;
+        // }
         
-        const copyArr = [...buttonDisplay];
-        copyArr[countBlock] = 'block';
-        setButtonDisplay(copyArr);
+        // const copyArr = [...buttonDisplay];
+        // copyArr[countBlock] = 'block';
+        // setButtonDisplay(copyArr);
     }
     
     function handleRemovePetName(e) {
-        const getButtonNum = parseInt(e.target.getAttribute('custom-attribute'));
-        const copyArr = [...buttonDisplay];
-        copyArr[getButtonNum - 2] = 'none';
-        setButtonDisplay(copyArr);
+        // const getButtonNum = parseInt(e.target.getAttribute('custom-attribute'));
+        // const copyArr = [...buttonDisplay];
+        // copyArr[getButtonNum - 2] = 'none';
+        // setButtonDisplay(copyArr);
 
-        const userDogNames = [setUserDogName1, setUserDogName2, setUserDogName3];
-        userDogNames[getButtonNum - 1]('');
+        // const userDogNames = [setUserDogName1, setUserDogName2, setUserDogName3];
+        // userDogNames[getButtonNum - 1]('');
     }
 
     useEffect(() => {
@@ -64,28 +68,36 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
                 return;
             }
 
-            if (Object.keys(data).length === 2) {
-                setUserName(data.name);
-                setUserId(data.id);
-            } else {
-                setUserName(data.name);
-                setUserId(data.id);
-                if (data.dog_name_1 !== '') {
-                    setUserDogName1(data.dog_name_1);
-                } else {
-                    setUserDogName1('');
+            const dogNames = [data.dog_name_1, data.dog_name_2, data.dog_name_3];
+            dogNames.forEach((name, idx) => {
+                const state = [...buttonDisplay];
+                console.log(buttonDisplay);
+                if (name !== '') {
+                    setButtonDisplay('block');
                 }
-                if (data.dog_name_2 !== '') {
-                    setUserDogName2(data.dog_name_2);
-                    handleAddPetName();
-                }
-                if (data.dog_name_3 !== '') {
-                    setUserDogName3(data.dog_name_3);
-                    handleAddPetName();
-                }
-            }
+            })
+            // if (Object.keys(data).length === 2) {
+            //     setUserName(data.name);
+            //     setUserId(data.id);
+            // } else {
+            //     setUserName(data.name);
+            //     setUserId(data.id);
+            //     if (data.dog_name_1 !== '') {
+            //         setUserDogName1(data.dog_name_1);
+            //     } else {
+            //         setUserDogName1('');
+            //     }
+            //     if (data.dog_name_2 !== '') {
+            //         setUserDogName2(data.dog_name_2);
+            //         handleAddPetName();
+            //     }
+            //     if (data.dog_name_3 !== '') {
+            //         setUserDogName3(data.dog_name_3);
+            //         handleAddPetName();
+            //     }
+            // }
         })
-    }, [history, handleAddPetName])
+    }, [history])
 
     function handleInputValue(e) {
         const isRegExp = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,}$/.test(e.target.value);
@@ -204,7 +216,10 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
                         <input ref={inputDogName1} className={styles.itemInput} type='text' defaultValue={userDogName1} />
                         <button className={styles.addPetButton} onClick={handleAddPetName} custom-attribute='1' type='button'>추가</button>
                     </div>
-                    <div className={styles.formItem} style={{display: `${buttonDisplay[0]}`}}>
+                    {
+
+                    }
+                    {/* <div className={styles.formItem} style={{display: `${buttonDisplay[0]}`}}>
                         <label className={styles.itemLabel}>반려견 이름</label>
                         <input ref={inputDogName2} className={styles.itemInput} type='text' defaultValue={userDogName2} />
                         <button className={styles.addPetButton} onClick={handleRemovePetName} custom-attribute='2' type='button'>삭제</button>
@@ -213,7 +228,7 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
                         <label className={styles.itemLabel}>반려견 이름</label>
                         <input ref={inputDogName3} className={styles.itemInput} type='text' defaultValue={userDogName3} />
                         <button className={styles.addPetButton} onClick={(e) => {handleRemovePetName(e)}} custom-attribute='3' type='button'>삭제</button>
-                    </div>
+                    </div> */}
                     <div className={styles.additionalTab}>
                         <button onClick={() => {
                             setCheckMessage({ display: 'block' });

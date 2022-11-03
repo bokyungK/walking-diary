@@ -22,17 +22,17 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
         if (checkLogin()) {
             return;
         }
-
         const currentDiary = localStorage.getItem('imageName');
+
         axios.post('http://localhost:3001/get-diary', { imageName: currentDiary }, { withCredentials: true })
         .then((res) => {
-            const data = res.data;
-            if (checkCookie(data, '/login')) {
+            if (checkCookie(res.data, '/login')) {
                 return;
             }
-            
+            const data = res.data;
+
             setDiaryInfo({
-                date: data.date.slice(0, 10),
+                date: String(data.date).substring(0, 10),
                 weather: data.weather,
                 dogName: data.dog_name,
                 title: data.title,
@@ -50,7 +50,7 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
                 }
             })
         })
-        }, [checkLocation])
+    }, [checkLocation])
 
     // update
     useEffect(() => {
@@ -125,16 +125,14 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
         axios.post('http://localhost:3001/update-diary', postData[0], { withCredentials: true })
         .then((res) => {
             const data = res.data;
-
             if (checkCookie(data, '/login')) {
                 return;
             }
 
-            if (data === 'Success') {
-                changeNotice('변경되었습니다', 'correct.png', 'flex', 1);
-                setCheckLocation(false);
-                setBackgroundOpacity(0);
-            }
+            changeNotice('변경되었습니다', 'correct.png', 'flex', 1);
+            setCheckLocation(false);
+            setBackgroundOpacity(0);
+            localStorage.setItem('imageName', data);
         })
     }
 
