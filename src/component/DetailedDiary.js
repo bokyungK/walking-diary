@@ -7,7 +7,7 @@ import CheckMessage from './CheckMessage.js';
 import Notice from './Notice.js';
 
 function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, checkCookie,
-    checkLocation, setCheckLocation, checkMessage, setCheckMessage, setBackgroundOpacity} ) {
+    checkLocation, setCheckLocation, checkMessage, setCheckMessage, setBackgroundOpacity } ) {
         
     const history = useHistory();
     const sunny = useRef();
@@ -50,7 +50,7 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
                 }
             })
         })
-    }, [checkLocation])
+    }, [checkLocation, diaryInfo.imageSrc])
 
     // update
     useEffect(() => {
@@ -125,14 +125,15 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
         axios.post('http://localhost:3001/update-diary', postData[0], { withCredentials: true })
         .then((res) => {
             const data = res.data;
+
             if (checkCookie(data, '/login')) {
                 return;
             }
 
+            localStorage.setItem('imageName', data);
             changeNotice('변경되었습니다', 'correct.png', 'flex', 1);
             setCheckLocation(false);
             setBackgroundOpacity(0);
-            localStorage.setItem('imageName', data);
         })
     }
 
