@@ -176,87 +176,89 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
 
     return (
     <section className={styles.DetailedDiary}>
-        <Notice message={notice} icon={noticeIcon} display={display} />
-        <div className={styles.crudIcon}>
-            <button onClick={handleStarImage} className={styles.icons}><img className={styles.iconImages} src={diaryInfo.starred ? 'filled_star.png':'empty_star.png'} alt='즐겨찾기 버튼'/></button>
-            <button onClick={handleDiaryUpdate} className={styles.icons}><img className={styles.iconImages} src='edit.png' alt='수정 버튼' /></button>
-            <button onClick={() => {
-                setCheckMessage({ display: 'block' });
-            }} className={styles.icons}><img className={styles.iconImages} src='delete.png' alt='삭제 버튼' /></button>
-            <button onClick={() => history.push("/mydiary")} className={styles.icons}><img className={styles.iconImages} src='cancel.png' alt='뒤로가기 버튼'/></button>
-        </div>
-        {
-            checkLocation ? 
-            <>
-                <label className={styles.attachmentLabel} htmlFor='image-attach'>
-                    <p>
-                        영역을 눌러 사진을 첨부하세요! <br />
-                        (사진을 변경하거나 추가하지 않으면,<br />
-                        기존 사진이 유지됩니다)
-                    </p>
-                    {
-                        imageSrc && <>
-                            <img className={styles.previewImage} src={imageSrc} alt='첨부 이미지 미리보기' />,
-                            <button onClick={(e) => {
-                                e.preventDefault();
-                                imageAttach.current.value = '';
-                                setImageSrc('');
-                                setImg('');
-                            }} type='button'><img src='cancel.png' alt='첨부 이미지 삭제 버튼' /></button>
-                        </>
-                    }
-                </label>
-                <input ref={imageAttach} onChange={(e) => {
-                    handleImagePreview(e.target.files[0]);
-                    setImg(e.target.files[0]);
-                    }} className={styles.attachmentInput} id='image-attach' type='file' accept='image/*' />
-                <div className={styles.diaryInfo}>
-                    <div className={styles.diaryInfoItems}>{diaryInfo.date}</div>
-                    <fieldset className={`${styles.diaryInfoItems} ${styles.weatherRadio}`}>
-                        <input ref={sunny} type='radio' id='sunny' name='weather-radio' value='sunny' />
-                        <label htmlFor='sunny'>☀</label>
-                        <input ref={cloudy} type='radio' id='cloudy' name='weather-radio' value='cloudy' />
-                        <label htmlFor='cloudy'>☁</label>
-                        <input ref={rainy} type='radio' id='rainy'  name='weather-radio' value='rainy' />
-                        <label htmlFor='rainy'>☂</label>
-                        <input ref={snowy} type='radio' id='snowy'  name='weather-radio' value='snowy' />
-                        <label htmlFor='snowy'>☃</label>
-                    </fieldset>
-                    <select ref={selectedDog} className={styles.infoItem}>
-                        <option></option>
-                        <option></option>
-                        <option></option>
-                    </select>
-                </div>
-                <input ref={title} className={`${styles.writingInfo} ${styles.titleInfo}`} type='text' placeholder='제목을 입력하세요' maxLength='30' defaultValue={diaryInfo.title} />
-                <textarea ref={content} className={`${styles.writingInfo} ${styles.contentInfo}`} placeholder='일기를 입력하세요' maxLength='500' defaultValue={diaryInfo.content}></textarea>
+        <div className={styles.inner}>
+            <Notice message={notice} icon={noticeIcon} display={display} />
+            <div className={styles.crudIcon}>
+                <button onClick={handleStarImage} className={styles.icons}><img className={styles.iconImages} src={diaryInfo.starred ? 'filled_star.png':'empty_star.png'} alt='즐겨찾기 버튼'/></button>
+                <button onClick={handleDiaryUpdate} className={styles.icons}><img className={styles.iconImages} src='edit.png' alt='수정 버튼' /></button>
+                <button onClick={() => {
+                    setCheckMessage({ display: 'block' });
+                }} className={styles.icons}><img className={styles.iconImages} src='delete.png' alt='삭제 버튼' /></button>
+                <button onClick={() => history.push("/mydiary")} className={styles.icons}><img className={styles.iconImages} src='cancel.png' alt='뒤로가기 버튼'/></button>
+            </div>
+            {
+                checkLocation ? 
+                <>
+                    <label className={styles.attachmentLabel} htmlFor='image-attach'>
+                        <p>
+                            영역을 눌러 사진을 첨부하세요! <br />
+                            (사진을 변경하거나 추가하지 않으면,<br />
+                            기존 사진이 유지됩니다)
+                        </p>
+                        {
+                            imageSrc && <>
+                                <img className={styles.previewImage} src={imageSrc} alt='첨부 이미지 미리보기' />,
+                                <button onClick={(e) => {
+                                    e.preventDefault();
+                                    imageAttach.current.value = '';
+                                    setImageSrc('');
+                                    setImg('');
+                                }} type='button'><img src='cancel.png' alt='첨부 이미지 삭제 버튼' /></button>
+                            </>
+                        }
+                    </label>
+                    <input ref={imageAttach} onChange={(e) => {
+                        handleImagePreview(e.target.files[0]);
+                        setImg(e.target.files[0]);
+                        }} className={styles.attachmentInput} id='image-attach' type='file' accept='image/*' />
+                    <div className={styles.diaryInfo}>
+                        <div className={styles.diaryInfoItems}>{diaryInfo.date}</div>
+                        <fieldset className={`${styles.diaryInfoItems} ${styles.weatherRadio}`}>
+                            <input ref={sunny} type='radio' id='sunny' name='weather-radio' value='sunny' />
+                            <label htmlFor='sunny'>☀</label>
+                            <input ref={cloudy} type='radio' id='cloudy' name='weather-radio' value='cloudy' />
+                            <label htmlFor='cloudy'>☁</label>
+                            <input ref={rainy} type='radio' id='rainy'  name='weather-radio' value='rainy' />
+                            <label htmlFor='rainy'>☂</label>
+                            <input ref={snowy} type='radio' id='snowy'  name='weather-radio' value='snowy' />
+                            <label htmlFor='snowy'>☃</label>
+                        </fieldset>
+                        <select ref={selectedDog} className={styles.infoItem}>
+                            <option></option>
+                            <option></option>
+                            <option></option>
+                        </select>
+                    </div>
+                    <input ref={title} className={`${styles.writingInfo} ${styles.titleInfo}`} type='text' placeholder='제목을 입력하세요' maxLength='30' defaultValue={diaryInfo.title} />
+                    <textarea ref={content} className={`${styles.writingInfo} ${styles.contentInfo}`} placeholder='일기를 입력하세요' maxLength='500' defaultValue={diaryInfo.content}></textarea>
 
-                <Buttons buttonName={{cancel: '취소' ,submit: '변경'}} cancelLink='/detail-diary' handleFormSubmit={handleFormSubmit}
-                 setCheckLocation={setCheckLocation} setBackgroundOpacity={setBackgroundOpacity} />
-            </>
-            :
-            <>
-                <img className={styles.diaryPictures} src={diaryInfo.imageSrc} alt='일기 사진' />
-                <div className={styles.diaryInfo}>
-                    <div className={styles.diaryInfoItems}>{diaryInfo.date}</div>
-                    <fieldset className={`${styles.diaryInfoItems} ${styles.weatherRadio}`}>
-                        <input ref={sunny} type='radio' id='sunny' name='weather-radio' value='sunny' disabled />
-                        <label htmlFor='sunny'>☀</label>
-                        <input ref={cloudy} type='radio' id='cloudy' name='weather-radio' value='cloudy' disabled />
-                        <label htmlFor='cloudy'>☁</label>
-                        <input ref={rainy} type='radio' id='rainy'  name='weather-radio' value='rainy' disabled />
-                        <label htmlFor='rainy'>☂</label>
-                        <input ref={snowy} type='radio' id='snowy'  name='weather-radio' value='snowy' disabled />
-                        <label htmlFor='snowy'>☃</label>
-                    </fieldset>
-                    <div className={styles.diaryInfoItems}>{diaryInfo.dogName}</div>
-                </div>
-                <h3 className={styles.diaryTitle}>{diaryInfo.title}</h3>
-                <p className={styles.diaryContent}>{diaryInfo.content}</p>
-            </>
-        }
-        <CheckMessage checkMessage={checkMessage} setCheckMessage={setCheckMessage} handleShowMessage={handleDiaryDelete}
-         option={{ cancel: '취소', submit: '삭제' }} />
+                    <Buttons buttonName={{cancel: '취소' ,submit: '변경'}} cancelLink='/detail-diary' handleFormSubmit={handleFormSubmit}
+                    setCheckLocation={setCheckLocation} setBackgroundOpacity={setBackgroundOpacity} />
+                </>
+                :
+                <>
+                    <img className={styles.diaryPictures} src={diaryInfo.imageSrc} alt='일기 사진' />
+                    <div className={styles.diaryInfo}>
+                        <div className={styles.diaryInfoItems}>{diaryInfo.date}</div>
+                        <fieldset className={`${styles.diaryInfoItems} ${styles.weatherRadio}`}>
+                            <input ref={sunny} type='radio' id='sunny' name='weather-radio' value='sunny' disabled />
+                            <label htmlFor='sunny'>☀</label>
+                            <input ref={cloudy} type='radio' id='cloudy' name='weather-radio' value='cloudy' disabled />
+                            <label htmlFor='cloudy'>☁</label>
+                            <input ref={rainy} type='radio' id='rainy'  name='weather-radio' value='rainy' disabled />
+                            <label htmlFor='rainy'>☂</label>
+                            <input ref={snowy} type='radio' id='snowy'  name='weather-radio' value='snowy' disabled />
+                            <label htmlFor='snowy'>☃</label>
+                        </fieldset>
+                        <div className={styles.diaryInfoItems}>{diaryInfo.dogName}</div>
+                    </div>
+                    <h3 className={styles.diaryTitle}>{diaryInfo.title}</h3>
+                    <p className={styles.diaryContent}>{diaryInfo.content}</p>
+                </>
+            }
+            <CheckMessage checkMessage={checkMessage} setCheckMessage={setCheckMessage} handleShowMessage={handleDiaryDelete}
+            option={{ cancel: '취소', submit: '삭제' }} />
+        </div>
     </section>
     )
 }

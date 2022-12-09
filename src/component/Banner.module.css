@@ -12,6 +12,7 @@
 }
 
 .Banner table {
+  min-width: 702px;
   color: white;
   background-color: skyblue;
   border-collapse: collapse;
