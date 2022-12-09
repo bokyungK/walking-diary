@@ -50,7 +50,7 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
                 }
             })
         })
-    }, [checkLocation, diaryInfo.imageSrc])
+    }, [checkLocation])
 
     // update
     useEffect(() => {

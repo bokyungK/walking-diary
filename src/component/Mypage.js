@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useHistory } from 'react-router-dom';
 import axios from "axios";
 import styles from "./Mypage.module.css";
 import Buttons from "./Buttons.js"
@@ -9,57 +8,52 @@ import Notice from './Notice.js';
 function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMessage,
      setCheckMessage, checkCookie }) {
 
-    const history = useHistory();
     const userPw = useRef();
     const userNewPw = useRef();
     const inputDogName1 = useRef();
     const inputDogName2 = useRef();
     const inputDogName3 = useRef();
+    const inputDogNames = [inputDogName1, inputDogName2, inputDogName3];
     const [userName, setUserName] = useState('');
     const [userId, setUserId] = useState('');
-    const [userDogName1, setUserDogName1] = useState('');
-    const [userDogName2, setUserDogName2] = useState('');
-    const [userDogName3, setUserDogName3] = useState('');
-    const [buttonDisplay, setButtonDisplay] = useState(['none', 'none']);
-
-    const [dogNames, setDogNames] = useState();
+    const [dogNames, setDogNames] = useState([]);
 
     function handleAddPetName() {
-        // const countBlock = buttonDisplay.filter((item) => {
-        //     return item === 'block';
-        // }).length;
-
-        // if (countBlock === 2) {
-        //     return;
-        // }
-
-        // if (countBlock === 1 && buttonDisplay[1] === 'block') {
-        //     const copyArr = [...buttonDisplay];
-        //     copyArr[countBlock - 1] = 'block';
-        //     setButtonDisplay(copyArr);
-        //     return;
-        // }
-        
-        // const copyArr = [...buttonDisplay];
-        // copyArr[countBlock] = 'block';
-        // setButtonDisplay(copyArr);
+        const nameLength = dogNames.length;
+        if (nameLength > 2) {
+            return;
+        }
+        setDogNames([...dogNames, '']);
     }
     
-    function handleRemovePetName(e) {
-        // const getButtonNum = parseInt(e.target.getAttribute('custom-attribute'));
-        // const copyArr = [...buttonDisplay];
-        // copyArr[getButtonNum - 2] = 'none';
-        // setButtonDisplay(copyArr);
+    function handleRemovePetName(idx) {
+        const newDogNames = dogNames;
+        newDogNames.splice(idx, 1);
+        setDogNames([...newDogNames]);
 
-        // const userDogNames = [setUserDogName1, setUserDogName2, setUserDogName3];
-        // userDogNames[getButtonNum - 1]('');
+        const userInfo = {
+            idx: idx,
+        }
+
+        axios.post('http://localhost:3001/delete-dog', userInfo, { withCredentials: true })
+        .then(res => {
+            const data = res.data;
+            
+            if (checkCookie(data, '/login')) {
+                return;
+            }
+
+            if (data === 'Success') {
+                changeNotice('반려견 이름이 삭제되었습니다', 'correct.png', 'flex', 1);
+            }
+        });
     }
 
     useEffect(() => {
         if (checkLogin()) {
             return;
         }
-        
+
         axios.get('http://localhost:3001/info', { withCredentials: true })
         .then(res => {
             const data = res.data;
@@ -68,36 +62,16 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
                 return;
             }
 
-            const dogNames = [data.dog_name_1, data.dog_name_2, data.dog_name_3];
-            dogNames.forEach((name, idx) => {
-                const state = [...buttonDisplay];
-                console.log(buttonDisplay);
-                if (name !== '') {
-                    setButtonDisplay('block');
-                }
+            setUserName(data.name);
+            setUserId(data.id);
+
+            const getDogNames = [data.dog_name_1, data.dog_name_2, data.dog_name_3];
+            const getFilteredDogNames = getDogNames.filter((dogName) => {
+                return dogName !== '';
             })
-            // if (Object.keys(data).length === 2) {
-            //     setUserName(data.name);
-            //     setUserId(data.id);
-            // } else {
-            //     setUserName(data.name);
-            //     setUserId(data.id);
-            //     if (data.dog_name_1 !== '') {
-            //         setUserDogName1(data.dog_name_1);
-            //     } else {
-            //         setUserDogName1('');
-            //     }
-            //     if (data.dog_name_2 !== '') {
-            //         setUserDogName2(data.dog_name_2);
-            //         handleAddPetName();
-            //     }
-            //     if (data.dog_name_3 !== '') {
-            //         setUserDogName3(data.dog_name_3);
-            //         handleAddPetName();
-            //     }
-            // }
+            setDogNames([...getFilteredDogNames]);
         })
-    }, [history])
+    }, [])
 
     function handleInputValue(e) {
         const isRegExp = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,}$/.test(e.target.value);
@@ -114,27 +88,25 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
         const userInfo = {
             userPw: userPw.current.value,
             userNewPw: userNewPw.current.value,
-            userDogName1: [inputDogName1.current.value, userDogName1 === inputDogName1.current.value ? true : false],
-            userDogName2: [inputDogName2.current.value, userDogName2 === inputDogName2.current.value ? true : false],
-            userDogName3: [inputDogName3.current.value, userDogName3 === inputDogName3.current.value ? true : false],
+            userDogName1: [inputDogName1.current.value, inputDogName1.current !== null && inputDogName1.current.defaultValue === inputDogName1.current.value ? true : false],
+            userDogName2: [inputDogName2.current.value, inputDogName2.current !== null && inputDogName2.current.defaultValue === inputDogName2.current.value ? true : false],
+            userDogName3: [inputDogName3.current.value, inputDogName3.current !== null && inputDogName3.current.defaultValue === inputDogName3.current.value ? true : false],
         }
-        
+
+        // 비밀 번호를 입력하지 않은 경우
         if (userInfo.userPw === '') {
-            changeNotice('비밀번호를 입력하세요', 'warning.png', 'flex', 0);
+            changeNotice('정보 변경을 위해, 비밀번호를 입력하세요', 'warning.png', 'flex', 0); 
             return;
         }
 
+        // 새 비밀번호를 입력한 경우
+            // 1. 비밀번호가 규칙에 맞지 않음
         if (userInfo.userNewPw !== '' && userNewPw.current.attributes.regExp.value === 'false') {
             changeNotice('새 비밀번호가 규칙에 어긋납니다', 'warning.png', 'flex', 0);
             return;
         }
 
-        const condition = userInfo.userDogName1[1] && userInfo.userDogName2[1] && userInfo.userDogName3[1];
-        if (condition && userInfo.userNewPw === '') {
-            changeNotice('변경된 정보가 없습니다', 'warning.png', 'flex', 0);
-            return;
-        }
-
+            // 2. 비밀번호가 규칙에 맞거나 반려견 이름 변경
         axios.post('http://localhost:3001/info', userInfo, { withCredentials: true })
         .then(res => {
             const data = res.data;
@@ -211,24 +183,22 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
                         <label className={styles.itemLabel}>새 비밀번호</label>
                         <input ref={userNewPw} onChange={handleInputValue} className={styles.itemInput} type='password' autoComplete="off" maxLength='15' />
                     </div>
-                    <div className={styles.formItem}>
-                        <label className={styles.itemLabel}>반려견 이름</label>
-                        <input ref={inputDogName1} className={styles.itemInput} type='text' defaultValue={userDogName1} />
-                        <button className={styles.addPetButton} onClick={handleAddPetName} custom-attribute='1' type='button'>추가</button>
-                    </div>
                     {
-
+                        dogNames.map((name, idx) => {
+                            return  <div className={styles.formItem} key={name + idx}>
+                                        <label className={styles.itemLabel}>반려견 이름</label>
+                                        <input ref={inputDogNames[idx]} className={styles.itemInput} type='text' defaultValue={name} maxLength='10' />
+                                        {
+                                            idx === 0 ? <button className={styles.addPetButton} onClick={handleAddPetName} type='button'>추가</button>
+                                            :
+                                            idx === dogNames.length - 1 ?
+                                                <button className={styles.addPetButton} onClick={() => {handleRemovePetName(idx)}} type='button'>삭제</button>
+                                                :
+                                                ''
+                                        }
+                                    </div>
+                        })
                     }
-                    {/* <div className={styles.formItem} style={{display: `${buttonDisplay[0]}`}}>
-                        <label className={styles.itemLabel}>반려견 이름</label>
-                        <input ref={inputDogName2} className={styles.itemInput} type='text' defaultValue={userDogName2} />
-                        <button className={styles.addPetButton} onClick={handleRemovePetName} custom-attribute='2' type='button'>삭제</button>
-                    </div>
-                    <div className={styles.formItem} style={{display: `${buttonDisplay[1]}`}}>
-                        <label className={styles.itemLabel}>반려견 이름</label>
-                        <input ref={inputDogName3} className={styles.itemInput} type='text' defaultValue={userDogName3} />
-                        <button className={styles.addPetButton} onClick={(e) => {handleRemovePetName(e)}} custom-attribute='3' type='button'>삭제</button>
-                    </div> */}
                     <div className={styles.additionalTab}>
                         <button onClick={() => {
                             setCheckMessage({ display: 'block' });
