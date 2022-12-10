@@ -48,16 +48,26 @@ function Banner({ checkCookie }) {
         const previousLastDate = new Date(currentYear, currentMonth - 1, 0).getDate();
         const currentFirstDay = new Date(currentYear, currentMonth - 1, 0).getDay() + 1;
         const currentLastDate = new Date(currentYear, currentMonth, 0).getDate();
-        const calendarLength = currentFirstDay + currentLastDate + 7 - (currentFirstDay + currentLastDate) % 7;
+        const calendarLength = (currentFirstDay + currentLastDate) % 7 === 0 ?
+                                currentFirstDay + currentLastDate
+                                :
+                                (Math.floor((currentFirstDay + currentLastDate) / 7) + 1) * 7;
         const dateArr = [];
 
         for (let i = 0; i < calendarLength; i++) {
             const index = Math.floor(i / 7);
             const date = (i + 1) - currentFirstDay;
             const previousDate = previousLastDate - currentFirstDay + (i + 1);
-            const num = i < currentFirstDay  ? `${currentMonth - 1}/` + `${previousDate}` :
-            date > currentLastDate ? `${currentMonth + 1}/` + `${date - currentLastDate}` : date;
-
+            const num = i < currentFirstDay ? 
+                        `${currentMonth - 1}/` + `${previousDate}` 
+                        :
+                        date > currentLastDate ?
+                            currentMonth === 12 ? 
+                                `1/` + `${date - currentLastDate}`
+                                :
+                                `${currentMonth + 1}/` + `${date - currentLastDate}`
+                            :
+                            date;
 
             if (dateArr[index] === undefined) {
                 dateArr[index] = [num, ]
