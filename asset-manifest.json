@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/walking-diary/static/css/main.4f38cd77.css",
+    "main.js": "/walking-diary/static/js/main.db73228b.js",
+    "static/js/787.7e769c87.chunk.js": "/walking-diary/static/js/787.7e769c87.chunk.js",
+    "static/media/background.png": "/walking-diary/static/media/background.0b2fb6ad3df47ddbaf4a.png",
+    "index.html": "/walking-diary/index.html",
+    "main.4f38cd77.css.map": "/walking-diary/static/css/main.4f38cd77.css.map",
+    "main.db73228b.js.map": "/walking-diary/static/js/main.db73228b.js.map",
+    "787.7e769c87.chunk.js.map": "/walking-diary/static/js/787.7e769c87.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4f38cd77.css",
+    "static/js/main.db73228b.js"
+  ]
+}
