@@ -16,7 +16,7 @@ function Banner({ checkCookie }) {
 
     useEffect(() => {
         if (loginState) {
-            axios.get('http://localhost:3001/calendar', { withCredentials: true })
+            axios.get('http://52.79.224.184:3001/calendar', { withCredentials: true })
             .then((res) => {
                 const data = res.data;
 

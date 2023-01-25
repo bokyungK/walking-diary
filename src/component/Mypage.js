@@ -35,7 +35,7 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
             idx: idx,
         }
 
-        axios.post('http://localhost:3001/delete-dog', userInfo, { withCredentials: true })
+        axios.post('http://52.79.224.184:3001/delete-dog', userInfo, { withCredentials: true })
         .then(res => {
             const data = res.data;
             
@@ -54,7 +54,7 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
             return;
         }
 
-        axios.get('http://localhost:3001/info', { withCredentials: true })
+        axios.get('http://52.79.224.184:3001/info', { withCredentials: true })
         .then(res => {
             const data = res.data;
 
@@ -107,7 +107,7 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
         }
 
             // 2. 비밀번호가 규칙에 맞거나 반려견 이름 변경
-        axios.post('http://localhost:3001/info', userInfo, { withCredentials: true })
+        axios.post('http://52.79.224.184:3001/info', userInfo, { withCredentials: true })
         .then(res => {
             const data = res.data;
 
@@ -130,7 +130,7 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
             return;
         }
 
-        axios.post('http://localhost:3001/withdrawal', { userPw: userPw.current.value }, { withCredentials: true })
+        axios.post('http://52.79.224.184:3001/withdrawal', { userPw: userPw.current.value }, { withCredentials: true })
         .then(res => {
             const data = res.data;
 
@@ -147,7 +147,7 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
     }
 
     function handleLogout() {
-        axios.get('http://localhost:3001/logout', { withCredentials: true })
+        axios.get('http://52.79.224.184:3001/logout', { withCredentials: true })
         .then(res => {
             const data = res.data;
 

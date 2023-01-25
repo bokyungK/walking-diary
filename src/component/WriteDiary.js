@@ -44,7 +44,7 @@ function WriteDiary({ notice, noticeIcon, display, changeNotice, checkLogin, che
             return;
         }
 
-        axios.get('http://localhost:3001/get-dogs', { withCredentials: true })
+        axios.get('http://52.79.224.184:3001/get-dogs', { withCredentials: true })
         .then(res => {
             const data = res.data;
 
@@ -82,7 +82,7 @@ function WriteDiary({ notice, noticeIcon, display, changeNotice, checkLogin, che
         formData.append('img', img);
         formData.append('info', JSON.stringify(userInfo));
 
-        axios.post('http://localhost:3001/write-diary', formData, { withCredentials: true })
+        axios.post('http://52.79.224.184:3001/write-diary', formData, { withCredentials: true })
         .then(res => {
             const data = res.data;
 
