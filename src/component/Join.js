@@ -56,7 +56,7 @@ function Join({ notice, noticeIcon, display, changeNotice }) {
         if (regExpBooleanArr.includes("false")) {
             changeNotice('정보를 규칙에 맞게 입력해주세요', 'warning.png', 'flex', 0);
         } else {
-            axios.post('http://52.79.224.184:3001/join', userInfo)
+            axios.post('https://api.walking-diary-server.site/join', userInfo)
             .then(res => {
                 if (res.data === 'Success') {
                     changeNotice('가입 성공', 'correct.png', 'flex', "/login");

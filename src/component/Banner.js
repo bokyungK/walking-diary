@@ -11,12 +11,12 @@ function Banner({ checkCookie }) {
     // get current year, month
     const today = new Date();
     const currentYear = today.getFullYear();
-    const currentMonth = today.getMonth() + 1;
+    const currentMonth = today.getMonth();
 
 
     useEffect(() => {
         if (loginState) {
-            axios.get('http://52.79.224.184:3001/calendar', { withCredentials: true })
+            axios.get('https://api.walking-diary-server.site/calendar', { withCredentials: true })
             .then((res) => {
                 const data = res.data;
 
@@ -35,7 +35,7 @@ function Banner({ checkCookie }) {
                     const month = parseInt(item.date.slice(5, 7));
                     const date = parseInt(item.date.slice(8, 10));
 
-                    if (currentYear === year && currentMonth === month) {
+                    if (currentYear === year && (currentMonth + 1) === month) {
                         writedArr.push(date);
                     }
                     setWritedDate(writedArr);
@@ -45,29 +45,35 @@ function Banner({ checkCookie }) {
     }, [])
 
     useEffect(() => {
-        const previousLastDate = new Date(currentYear, currentMonth - 1, 0).getDate();
-        const currentFirstDay = new Date(currentYear, currentMonth - 1, 0).getDay() + 1;
-        const currentLastDate = new Date(currentYear, currentMonth, 0).getDate();
-        const calendarLength = (currentFirstDay + currentLastDate) % 7 === 0 ?
-                                currentFirstDay + currentLastDate
-                                :
-                                (Math.floor((currentFirstDay + currentLastDate) / 7) + 1) * 7;
-        const dateArr = [];
+        const previousLastDate = new Date(currentYear, currentMonth, 0).getDate();
+        const currentFirstDay = new Date(currentYear, currentMonth, 1).getDay();
+        const currentLastDate = new Date(currentYear, currentMonth + 1, 0).getDate();
 
+        const calendarLength = currentFirstDay === 0 ?
+                                // 1일이 일요일부터 시작할 때
+                                currentLastDate % 7 === 0 ? 
+                                    currentLastDate
+                                    :
+                                    currentLastDate + (7 - currentLastDate % 7) 
+                                :
+                                // 1일이 일요일부터 시작하지 않을 때
+                                (currentFirstDay + currentLastDate) % 7 === 0 ?
+                                    currentFirstDay + currentLastDate
+                                    :
+                                    currentFirstDay + currentLastDate + (7 - ((currentFirstDay + currentLastDate) % 7))
+        const dateArr = new Array(calendarLength);
+    
         for (let i = 0; i < calendarLength; i++) {
             const index = Math.floor(i / 7);
             const date = (i + 1) - currentFirstDay;
             const previousDate = previousLastDate - currentFirstDay + (i + 1);
             const num = i < currentFirstDay ? 
-                        `${currentMonth - 1}/` + `${previousDate}` 
-                        :
-                        date > currentLastDate ?
-                            currentMonth === 12 ? 
-                                `1/` + `${date - currentLastDate}`
-                                :
-                                `${currentMonth + 1}/` + `${date - currentLastDate}`
+                            currentMonth === 0 ? `12/` + `${previousDate}` : `${currentMonth}/` + `${previousDate}` 
                             :
-                            date;
+                            date > currentLastDate ?
+                                currentMonth === 11 ? `1/` + `${date - currentLastDate}` : `${currentMonth + 2}/` + `${date - currentLastDate}`
+                                :
+                                date;
 
             if (dateArr[index] === undefined) {
                 dateArr[index] = [num, ]
@@ -83,7 +89,7 @@ function Banner({ checkCookie }) {
             {
                 loginState ?
                     <div>
-                        <h2>{ `${currentYear}년 ${currentMonth}월달의 기록` }</h2>
+                        <h2>{ `${currentYear}년 ${currentMonth + 1}월달의 기록` }</h2>
                         <table>
                             <thead>
                                 <tr>

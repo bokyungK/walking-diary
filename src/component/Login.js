@@ -18,7 +18,7 @@ function Login({ notice, noticeIcon, display, changeNotice }) {
         if (condition) {
             changeNotice('모든 정보를 입력하세요', 'warning.png', 'flex', 0);
         } else {
-            axios.post('http://52.79.224.184:3001/login', userInfo, { withCredentials: true })
+            axios.post('https://api.walking-diary-server.site/login', userInfo, { withCredentials: true })
             .then(res => {
                 if (res.data === 'Success') {
                     localStorage.setItem('loginState', true);
