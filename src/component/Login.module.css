@@ -27,7 +27,8 @@
 .label {
     margin-right: 1rem;
     font-size: 1.5rem;
-    font-weight: lighter;
+    font-weight: bold;
+    color: #212121;
 }
 
 .input {

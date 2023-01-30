@@ -30,23 +30,6 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
         const newDogNames = dogNames;
         newDogNames.splice(idx, 1);
         setDogNames([...newDogNames]);
-
-        const userInfo = {
-            idx: idx,
-        }
-
-        axios.post('https://api.walking-diary-server.site/delete-dog', userInfo, { withCredentials: true })
-        .then(res => {
-            const data = res.data;
-            
-            if (checkCookie(data, '/login')) {
-                return;
-            }
-
-            if (data === 'Success') {
-                changeNotice('반려견 이름이 삭제되었습니다', 'correct.png', 'flex', 1);
-            }
-        });
     }
 
     useEffect(() => {
@@ -64,10 +47,11 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
 
             setUserName(data.name);
             setUserId(data.id);
-
-            const getDogNames = [data.dog_name_1, data.dog_name_2, data.dog_name_3];
-            const getFilteredDogNames = getDogNames.filter((dogName) => {
-                return dogName !== '';
+            const getDogNames = [data.dog_name_1 === undefined ? '' : data.dog_name_1,
+                                 data.dog_name_2 === undefined ? '' : data.dog_name_2,
+                                 data.dog_name_3 === undefined ? '' : data.dog_name_3];
+            const getFilteredDogNames = getDogNames.filter((dogName, idx) => {
+                return dogName !== '' || idx === 0;
             })
             setDogNames([...getFilteredDogNames]);
         })
@@ -88,9 +72,9 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
         const userInfo = {
             userPw: userPw.current.value,
             userNewPw: userNewPw.current.value,
-            userDogName1: [inputDogName1.current.value, inputDogName1.current !== null && inputDogName1.current.defaultValue === inputDogName1.current.value ? true : false],
-            userDogName2: [inputDogName2.current.value, inputDogName2.current !== null && inputDogName2.current.defaultValue === inputDogName2.current.value ? true : false],
-            userDogName3: [inputDogName3.current.value, inputDogName3.current !== null && inputDogName3.current.defaultValue === inputDogName3.current.value ? true : false],
+            userDogName1: inputDogName1.current === undefined || inputDogName1.current === null ? '' : inputDogName1.current.value,
+            userDogName2: inputDogName2.current === undefined || inputDogName2.current === null ? '' : inputDogName2.current.value,
+            userDogName3: inputDogName3.current === undefined || inputDogName3.current === null ? '' : inputDogName3.current.value,
         }
 
         // 비밀 번호를 입력하지 않은 경우
@@ -186,7 +170,7 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
                     {
                         dogNames.map((name, idx) => {
                             return  <div className={styles.formItem} key={name + idx}>
-                                        <label className={styles.itemLabel}>반려견 이름</label>
+                                        <label className={styles.itemLabel}>반려견 이름 {idx + 1}</label>
                                         <input ref={inputDogNames[idx]} className={styles.itemInput} type='text' defaultValue={name} maxLength='10' />
                                         {
                                             idx === 0 ? <button className={styles.addPetButton} onClick={handleAddPetName} type='button'>추가</button>
