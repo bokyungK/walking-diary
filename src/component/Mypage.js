@@ -125,6 +125,7 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
                 changeNotice('비밀번호가 틀렸습니다', 'warning.png', 'flex', 0);
             }
             localStorage.removeItem('loginState');
+            localStorage.removeItem('imageName');
             changeNotice('탈퇴 완료', 'goodbye.png', 'flex', "/");
             setCheckMessage({ display: 'none' });
         });
@@ -141,6 +142,7 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
             changeNotice('로그아웃 완료', 'goodbye.png', 'flex', "/");
             setTimeout(() => {
                 localStorage.removeItem('loginState');
+                localStorage.removeItem('imageName');
             }, 1000)
         });
     }
