@@ -4,7 +4,7 @@ import Buttons from './Buttons.js';
 import styles from './Join.module.css';
 import Notice from './Notice.js';
 
-function Join({ notice, noticeIcon, display, changeNotice }) {
+function Join({ notice, noticeIcon, display, changeNotice, apiUrl }) {
     const buttonName = {
         cancel: '취소',
         submit: '가입'
@@ -56,7 +56,7 @@ function Join({ notice, noticeIcon, display, changeNotice }) {
         if (regExpBooleanArr.includes("false")) {
             changeNotice('정보를 규칙에 맞게 입력해주세요', 'warning.png', 'flex', 0);
         } else {
-            axios.post('https://api.walking-diary-server.site/join', userInfo)
+            axios.post(apiUrl + 'join', userInfo)
             .then(res => {
                 if (res.data === 'Success') {
                     changeNotice('가입 성공', 'correct.png', 'flex', "/login");

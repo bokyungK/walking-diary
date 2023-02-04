@@ -7,8 +7,8 @@ import CheckMessage from './CheckMessage.js';
 import Notice from './Notice.js';
 
 function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, checkCookie,
-    checkLocation, setCheckLocation, checkMessage, setCheckMessage, setBackgroundOpacity } ) {
-        
+    checkLocation, setCheckLocation, checkMessage, setCheckMessage, setBackgroundOpacity, apiUrl } ) {
+
     const history = useHistory();
     const sunny = useRef();
     const cloudy = useRef();
@@ -24,7 +24,7 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
         }
         const currentDiary = localStorage.getItem('imageName');
 
-        axios.post('https://api.walking-diary-server.site/get-diary', { imageName: currentDiary }, { withCredentials: true })
+        axios.post(apiUrl + 'get-diary', { imageName: currentDiary }, { withCredentials: true })
         .then((res) => {
             if (checkCookie(res.data, '/login')) {
                 return;
@@ -38,7 +38,7 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
                 title: data.title,
                 content: data.content,
                 imageName: data.image_name,
-                imageSrc: `https://api.walking-diary-server.site/${data.id}/${data.image_name}`,
+                imageSrc: apiUrl + `${data.id}/${data.image_name}`,
                 starred: data.starred,
             })
 
@@ -57,7 +57,7 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
         if (checkLocation) {
             setImageSrc(diaryInfo.imageSrc);
 
-            axios.get('https://api.walking-diary-server.site/get-dogs', { withCredentials: true })
+            axios.get(apiUrl + 'get-dogs', { withCredentials: true })
             .then(res => {
                 const data = res.data;
 
@@ -122,7 +122,7 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
             postData.push(formData);
         }
 
-        axios.post('https://api.walking-diary-server.site/update-diary', postData[0], { withCredentials: true })
+        axios.post(apiUrl + 'update-diary', postData[0], { withCredentials: true })
         .then((res) => {
             const data = res.data;
 
@@ -139,7 +139,7 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
 
     // delete
     function handleDiaryDelete() {
-        axios.post('https://api.walking-diary-server.site/delete-diary', diaryInfo, { withCredentials: true })
+        axios.post(apiUrl + 'delete-diary', diaryInfo, { withCredentials: true })
         .then(res => {
             const data = res.data;
 
@@ -163,7 +163,7 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
         setDiaryInfo({...diaryInfo, starred: reverseState});
         starred.push(reverseState);
 
-        axios.post('https://api.walking-diary-server.site/starred', {starred: starred[0], imageName: imageName}, { withCredentials: true })
+        axios.post(apiUrl + 'starred', {starred: starred[0], imageName: imageName}, { withCredentials: true })
         
         .then((res) => {
             const data = res.data;

@@ -6,7 +6,7 @@ import CheckMessage from './CheckMessage.js';
 import Notice from './Notice.js';
 
 function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMessage,
-     setCheckMessage, checkCookie }) {
+     setCheckMessage, checkCookie, apiUrl }) {
 
     const userPw = useRef();
     const userNewPw = useRef();
@@ -37,7 +37,7 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
             return;
         }
 
-        axios.get('https://api.walking-diary-server.site/info', { withCredentials: true })
+        axios.get(apiUrl + 'info', { withCredentials: true })
         .then(res => {
             const data = res.data;
 
@@ -91,7 +91,7 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
         }
 
             // 2. 비밀번호가 규칙에 맞거나 반려견 이름 변경
-        axios.post('https://api.walking-diary-server.site/info', userInfo, { withCredentials: true })
+        axios.post(apiUrl + 'info', userInfo, { withCredentials: true })
         .then(res => {
             const data = res.data;
 
@@ -114,7 +114,7 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
             return;
         }
 
-        axios.post('https://api.walking-diary-server.site/withdrawal', { userPw: userPw.current.value }, { withCredentials: true })
+        axios.post(apiUrl + 'withdrawal', { userPw: userPw.current.value }, { withCredentials: true })
         .then(res => {
             const data = res.data;
 
@@ -132,7 +132,7 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
     }
 
     function handleLogout() {
-        axios.get('https://api.walking-diary-server.site/logout', { withCredentials: true })
+        axios.get(apiUrl + 'logout', { withCredentials: true })
         .then(res => {
             const data = res.data;
 

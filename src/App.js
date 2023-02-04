@@ -11,6 +11,8 @@ import DetailedDiary from './component/DetailedDiary.js';
 import WriteDiary from './component/WriteDiary.js';
 
 function App() {
+  const apiUrl = "http://localhost:3001/";
+  // https://api.walking-diary-server.site/
   const history = useHistory();
   const wrapper = useRef();
   const [backgroundOpacity, setBackgroundOpacity] = useState(0);
@@ -112,27 +114,28 @@ function App() {
     <Header backgroundOpacity={backgroundOpacity} />
     <main>
       <Route path="/" exact={true} render={() =>
-        <Banner checkCookie={checkCookie} />} />
+        <Banner checkCookie={checkCookie} apiUrl={apiUrl} />} />
       <Route path="/login" render={() =>
         <Login changeNotice={changeNotice} notice={notice}
-        noticeIcon={noticeIcon} display={display}/>} />
+        noticeIcon={noticeIcon} display={display} apiUrl={apiUrl} />} />
       <Route path="/join" render={() =>
-        <Join changeNotice={changeNotice} notice={notice} noticeIcon={noticeIcon} display={display} />} />
+        <Join changeNotice={changeNotice} notice={notice} noticeIcon={noticeIcon} display={display} 
+        apiUrl={apiUrl} />} />
       <Route path="/mypage" render={() =>
         <Mypage changeNotice={changeNotice} checkLogin={checkLogin} checkMessage={checkMessage}
         setCheckMessage={setCheckMessage} checkCookie={checkCookie} notice={notice} noticeIcon={noticeIcon}
-        display={display} /> } />
+        display={display} apiUrl={apiUrl} /> } />
       <Route path="/mydiary" render={() =>
         <MyDiary notice={notice} noticeIcon={noticeIcon} display={display} checkLogin={checkLogin}
-        checkCookie={checkCookie} />} />
+        checkCookie={checkCookie} apiUrl={apiUrl} />} />
       <Route path="/detail-diary" render={() =>
         <DetailedDiary notice={notice} noticeIcon={noticeIcon} display={display} changeNotice={changeNotice}
         checkLogin={checkLogin} checkLocation={checkLocation} setCheckLocation={setCheckLocation} 
         checkMessage={checkMessage} setCheckMessage={setCheckMessage} checkCookie={checkCookie}
-        setBackgroundOpacity={setBackgroundOpacity} /> } />
+        setBackgroundOpacity={setBackgroundOpacity} apiUrl={apiUrl} /> } />
       <Route path="/write-diary" render={() =>
        <WriteDiary notice={notice} noticeIcon={noticeIcon} display={display} changeNotice={changeNotice}
-       checkLogin={checkLogin} checkCookie={checkCookie} />} />
+       checkLogin={checkLogin} checkCookie={checkCookie} apiUrl={apiUrl} />} />
     </main>
   </div>
   )

@@ -5,7 +5,9 @@ import Notice from './Notice.js';
 import styles from './MyDiary.module.css';
 
 
-function MyDiary({ notice, noticeIcon, display, checkLogin, checkCookie }) {
+function MyDiary({ notice, noticeIcon, display, checkLogin, checkCookie,
+    apiUrl }) {
+
     const history = useHistory();
     const favoriteSlider = useRef();
     const sliderSection = useRef();
@@ -33,7 +35,7 @@ function MyDiary({ notice, noticeIcon, display, checkLogin, checkCookie }) {
             return;
         }
 
-        axios.post("https://api.walking-diary-server.site/diaries", { order: getOrder }, { withCredentials: true })
+        axios.post(apiUrl + "diaries", { order: getOrder }, { withCredentials: true })
         .then(res => {
             const data = res.data;
 
@@ -51,7 +53,7 @@ function MyDiary({ notice, noticeIcon, display, checkLogin, checkCookie }) {
                             dogName: item.dog_name,               
                             title: item.title,
                             imageName: item.image_name,
-                            imageSrc: `https://api.walking-diary-server.site/${item.id}/${item.image_name}`
+                            imageSrc: apiUrl + `${item.id}/${item.image_name}`
                         })
                     }
                 })
@@ -66,13 +68,13 @@ function MyDiary({ notice, noticeIcon, display, checkLogin, checkCookie }) {
                         dogName: item.dog_name,
                         title: item.title,
                         imageName: item.image_name,
-                        imageSrc: `https://api.walking-diary-server.site/${item.id}/${item.image_name}`,
+                        imageSrc: apiUrl + `${item.id}/${item.image_name}`,
                     }})
                     setCards(diaryData);
             }
         })
 
-        axios.get('https://api.walking-diary-server.site/get-dogs', { withCredentials: true })
+        axios.get(apiUrl + 'get-dogs', { withCredentials: true })
         .then(res => {
             const data = res.data;
             const clearData = Object.values(data).filter((name) => name !== '');
@@ -91,7 +93,7 @@ function MyDiary({ notice, noticeIcon, display, checkLogin, checkCookie }) {
 
         localStorage.setItem('order', order);
 
-        axios.post('https://api.walking-diary-server.site/order', { order: order }, { withCredentials: true })
+        axios.post(apiUrl + 'order', { order: order }, { withCredentials: true })
         .then(res => {
             const data = res.data;
             
@@ -105,7 +107,7 @@ function MyDiary({ notice, noticeIcon, display, checkLogin, checkCookie }) {
                     title: item.title,
                     dogName: item.dog_name,
                     imageName: item.image_name,
-                    imageSrc: `https://api.walking-diary-server.site/${item.id}/${item.image_name}`,
+                    imageSrc: apiUrl + `${item.id}/${item.image_name}`,
                 }
             })
             setCards(dataArr);
@@ -164,7 +166,7 @@ function MyDiary({ notice, noticeIcon, display, checkLogin, checkCookie }) {
             const share = length / 9; // 몫
 
             if (length % 9 === 0) {
-                axios.post('https://api.walking-diary-server.site/more-diaries', { share: share, order: getOrder }, { withCredentials: true })
+                axios.post(apiUrl + 'more-diaries', { share: share, order: getOrder }, { withCredentials: true })
                 .then(res => {
                     const data = res.data;
 
@@ -182,7 +184,7 @@ function MyDiary({ notice, noticeIcon, display, checkLogin, checkCookie }) {
                             dogName: item.dog_name,
                             title: item.title,
                             imageName: item.image_name,
-                            imageSrc: `https://api.walking-diary-server.site/${item.id}/${item.image_name}`,
+                            imageSrc: apiUrl + `${item.id}/${item.image_name}`,
                         }})
                     setCards([...cards].concat(diaryData));
                 })

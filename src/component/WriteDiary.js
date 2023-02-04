@@ -4,7 +4,9 @@ import Buttons from "./Buttons";
 import Notice from './Notice.js';
 import styles from "./WriteDiary.module.css";
 
-function WriteDiary({ notice, noticeIcon, display, changeNotice, checkLogin, checkCookie }) {
+function WriteDiary({ notice, noticeIcon, display, changeNotice, checkLogin, checkCookie,
+    apiUrl }) {
+
     const imageAttach = useRef();;
     const date = useRef();
     date.value = `${new Date().getFullYear()}-${new Date().getMonth() + 1 < 10 ? '0' + (new Date().getMonth() + 1) : new Date().getMonth() + 1}-${new Date().getDate() < 10 ? '0' + new Date().getDate() : new Date().getDate()}`;
@@ -44,7 +46,7 @@ function WriteDiary({ notice, noticeIcon, display, changeNotice, checkLogin, che
             return;
         }
 
-        axios.get('https://api.walking-diary-server.site/get-dogs', { withCredentials: true })
+        axios.get(apiUrl + 'get-dogs', { withCredentials: true })
         .then(res => {
             const data = res.data;
 
@@ -82,7 +84,7 @@ function WriteDiary({ notice, noticeIcon, display, changeNotice, checkLogin, che
         formData.append('img', img);
         formData.append('info', JSON.stringify(userInfo));
 
-        axios.post('https://api.walking-diary-server.site/write-diary', formData, { withCredentials: true })
+        axios.post(apiUrl + 'write-diary', formData, { withCredentials: true })
         .then(res => {
             const data = res.data;
 

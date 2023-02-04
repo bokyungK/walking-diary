@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import styles from './Banner.module.css'
 
-function Banner({ checkCookie }) {
+function Banner({ checkCookie, apiUrl }) {
     const loginState = localStorage.getItem('loginState');
     const [calendar, setCalendar] = useState([]);
     const days = ['일', '월', '화', '수', '목', '금', '토'];
@@ -16,7 +16,7 @@ function Banner({ checkCookie }) {
 
     useEffect(() => {
         if (loginState) {
-            axios.get('https://api.walking-diary-server.site/calendar', { withCredentials: true })
+            axios.get(apiUrl + 'calendar', { withCredentials: true })
             .then((res) => {
                 const data = res.data;
 

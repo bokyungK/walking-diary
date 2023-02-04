@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import styles from './Login.module.css';
 import Notice from './Notice.js';
 
-function Login({ notice, noticeIcon, display, changeNotice }) {
+function Login({ notice, noticeIcon, display, changeNotice, apiUrl }) {
     const userId = useRef();
     const userPw = useRef();
 
@@ -18,7 +18,7 @@ function Login({ notice, noticeIcon, display, changeNotice }) {
         if (condition) {
             changeNotice('모든 정보를 입력하세요', 'warning.png', 'flex', 0);
         } else {
-            axios.post('https://api.walking-diary-server.site/login', userInfo, { withCredentials: true })
+            axios.post(apiUrl + 'login', userInfo, { withCredentials: true })
             .then(res => {
                 if (res.data === 'Success') {
                     localStorage.setItem('loginState', true);
