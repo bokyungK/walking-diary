@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from 'react-router-dom';
 import Notice from './Notice.js';
-import styles from './MyDiary.module.css';
+import styled, { css } from "styled-components";
 
 
 function MyDiary({ notice, noticeIcon, display, checkLogin, checkCookie,
@@ -126,7 +126,7 @@ function MyDiary({ notice, noticeIcon, display, checkLogin, checkCookie,
         if (e.screenX === 0) {
             return;
         }
-        const previousMoveDist = parseInt(favoriteSlider.current.attributes.movedist.value);
+        const previousMoveDist = parseInt(favoriteSlider.current.attributes[0].value);
         setCurrentX(previousMoveDist + (e.clientX - startX));
         favoriteSlider.current.style.transform = `translateX(${currentX}px)`;
     }
@@ -136,7 +136,7 @@ function MyDiary({ notice, noticeIcon, display, checkLogin, checkCookie,
         const favoriteSliderWidth = favoriteSlider.current.clientWidth;
         if (currentX > 0) {
             favoriteSlider.current.style.transform = `translateX(0)`;
-            favoriteSlider.current.attributes.movedist.value = 0;
+            favoriteSlider.current.attributes[0].value = 0;
             return
         }
 
@@ -144,13 +144,13 @@ function MyDiary({ notice, noticeIcon, display, checkLogin, checkCookie,
         if (sliderSectionWidth > favoriteSliderWidth + currentX) {
             if (sliderSectionWidth >= favoriteSliderWidth) {
                 favoriteSlider.current.style.transform = `translateX(0)`;
-                favoriteSlider.current.attributes.movedist.value = 0;
+                favoriteSlider.current.attributes[0].value = 0;
                 return
             }
             favoriteSlider.current.style.transform = `translateX(${subWidth}px)`;
-            favoriteSlider.current.attributes.movedist.value = subWidth;
+            favoriteSlider.current.attributes[0].value = subWidth;
         }
-        favoriteSlider.current.attributes.movedist.value = currentX;
+        favoriteSlider.current.attributes[0].value = currentX;
     }
 
     // show more data when scrolling
@@ -200,59 +200,214 @@ function MyDiary({ notice, noticeIcon, display, checkLogin, checkCookie,
       }, [cards]);
 
     return (
-        <div className={styles.MyDiary}>
+        <Inner>
             <Notice message={notice} icon={noticeIcon} display={display} />
-            <section ref={sliderSection} className={`${styles.mydiarySection} ${styles.favoriteSection}`}>
-                <h2 className={styles.sectionTitle}>즐겨찾기</h2>
-                <ul ref={favoriteSlider} onDragStart={startSlider} onDrag={moveSlider} onDragEnd={endSlider} className={styles.favorites} movedist='0'>
+            <FavoriteSection ref={sliderSection}>
+                <SectionTitle>즐겨찾기</SectionTitle>
+                <FavoriteList ref={favoriteSlider} onDragStart={startSlider} onDrag={moveSlider} onDragEnd={endSlider} data-movedist='0'>
                     {
                         favoriteCards[0].title !== '' ? favoriteCards.map((item) => {
                         return (
-                        <li onClick={() => handleOpenDiary(item.imageName)} className={styles.favoriteItem} key={item.imageName}>
+                        <FavoriteCard onClick={() => handleOpenDiary(item.imageName)} key={item.imageName}>
                             <img src={item.imageSrc} alt='산책 사진'/>
                             <div>
                                 <div>🦴제목🦴 {item.title}</div>
                                 <div>🦴날짜🦴 {item.date}</div>
                                 <div>with {item.dogName}</div>
                             </div>
-                        </li>)}) : <span>즐겨찾기에 등록된 일기가 없습니다!</span>
+                        </FavoriteCard>)}) : <span>즐겨찾기에 등록된 일기가 없습니다!</span>
                     }
-                </ul>
-            </section>
-            <section className={`${styles.mydiarySection} ${styles.diarySection}`}>
-                <h2 className={styles.sectionTitle}>일기 보관함</h2>
-                <select onChange={handleOrderSelect} className={styles.diarySort} name='sort' value={order}>
-                    <option className={styles.sortOption}>정렬 방식</option>
-                    <option className={styles.sortOption}>최신 순서</option>
-                    <option className={styles.sortOption}>오래된 순서</option>
+                </FavoriteList>
+            </FavoriteSection>
+            <DiarySection>
+                <SectionTitle>일기 보관함</SectionTitle>
+                <Sort onChange={handleOrderSelect} name='sort' value={order}>
+                    <option>정렬 방식</option>
+                    <option>최신 순서</option>
+                    <option>오래된 순서</option>
                     {
                         dogNames.length > 0 ?
                             dogNames.map(name => {
-                                    return <option className={styles.sortOption} key={name}>{name}</option>
+                                    return <option key={name}>{name}</option>
                             })
                         :
                             ''
                     }
-                </select>
-                <div className={styles.diaryContainer}>
-                    <ul className={styles.diaries}>
+                </Sort>
+                <DiaryContainer>
+                    <DiaryList>
                         {
                             cards[0].title !== '' ? cards.map((item) => {
                             return (
-                            <li onClick={() => handleOpenDiary(item.imageName)} className={styles.diary} key={item.imageName}>
+                            <DiaryCard onClick={() => handleOpenDiary(item.imageName)} key={item.imageName}>
                                 <img src={item.imageSrc} alt='산책 사진'/>
                                 <div>
                                     <div>🦴제목🦴 {item.title}</div>
                                     <div>🦴날짜🦴 {item.date}</div>
                                     <div>with {item.dogName}</div>
                                 </div>
-                            </li>) }) : <span>작성된 일기가 없습니다!</span>
+                            </DiaryCard>) }) : <span>작성된 일기가 없습니다!</span>
                         }
-                    </ul>
-                </div>
-            </section>
-        </div>
+                    </DiaryList>
+                </DiaryContainer>
+            </DiarySection>
+        </Inner>
     )
 }
 
 export default MyDiary;
+
+
+// styled component
+const Inner = styled.div`
+    width: max-content;
+    margin: 0 auto;
+    height: 100%;
+`
+
+const MydiarySection = css`
+    width: 932px;
+    overflow: hidden;
+`
+
+const FavoriteSection = styled.section`
+    ${MydiarySection}
+    margin-bottom: 3rem;
+`
+
+const SectionTitle = styled.h2`
+    margin-bottom: 1rem;
+`
+
+const FavoriteList = styled.ul`
+    width: max-content;
+    display: flex;
+    list-style: none;
+`
+
+const FavoriteCard = styled.li`
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: 300px;
+    height: 300px;
+    background-color: skyblue;
+    border-radius: 30px;
+    margin-bottom: 1rem;
+    margin-right: 1rem;
+    overflow: hidden;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &:not(:nth-child(3n)) {
+        margin-right: 1rem;
+    }
+
+    > img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+    }
+
+    > div {
+        background-color: #fff;
+        border: #997000 solid 3px;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        max-height: 80px;
+        overflow: hidden;
+        padding: 0.3rem 1rem;
+        z-index: 1;
+
+        > div:nth-child(3) {
+            text-align: center;
+        }
+    }
+`
+
+const DiarySection = styled.section`
+    ${MydiarySection}
+    margin-bottom: 3rem;
+`
+
+const Sort = styled.select`
+    width: max-content;
+    height: 30px;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    color: rgb(103, 103, 103);
+    border: rgb(103, 103, 103) solid 3px;
+    outline: none;
+
+    > option {
+        font-weight: bold;        
+    }
+`
+
+const DiaryContainer = styled.div`
+    width: 100%;
+    display: flex;
+    position: relative;
+`
+
+const DiaryList = styled.ul`
+    display: flex;
+    list-style: none;
+    flex-wrap: wrap;
+    align-items: flex-end;
+`
+
+const DiaryCard = styled.li`
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: 300px;
+    height: 300px;
+    background-color: skyblue;
+    border-radius: 30px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+
+    &:hover {
+        cursor: pointer;       
+    }
+
+    &:not(:nth-child(3n)) {
+        margin-right: 1rem;
+    }
+
+    > img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+    }
+
+    > div {
+        background-color: #fff;
+        border: #997000 solid 3px;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        width: 207px;
+        height: 80px;
+        overflow: hidden;
+        padding: 0.3rem 1rem;
+        z-index: 1;
+
+        > div {
+            width: 169px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        > div:nth-child(3) {
+            text-align: center;           
+        }
+    }
+`

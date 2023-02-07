@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useRef, useEffect } from "react";
 import Buttons from "./Buttons";
 import Notice from './Notice.js';
-import styles from "./WriteDiary.module.css";
+import styled, { css } from "styled-components";
 
 function WriteDiary({ notice, noticeIcon, display, changeNotice, checkLogin, checkCookie,
     apiUrl }) {
@@ -97,15 +97,15 @@ function WriteDiary({ notice, noticeIcon, display, changeNotice, checkLogin, che
     }
 
     return (
-        <section className={styles.WriteDiary}>    
+        <WritingSection>    
             <Notice message={notice} icon={noticeIcon} display={display} />
-            <div className={styles.inner}>
+            <Inner>
                 <form encType='multipart/form-data'>
-                    <label className={styles.attachmentLabel} htmlFor='image-attach'>
+                    <AttachmentLabel htmlFor='image-attach'>
                         <span>영역을 눌러 사진을 첨부하세요!</span>
                     {
                         imageSrc && <>
-                            <img className={styles.previewImage} src={imageSrc} alt='첨부 이미지 미리보기' />,
+                            <PreviewImage src={imageSrc} alt='첨부 이미지 미리보기' />,
                             <button onClick={(e) => {
                                 e.preventDefault();
                                 imageAttach.current.value = '';
@@ -113,14 +113,14 @@ function WriteDiary({ notice, noticeIcon, display, changeNotice, checkLogin, che
                             }} type='button'><img src='cancel.png' alt='첨부 이미지 삭제 버튼' /></button>
                         </>
                     }
-                    </label>
-                    <input ref={imageAttach} onChange={(e) => {
+                    </AttachmentLabel>
+                    <AttachmentInput ref={imageAttach} onChange={(e) => {
                         handleImagePreview(e.target.files[0]);
                         setImg(e.target.files[0]);
-                        }} className={styles.attachmentInput} id='image-attach' type='file' accept='image/*' />
-                    <div className={styles.diaryInfo}>
-                        <input ref={date} className={styles.infoItem} type='date' value={date.value} disabled />
-                        <fieldset className={`${styles.infoItem} ${styles.weatherRadio}`}>
+                        }} id='image-attach' type='file' accept='image/*' />
+                    <DiaryInfo>
+                        <DateBox ref={date} type='date' value={date.value} disabled />
+                        <WeatherBox>
                                 <input ref={sunny} type='radio' id='sunny' name='weather-radio' value='sunny' defaultChecked />
                                 <label htmlFor='sunny'>☀</label>
                                 <input ref={cloudy} type='radio' id='cloudy' name='weather-radio' value='cloudy' />
@@ -129,20 +129,139 @@ function WriteDiary({ notice, noticeIcon, display, changeNotice, checkLogin, che
                                 <label htmlFor='rainy'>☂</label>
                                 <input ref={snowy} type='radio' id='snowy'  name='weather-radio' value='snowy' />
                                 <label htmlFor='snowy'>☃</label>
-                        </fieldset>
-                        <select ref={selectedDog} className={styles.infoItem}>
+                        </WeatherBox>
+                        <select ref={selectedDog}>
                             <option></option>
                             <option></option>
                             <option></option>
                         </select>
-                    </div>
-                    <input ref={title} className={`${styles.writingInfo} ${styles.titleInfo}`} type='text' placeholder='제목을 입력하세요' maxLength='30' />
-                    <textarea ref={content} className={`${styles.writingInfo} ${styles.contentInfo}`} placeholder='일기를 입력하세요' maxLength='500' ></textarea>
+                    </DiaryInfo>
+                    <TitleInfo ref={title} type='text' placeholder='제목을 입력하세요' maxLength='30' />
+                    <ContentInfo ref={content} placeholder='일기를 입력하세요' maxLength='500' ></ContentInfo>
                     <Buttons buttonName={{ cancel: '취소', submit: '저장' }} cancelLink={{ path: '/MyDiary' }} handleFormSubmit={handleFormSubmit} />
                 </form>
-            </div>
-        </section>
+            </Inner>
+        </WritingSection>
     )
 }
 
 export default WriteDiary;
+
+
+// styled component
+const WritingSection = styled.section`
+    width: 100%;
+    height: 100%;
+`
+
+const Inner = styled.div`
+    width: 700px;
+    margin: 0 auto;
+`
+
+const AttachmentLabel = styled.label`
+    background-color: skyblue;
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 500px;
+    border: darkgray 3px solid;
+    margin-bottom: 1rem;
+    color: #fff;
+    text-align: center;
+    line-height: 500px;
+    border-radius: 30px;
+    overflow: hidden;
+
+    > button {
+        position: absolute;
+        border: none;
+        top: 10px;
+        right: 10px;
+        z-index: 1;
+
+        > img {
+            width: 30px;
+            height: 30px;
+        }
+    }
+`
+
+const PreviewImage = styled.img`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+`
+
+const AttachmentInput = styled.input`
+    display: none;
+`
+
+const DiaryInfo = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+`
+
+const InfoItem = css`
+    flex-basis: 30%;
+    border: 3px solid #997000;
+    border-radius: 10px;
+    width: 33%;
+    text-align: center;
+`
+
+const DateBox = styled.input`
+    ${InfoItem};
+`
+
+const WeatherBox = styled.fieldset`
+    ${InfoItem};
+
+    input[type=radio] {
+        display: none;
+    }
+
+    input[type=radio] + label {
+        font-size: 1.5rem;
+        color: darkgray;
+    }
+
+    input[type=radio] + label:not(:last-child) {
+        margin-right: 1rem;
+    }
+
+    input[type=radio]:checked + label {
+        color: black;
+    }
+`
+
+
+const WritingInfo = css`
+    width: 100%;
+    margin-bottom: 1rem;
+    line-height: 2rem;
+    padding: 0 1rem;
+    border: 3px solid #997000;
+    border-radius: 10px;
+    font-weight: normal;
+`
+
+const TitleInfo = styled.input`
+    ${WritingInfo};
+
+    background-color: white;
+    font-size: 1.3rem;
+`
+
+const ContentInfo = styled.textarea`
+    ${WritingInfo};
+
+    resize: none;
+    height: 200px;
+    background: repeating-linear-gradient(white, white 30px, #997000 30px, #997000 33px);
+    font-size: 1.2rem;
+`

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import styles from './Banner.module.css'
+import styled from 'styled-components';
+
 
 function Banner({ checkCookie, apiUrl }) {
     const loginState = localStorage.getItem('loginState');
@@ -85,17 +86,17 @@ function Banner({ checkCookie, apiUrl }) {
     }, [])
 
     return (
-        <div className={styles.Banner}>
+        <Inner>
             {
                 loginState ?
                     <div>
-                        <h2>{ `${currentYear}년 ${currentMonth + 1}월달의 기록` }</h2>
-                        <table>
+                        <Title>{ `${currentYear}년 ${currentMonth + 1}월달의 기록` }</Title>
+                        <CalendarTable>
                             <thead>
                                 <tr>
                                     {
                                         days.map((day) => {
-                                            return <th key={`day-${day}`}>{day}</th>;
+                                            return <TableHeader key={`day-${day}`}>{day}</TableHeader>;
                                         })
                                     }
                                 </tr>
@@ -107,31 +108,94 @@ function Banner({ checkCookie, apiUrl }) {
                                             {
                                                 arr.map((num) => { 
                                                     return typeof num === 'string' ? 
-                                                    <td className={styles.otherMonth} key={`current-${num}`}>&nbsp;{num}</td>
+                                                    <OtherMonthCell key={`current-${num}`}>&nbsp;{num}</OtherMonthCell>
                                                     :
-                                                    <td key={`current-${num}`}>{ writedDate.includes(num) ?
-                                                        <>&nbsp;{num}<img className={styles.attendance} src='attendance.png' alt='출석 도장'/></>
+                                                    <TableCell key={`current-${num}`}>{ writedDate.includes(num) ?
+                                                        <>&nbsp;{num}<Attendance/></>
                                                         :
                                                         <>&nbsp;{num}</>
-                                                    }</td>
+                                                    }</TableCell>
                                                 })
                                             }
                                         </tr>;
                                     })
                                 }
                             </tbody>
-                        </table>
+                        </CalendarTable>
                     </div>
                 :
-                    <p className={styles.intro}>
+                    <Intro>
                     반려견과 함께<br />
                     하루 하루를 기록하는<br />
                     '산책일기'<br />
                     지금 바로 사용해보세요!
-                    </p>
+                    </Intro>
             }
-        </div>
+        </Inner>
     )
   }
   
   export default Banner;
+
+
+// styled component
+const Inner = styled.div`
+    height: calc( 100vh - 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
+
+const Title = styled.h2`
+    font-size: 1.7rem;
+    text-align: center;
+    margin-bottom: 1rem;
+`
+
+const CalendarTable = styled.table`
+    min-width: 702px;
+    color: white;
+    background-color: skyblue;
+    border-collapse: collapse;
+    border-radius: 30px;
+    overflow: hidden;
+`
+
+const TableHeader = styled.th`
+    font-size: 1.3rem;
+    height: 50px;
+    border: 2px solid white;
+`
+
+  
+const TableCell = styled.td`
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border: 2px solid white;
+    vertical-align: top;
+`
+
+
+const OtherMonthCell = styled(TableCell)`
+    color: rgba(244, 243, 243, 0.534);
+`
+  
+const Attendance = styled.img.attrs(() => ({
+    src: 'attendance.png',
+    alt: '출석 도장',
+}))`
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    width: 50px;
+    height: 50px;
+`
+  
+const Intro = styled.p`
+    width: 100%;
+    text-align: center;
+    line-height: 4rem;
+    font-size: 1.8rem;
+    color: black;
+`

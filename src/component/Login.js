@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import styles from './Login.module.css';
 import Notice from './Notice.js';
+import styled from 'styled-components';
 
 function Login({ notice, noticeIcon, display, changeNotice, apiUrl }) {
     const userId = useRef();
@@ -35,24 +35,91 @@ function Login({ notice, noticeIcon, display, changeNotice, apiUrl }) {
         }
     }
     return (
-        <div className={styles.Login}>
+        <Inner>
             <Notice message={notice} icon={noticeIcon} display={display} />
-            <form className={styles.loginForm} method='post'>
-                <div className={styles.inputContainer}>
-                    <div className={styles.inputBoxes}>
-                        <label className={styles.label} htmlFor='userId'>ID</label>
-                        <input ref={userId} className={styles.input} id='userId' type='text' />
+            <Form method='post'>
+                <div>
+                    <div>
+                        <Label htmlFor='userId'>ID</Label>
+                        <Input ref={userId} id='userId' type='text' />
                     </div>
                     <div>
-                        <label className={styles.label} htmlFor='userPw'>PW</label>
-                        <input ref={userPw} className={styles.input} id='userPw' type='password' autoComplete="off" />
+                        <Label htmlFor='userPw'>PW</Label>
+                        <Input ref={userPw} id='userPw' type='password' autoComplete="off" />
                     </div>
                 </div>
-                <button onClick={handleFormSubmit} className={styles.loginButton} type="button">LOGIN</button>
-            </form>
-            <button className={styles.joinButton} type='button'><Link to="/join">회원가입 하러가기</Link></button>
-        </div>
+                <LoginButton onClick={handleFormSubmit} type="button">LOGIN</LoginButton>
+            </Form>
+            <JoinButton type='button'><Link to="/join">회원가입 하러가기</Link></JoinButton>
+        </Inner>
     )
 }
 
 export default Login;
+
+
+// styled component
+const Inner = styled.div`
+    width: max-content;
+    margin: 0 auto;
+    height: calc( 100vh - 80px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+`
+
+const Form = styled.form`
+    display: flex;
+    height: 150px;
+    margin-bottom: 1rem;
+
+    > div {
+        display: flex;
+        flex-direction: column;
+        text-align: end;
+        margin-right: 1.5rem;
+
+        > div:first-child {
+            margin-bottom: 1.5rem;
+        }
+    }
+`
+
+const Label = styled.label`
+    margin-right: 1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #212121;
+`
+
+const Input = styled.input`
+    background-color: skyblue;
+    color: #fff;
+    width: 12rem;
+    height: 4rem;
+    font-size: 1.5rem;
+    text-align: center;
+`
+
+const LoginButton = styled.button`
+    width: 100px;
+    height: inherit;
+    text-align: center;
+    color: #997000;
+    border: #997000 solid 3px;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.5);
+    font-size: 1.5rem;
+    font-weight: bold;
+`
+
+const JoinButton = styled.button`
+    width: max-content;
+    display: block;
+    margin: 0 auto;
+    background-color: rgba(255, 255, 255, 0);
+    border: none;
+    color: darkgray;
+    font-weight: bold;
+    font-size: 1rem;
+`

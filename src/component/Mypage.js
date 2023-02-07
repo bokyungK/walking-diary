@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import styles from "./Mypage.module.css";
 import Buttons from "./Buttons.js"
 import CheckMessage from './CheckMessage.js';
 import Notice from './Notice.js';
+import styled, { css } from "styled-components";
 
 function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMessage,
      setCheckMessage, checkCookie, apiUrl }) {
@@ -148,56 +148,138 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
     }
 
     return (
-        <div className={styles.Mypage}>
-            <h2 className={styles.infoTitle}>마이페이지</h2>
+        <Inner>
+            <Title>마이페이지</Title>
             <Notice message={notice} icon={noticeIcon} display={display} />
-            <form className={styles.infoForm}>
-                <div className={styles.formSection}>
-                    <div className={styles.formItem}>
-                        <label className={styles.itemLabel}>이름</label>
-                        <input className={styles.itemInput} type='text' disabled defaultValue={userName}/>
-                    </div>
-                    <div className={styles.formItem}>                       
-                        <label className={styles.itemLabel}>아이디</label>
-                        <input className={styles.itemInput} type='text' disabled defaultValue={userId}/>
-                    </div>
-                    <div className={styles.formItem}>
-                        <label className={styles.itemLabel}>비밀번호</label>
-                        <input ref={userPw} className={styles.itemInput} type='password' autoComplete="off" maxLength='15' />
-                    </div>
-                    <div className={styles.formItem}>
-                        <label className={styles.itemLabel}>새 비밀번호</label>
-                        <input ref={userNewPw} onChange={handleInputValue} className={styles.itemInput} type='password' autoComplete="off" maxLength='15' />
-                    </div>
+            <Form>
+                <FormSection>
+                    <FormItem>
+                        <ItemLabel>이름</ItemLabel>
+                        <ItemInput type='text' disabled defaultValue={userName}/>
+                    </FormItem>
+                    <FormItem>                       
+                        <ItemLabel>아이디</ItemLabel>
+                        <ItemInput type='text' disabled defaultValue={userId}/>
+                    </FormItem>
+                    <FormItem>
+                        <ItemLabel>비밀번호</ItemLabel>
+                        <ItemInput ref={userPw} type='password' autoComplete="off" maxLength='15' />
+                    </FormItem>
+                    <FormItem>
+                        <ItemLabel>새 비밀번호</ItemLabel>
+                        <ItemInput ref={userNewPw} onChange={handleInputValue} type='password' autoComplete="off" maxLength='15' />
+                    </FormItem>
                     {
                         dogNames.map((name, idx) => {
-                            return  <div className={styles.formItem} key={name + idx}>
-                                        <label className={styles.itemLabel}>반려견 이름 {idx + 1}</label>
-                                        <input ref={inputDogNames[idx]} className={styles.itemInput} type='text' defaultValue={name} maxLength='10' />
+                            return  <FormItem key={name + idx}>
+                                        <ItemLabel>반려견 이름 {idx + 1}</ItemLabel>
+                                        <ItemInput ref={inputDogNames[idx]} type='text' defaultValue={name} maxLength='10' />
                                         {
-                                            idx === 0 ? <button className={styles.addPetButton} onClick={handleAddPetName} type='button'>추가</button>
+                                            idx === 0 ? <AddBoxButton onClick={handleAddPetName} type='button'>추가</AddBoxButton>
                                             :
                                             idx === dogNames.length - 1 ?
-                                                <button className={styles.addPetButton} onClick={() => {handleRemovePetName(idx)}} type='button'>삭제</button>
+                                                <RemovePetButton onClick={() => {handleRemovePetName(idx)}} type='button'>삭제</RemovePetButton>
                                                 :
                                                 ''
                                         }
-                                    </div>
+                                    </FormItem>
                         })
                     }
-                    <div className={styles.additionalTab}>
+                    <AdditionalTab>
                         <button onClick={() => {
                             setCheckMessage({ display: 'block' });
-                        }} className={`button ${styles.withdrawal}`} type='button'>회원탈퇴</button>
-                        <button onClick={handleLogout} className={`button ${styles.logout}`} type='button'>로그아웃</button>
-                    </div>
-                </div>
+                        }} type='button'>회원탈퇴</button>
+                        <button onClick={handleLogout} type='button'>로그아웃</button>
+                    </AdditionalTab>
+                </FormSection>
                 <CheckMessage checkMessage={checkMessage} setCheckMessage={setCheckMessage} handleShowMessage={handleWithdrawal}
                  option={{ cancel: '취소', submit: '탈퇴' }} />
                 <Buttons handleFormSubmit={handleFormSubmit} buttonName={{cancel: '취소', submit: '저장'}} cancelLink={{path: '/'}} />
-            </form>
-        </div>
+            </Form>
+        </Inner>
     )
 }
 
 export default Mypage;
+
+
+// styled component
+const Inner = styled.div`
+    height: calc( 100vh - 80px);
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    justify-content: center;
+`
+
+const Title = styled.h2`
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+`
+  
+const Form = styled.form`
+    text-align: center;
+`
+  
+const FormSection = styled.div`
+    width: max-content;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-bottom: 1rem;
+    padding-right: 7rem;
+`
+
+const FormItem = styled.div`
+    margin-bottom: 1rem;
+    position: relative;
+`
+
+const ItemLabel = styled.label`
+    margin-right: 1rem;
+    font-size: 1.1rem;
+`
+
+const ItemInput = styled.input`
+    width: 200px;
+    height: 40px;
+    background-color: skyblue;
+    color: #fff;
+    font-size: 1.1rem;
+    text-align: center;
+`
+
+const ControlBoxButton = css`
+    border: #997000 solid 3px;
+    font-weight: bold;
+    background-color: rgba(255, 255, 255, 0);
+    border-radius: 10px;
+    position: absolute;
+    width: 50px;
+    height: 100%;
+    right: -60px;
+`
+
+const AddBoxButton = styled.button`
+    ${ControlBoxButton}
+`
+
+const RemovePetButton = styled.button`
+    ${ControlBoxButton}
+`
+
+const AdditionalTab = styled.div`
+    width: 200px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+
+    > button {
+        border: 3px solid #997000;
+        font-weight: bold;
+        border-radius: 10px;
+    }
+`

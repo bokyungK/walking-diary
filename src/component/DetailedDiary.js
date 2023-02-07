@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from "react-router-dom";
-import styles from './DetailedDiary.module.css';
 import Buttons from './Buttons';
 import CheckMessage from './CheckMessage.js';
 import Notice from './Notice.js';
+import styled, { css } from 'styled-components';
 
 function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, checkCookie,
     checkLocation, setCheckLocation, checkMessage, setCheckMessage, setBackgroundOpacity, apiUrl } ) {
@@ -16,6 +16,11 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
     const snowy = useRef();
     const selectedDog = useRef();
     const [diaryInfo, setDiaryInfo] = useState('');
+    const imageAttach = useRef();
+    const [imageSrc, setImageSrc] = React.useState('');
+    const [img, setImg] = React.useState('');
+    const title = useRef();
+    const content = useRef();
 
     // read
     useEffect(() => {
@@ -23,65 +28,51 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
             return;
         }
         const currentDiary = localStorage.getItem('imageName');
-
-        axios.post(apiUrl + 'get-diary', { imageName: currentDiary }, { withCredentials: true })
-        .then((res) => {
-            if (checkCookie(res.data, '/login')) {
-                return;
-            }
-            const data = res.data;
-
-            setDiaryInfo({
-                date: String(data.date).substring(0, 10),
-                weather: data.weather,
-                dogName: data.dog_name,
-                title: data.title,
-                content: data.content,
-                imageName: data.image_name,
-                imageSrc: apiUrl + `${data.id}/${data.image_name}`,
-                starred: data.starred,
-            })
-
-            const currentWeather = data.weather;
-            const weathers = [sunny, cloudy, rainy, snowy];
-            weathers.forEach((item) => {
-                if (item.current.value === currentWeather) {
-                    item.current.checked = true;
-                }
-            })
-        })
-    }, [checkLocation])
-
-    // update
-    useEffect(() => {
-        if (checkLocation) {
-            setImageSrc(diaryInfo.imageSrc);
-
-            axios.get(apiUrl + 'get-dogs', { withCredentials: true })
-            .then(res => {
-                const data = res.data;
+        const fetchData = async () => {
+            try {
+                const res = await axios.post(apiUrl + 'get-diary', { imageName: currentDiary }, { withCredentials: true })
+                const data = await res.data;
 
                 if (checkCookie(data, '/login')) {
                     return;
                 }
 
-                const dogNames = [data.dog_name_1, data.dog_name_2, data.dog_name_3];
-                dogNames.forEach((dogName, idx) => {
-                    if (dogName === '') {
-                        selectedDog.current[idx].innerText = ''
-                    } else {
-                        selectedDog.current[idx].innerText = dogName;
+                setDiaryInfo({...data, 
+                    date: String(data.date).substring(0, 10),
+                    imageSrc: apiUrl + `${data.id}/${data.image_name}`,
+                    imageName: data.image_name,
+                });
+    
+                const currentWeather = data.weather;
+                const weathers = [sunny, cloudy, rainy, snowy];
+                weathers.forEach((item) => {
+                    if (item.current.value === currentWeather) {
+                        item.current.checked = true;
                     }
                 })
-                selectedDog.current.value = diaryInfo.dogName;
-            })
-        }
-    }, [checkLocation])
 
-    
-    const imageAttach = useRef();
-    const [imageSrc, setImageSrc] = React.useState('');
-    const [img, setImg] = React.useState('');
+                if (checkLocation) {
+                    setImageSrc(diaryInfo.imageSrc);
+                    const res = await axios.get(apiUrl + 'get-dogs', { withCredentials: true })
+                    const data = await res.data;
+                    const dogNames = [data.dog_name_1, data.dog_name_2, data.dog_name_3];
+                    
+                    dogNames.forEach((dogName, idx) => {
+                        if (dogName === '') {
+                            selectedDog.current[idx].innerText = ''
+                        } else {
+                            selectedDog.current[idx].innerText = dogName;
+                        }
+                    })
+                    selectedDog.current.value = diaryInfo.dog_name;
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        fetchData();
+    }, [checkLocation])
 
     function handleImagePreview(fileBlob) {
         const reader = new FileReader();
@@ -98,33 +89,30 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
         setCheckLocation(true);
     }
 
-    const title = useRef();
-    const content = useRef();
+    async function handleFormSubmit() {
+        try {
+            const weathers = [sunny, cloudy, rainy, snowy];
+            const weather = weathers.filter((item) => item.current.checked === true);
+            const newDiaryInfo = {
+                weather: weather[0].current.value,
+                dogName: selectedDog.current.value,
+                title: title.current.value,
+                content: content.current.value,
+                imageName: diaryInfo.imageName,
+            }
+            const postData = [];
+    
+            if (img === '') {
+                postData.push('newDiaryInfo');
+            } else {
+                const formData = new FormData();
+                formData.append('img', img);
+                formData.append('info', JSON.stringify(newDiaryInfo));
+                postData.push(formData);
+            }
 
-    function handleFormSubmit() {
-        const weathers = [sunny, cloudy, rainy, snowy];
-        const weather = weathers.filter((item) => item.current.checked === true);
-        const newDiaryInfo = {
-            weather: weather[0].current.value,
-            dogName: selectedDog.current.value,
-            title: title.current.value,
-            content: content.current.value,
-            imageName: diaryInfo.imageName,
-        }
-        const postData = [];
-
-        if (img === '') {
-            postData.push(newDiaryInfo);
-        } else {
-            const formData = new FormData();
-            formData.append('img', img);
-            formData.append('info', JSON.stringify(newDiaryInfo));
-            postData.push(formData);
-        }
-
-        axios.post(apiUrl + 'update-diary', postData[0], { withCredentials: true })
-        .then((res) => {
-            const data = res.data;
+            const res = await axios.post(apiUrl + 'update-diary', postData[0], { withCredentials: true })
+            const data = await res.data;
 
             if (checkCookie(data, '/login')) {
                 return;
@@ -134,7 +122,9 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
             changeNotice('변경되었습니다', 'correct.png', 'flex', 1);
             setCheckLocation(false);
             setBackgroundOpacity(0);
-        })
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     // delete
@@ -175,21 +165,28 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
     }
 
     return (
-    <section className={styles.DetailedDiary}>
-        <div className={styles.inner}>
+    <section>
+        <Inner>
             <Notice message={notice} icon={noticeIcon} display={display} />
-            <div className={styles.crudIcon}>
-                <button onClick={handleStarImage} className={styles.icons}><img className={styles.iconImages} src={diaryInfo.starred ? 'filled_star.png':'empty_star.png'} alt='즐겨찾기 버튼'/></button>
-                <button onClick={handleDiaryUpdate} className={styles.icons}><img className={styles.iconImages} src='edit.png' alt='수정 버튼' /></button>
-                <button onClick={() => {
+            <Icons>
+                <Icon onClick={handleStarImage}>
+                    <IconImg imgSrc={diaryInfo.starred ? 'filled_star.png':'empty_star.png'} imgAlt='즐겨찾기 버튼'/>
+                </Icon>
+                <Icon onClick={handleDiaryUpdate}>
+                    <IconImg imgSrc='edit.png' imgAlt='수정 버튼' />
+                </Icon>
+                <Icon onClick={() => {
                     setCheckMessage({ display: 'block' });
-                }} className={styles.icons}><img className={styles.iconImages} src='delete.png' alt='삭제 버튼' /></button>
-                <button onClick={() => history.push("/mydiary")} className={styles.icons}><img className={styles.iconImages} src='cancel.png' alt='뒤로가기 버튼'/></button>
-            </div>
+                    }}><IconImg imgSrc='delete.png' imgAlt='삭제 버튼' />
+                </Icon>
+                <Icon onClick={() => history.push("/mydiary")}>
+                    <IconImg imgSrc='cancel.png' imgAlt='뒤로가기 버튼' />
+                </Icon>
+            </Icons>
             {
                 checkLocation ? 
                 <>
-                    <label className={styles.attachmentLabel} htmlFor='image-attach'>
+                    <AttachmentLabel htmlFor='image-attach'>
                         <p>
                             영역을 눌러 사진을 첨부하세요! <br />
                             (사진을 변경하거나 추가하지 않으면,<br />
@@ -197,7 +194,7 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
                         </p>
                         {
                             imageSrc && <>
-                                <img className={styles.previewImage} src={imageSrc} alt='첨부 이미지 미리보기' />,
+                                <PreviewImage src={imageSrc} alt='첨부 이미지 미리보기' />,
                                 <button onClick={(e) => {
                                     e.preventDefault();
                                     imageAttach.current.value = '';
@@ -206,14 +203,14 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
                                 }} type='button'><img src='cancel.png' alt='첨부 이미지 삭제 버튼' /></button>
                             </>
                         }
-                    </label>
-                    <input ref={imageAttach} onChange={(e) => {
+                    </AttachmentLabel>
+                    <AttachmentInput ref={imageAttach} onChange={(e) => {
                         handleImagePreview(e.target.files[0]);
                         setImg(e.target.files[0]);
-                        }} className={styles.attachmentInput} id='image-attach' type='file' accept='image/*' />
-                    <div className={styles.diaryInfo}>
-                        <div className={styles.diaryInfoItems}>{diaryInfo.date}</div>
-                        <fieldset className={`${styles.diaryInfoItems} ${styles.weatherRadio}`}>
+                        }} id='image-attach' type='file' accept='image/*' />
+                    <DiaryInfo>
+                        <DiaryInfoItems>{diaryInfo.date}</DiaryInfoItems>
+                        <WeatherRadio>
                             <input ref={sunny} type='radio' id='sunny' name='weather-radio' value='sunny' />
                             <label htmlFor='sunny'>☀</label>
                             <input ref={cloudy} type='radio' id='cloudy' name='weather-radio' value='cloudy' />
@@ -222,25 +219,24 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
                             <label htmlFor='rainy'>☂</label>
                             <input ref={snowy} type='radio' id='snowy'  name='weather-radio' value='snowy' />
                             <label htmlFor='snowy'>☃</label>
-                        </fieldset>
-                        <select ref={selectedDog} className={styles.infoItem}>
+                        </WeatherRadio>
+                        <InfoItem ref={selectedDog}>
                             <option></option>
                             <option></option>
                             <option></option>
-                        </select>
-                    </div>
-                    <input ref={title} className={`${styles.writingInfo} ${styles.titleInfo}`} type='text' placeholder='제목을 입력하세요' maxLength='30' defaultValue={diaryInfo.title} />
-                    <textarea ref={content} className={`${styles.writingInfo} ${styles.contentInfo}`} placeholder='일기를 입력하세요' maxLength='500' defaultValue={diaryInfo.content}></textarea>
-
+                        </InfoItem>
+                    </DiaryInfo>
+                    <Title ref={title} type='text' placeholder='제목을 입력하세요' maxLength='30' defaultValue={diaryInfo.title} />
+                    <Content ref={content} placeholder='일기를 입력하세요' maxLength='500' defaultValue={diaryInfo.content}></Content>
                     <Buttons buttonName={{cancel: '취소' ,submit: '변경'}} cancelLink='/detail-diary' handleFormSubmit={handleFormSubmit}
                     setCheckLocation={setCheckLocation} setBackgroundOpacity={setBackgroundOpacity} />
                 </>
                 :
                 <>
-                    <img className={styles.diaryPictures} src={diaryInfo.imageSrc} alt='일기 사진' />
-                    <div className={styles.diaryInfo}>
-                        <div className={styles.diaryInfoItems}>{diaryInfo.date}</div>
-                        <fieldset className={`${styles.diaryInfoItems} ${styles.weatherRadio}`}>
+                    <DiaryPhoto src={diaryInfo.imageSrc} alt='일기 사진' />
+                    <DiaryInfo>
+                        <DiaryInfoItems>{diaryInfo.date}</DiaryInfoItems>
+                        <WeatherRadio>
                             <input ref={sunny} type='radio' id='sunny' name='weather-radio' value='sunny' disabled />
                             <label htmlFor='sunny'>☀</label>
                             <input ref={cloudy} type='radio' id='cloudy' name='weather-radio' value='cloudy' disabled />
@@ -249,18 +245,183 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
                             <label htmlFor='rainy'>☂</label>
                             <input ref={snowy} type='radio' id='snowy'  name='weather-radio' value='snowy' disabled />
                             <label htmlFor='snowy'>☃</label>
-                        </fieldset>
-                        <div className={styles.diaryInfoItems}>{diaryInfo.dogName}</div>
-                    </div>
-                    <h3 className={styles.diaryTitle}>{diaryInfo.title}</h3>
-                    <p className={styles.diaryContent}>{diaryInfo.content}</p>
+                        </WeatherRadio>
+                        <DiaryInfoItems>{diaryInfo.dog_name}</DiaryInfoItems>
+                    </DiaryInfo>
+                    <Title ref={title} type='text' placeholder='제목을 입력하세요' maxLength='30' defaultValue={diaryInfo.title} disabled />
+                    <Content ref={content} placeholder='일기를 입력하세요' maxLength='500' defaultValue={diaryInfo.content} disabled></Content>
                 </>
             }
             <CheckMessage checkMessage={checkMessage} setCheckMessage={setCheckMessage} handleShowMessage={handleDiaryDelete}
             option={{ cancel: '취소', submit: '삭제' }} />
-        </div>
+        </Inner>
     </section>
     )
 }
 
 export default DetailedDiary;
+
+
+// styled component
+const Inner = styled.div`
+    width: 700px;
+    margin: 0 auto;
+`
+
+const Icons = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+`
+
+const Icon = styled.div`
+    background-color: rgba(255, 255, 255, 0);
+    border: none;
+
+    &:not(:last-child) {
+        margin-right: 1rem;
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+`
+const IconImg = styled.img.attrs((props) => ({
+    src: props.imgSrc,
+    alt: props.imgAlt,
+}))`
+    width: 30px;
+    height: 30px;
+`
+
+const AttachmentLabel = styled.label`
+    background-color: skyblue;
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 500px;
+    border: darkgray 3px solid;
+    margin-bottom: 1rem;
+    color: #fff;
+    justify-content: center;
+    align-items: center;
+    border-radius: 30px;
+    overflow: hidden;
+
+    > p {
+        text-align: center;     
+    }
+
+    > button {
+        position: absolute;
+        border: none;
+        top: 10px;
+        right: 10px;
+        z-index: 1;
+
+        img {
+            width: 30px;
+            height: 30px;
+        }
+    }
+`
+const PreviewImage = styled.img`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+`
+
+const AttachmentInput = styled.input`
+    display: none;
+`
+
+const DiaryPhoto = styled.img`
+    width: 100%;
+    height: 500px;
+    margin-bottom: 1rem;
+    border-radius: 30px;
+`
+
+const DiaryInfo = styled.div`
+    display: flex;
+    margin-bottom: 1rem;
+    font-weight: normal;
+    justify-content: space-between;
+    font-size: 1rem;
+`
+
+const DiaryInfoItemsCss = css`
+    background-color: white;
+    line-height: 2rem;
+    flex-basis: 30%;
+    text-align: center;
+    border: 3px solid #997000;
+    border-radius: 10px;
+    padding: 0 1rem;
+    font-size: 1rem;
+    outline: none;
+`
+const DiaryInfoItems = styled.div`
+    ${DiaryInfoItemsCss}
+`
+
+const WeatherRadio = styled.fieldset`
+    ${DiaryInfoItemsCss}
+
+    input[type=radio] {
+        display: none;
+    }
+
+    input[type=radio] + label {
+        font-size: 1.5rem;
+        color: darkgray;
+    }
+
+    input[type=radio] + label:not(:last-child) {
+        margin-right: 1rem;
+    }
+
+    input[type=radio]:checked + label {
+        color: black;
+    }
+`
+
+const InfoItem = styled.select`
+    flex-basis: 30%;
+    border: 3px solid #997000;
+    border-radius: 10px;
+    width: 33%;
+    text-align: center;
+`
+
+const Title = styled.input`
+    width: 100%;
+    background-color: white;
+    margin-bottom: 1rem;
+    line-height: 2rem;
+    font-size: 1.3rem;
+    border: 3px solid #997000;
+    border-radius: 10px;
+    font-weight: normal;
+    padding: 0 1rem;
+    outline: none;
+`
+
+const Content = styled.textarea`
+    width: 100%;
+    height: 200px;
+    word-break: break-word;
+    background: repeating-linear-gradient(white, white 30px, #997000 30px, #997000 33px);
+    font-size: 1.2rem;
+    padding: 0 1rem;
+    line-height: 2rem;
+    border: 3px solid #997000;
+    border-bottom: 1px solid #997000;
+    margin-bottom: 3rem;
+    border-radius: 10px;
+    font-weight: normal;
+    outline: none;
+`
