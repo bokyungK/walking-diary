@@ -130,11 +130,11 @@ function WriteDiary({ notice, noticeIcon, display, changeNotice, checkLogin, che
                                 <input ref={snowy} type='radio' id='snowy'  name='weather-radio' value='snowy' />
                                 <label htmlFor='snowy'>☃</label>
                         </WeatherBox>
-                        <select ref={selectedDog}>
+                        <DogBox ref={selectedDog}>
                             <option></option>
                             <option></option>
                             <option></option>
-                        </select>
+                        </DogBox>
                     </DiaryInfo>
                     <TitleInfo ref={title} type='text' placeholder='제목을 입력하세요' maxLength='30' />
                     <ContentInfo ref={content} placeholder='일기를 입력하세요' maxLength='500' ></ContentInfo>
@@ -152,11 +152,20 @@ export default WriteDiary;
 const WritingSection = styled.section`
     width: 100%;
     height: 100%;
+    @media only screen and (hover: none) and (pointer: coarse) {
+        margin-top: 80px;
+    }
 `
 
 const Inner = styled.div`
     width: 700px;
     margin: 0 auto;
+    @media only screen and (max-width: 450px) {
+        width: 98%;
+    }
+    @media only screen and (min-width: 451px) and (max-width: 700px) {
+        width: 440px;
+    }
 `
 
 const AttachmentLabel = styled.label`
@@ -172,6 +181,10 @@ const AttachmentLabel = styled.label`
     line-height: 500px;
     border-radius: 30px;
     overflow: hidden;
+    @media only screen and (max-width: 700px) {
+        height: 300px;
+        line-height: 300px;
+    }
 
     > button {
         position: absolute;
@@ -198,6 +211,7 @@ const PreviewImage = styled.img`
 
 const AttachmentInput = styled.input`
     display: none;
+    width: 100%;
 `
 
 const DiaryInfo = styled.div`
@@ -210,8 +224,11 @@ const InfoItem = css`
     flex-basis: 30%;
     border: 3px solid #997000;
     border-radius: 10px;
-    width: 33%;
+    line-height: 2rem;
     text-align: center;
+    @media only screen and (max-width: 700px) {
+        flex-basis: 33%
+    }
 `
 
 const DateBox = styled.input`
@@ -228,14 +245,30 @@ const WeatherBox = styled.fieldset`
     input[type=radio] + label {
         font-size: 1.5rem;
         color: darkgray;
+        @media only screen and (max-width: 700px) {
+            font-size: 1.2rem;
+        }
     }
 
     input[type=radio] + label:not(:last-child) {
         margin-right: 1rem;
+        @media only screen and (max-width: 700px) {
+            margin-right: 0.8rem;
+        }
     }
 
     input[type=radio]:checked + label {
         color: black;
+    }
+`
+
+const DogBox = styled.select`
+    ${InfoItem}
+
+    > option {
+        background-color: #997000;
+        color: #fff;
+        border-radius: 10px;
     }
 `
 
@@ -248,13 +281,14 @@ const WritingInfo = css`
     border: 3px solid #997000;
     border-radius: 10px;
     font-weight: normal;
+    font-size: 1.3rem;
+    @media only screen and (max-width: 700px) {
+        font-size: 1rem;
+    }
 `
 
 const TitleInfo = styled.input`
     ${WritingInfo};
-
-    background-color: white;
-    font-size: 1.3rem;
 `
 
 const ContentInfo = styled.textarea`

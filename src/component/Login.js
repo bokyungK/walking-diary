@@ -62,7 +62,7 @@ export default Login;
 const Inner = styled.div`
     width: max-content;
     margin: 0 auto;
-    height: calc( 100vh - 80px);
+    height: calc(100vh - 80px);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -90,6 +90,9 @@ const Label = styled.label`
     font-size: 1.5rem;
     font-weight: bold;
     color: #212121;
+    @media only screen and (max-width: 450px) {
+        font-size: 1.2rem;
+    }
 `
 
 const Input = styled.input`
@@ -99,6 +102,9 @@ const Input = styled.input`
     height: 4rem;
     font-size: 1.5rem;
     text-align: center;
+    @media only screen and (max-width: 450px) {
+        width: 10rem;
+    }
 `
 
 const LoginButton = styled.button`
@@ -111,6 +117,9 @@ const LoginButton = styled.button`
     background-color: rgba(255, 255, 255, 0.5);
     font-size: 1.5rem;
     font-weight: bold;
+    @media only screen and (max-width: 450px) {
+        width: 90px;
+    }
 `
 
 const JoinButton = styled.button`
@@ -122,4 +131,7 @@ const JoinButton = styled.button`
     color: darkgray;
     font-weight: bold;
     font-size: 1rem;
+    @media only screen and (max-width: 450px) {
+        font-size: 1rem;
+    }
 `

@@ -204,7 +204,8 @@ function MyDiary({ notice, noticeIcon, display, checkLogin, checkCookie,
             <Notice message={notice} icon={noticeIcon} display={display} />
             <FavoriteSection ref={sliderSection}>
                 <SectionTitle>즐겨찾기</SectionTitle>
-                <FavoriteList ref={favoriteSlider} onDragStart={startSlider} onDrag={moveSlider} onDragEnd={endSlider} data-movedist='0'>
+                <FavoriteList
+                 ref={favoriteSlider} onDragStart={startSlider} onDrag={moveSlider} onDragEnd={endSlider} data-movedist='0'>
                     {
                         favoriteCards[0].title !== '' ? favoriteCards.map((item) => {
                         return (
@@ -263,11 +264,28 @@ const Inner = styled.div`
     width: max-content;
     margin: 0 auto;
     height: 100%;
+    padding: 0 1rem;
+    @media only screen and (hover: none) and (pointer: coarse){
+        margin-top: 80px;
+    }
+
+    @media only screen and (max-width: 631px) {
+        padding: 0 calc((100vw - 300px)/2);
+        width: 100vw;
+    }
+
+    @media only screen and (min-width: 632px) and (max-width: 930px) {
+        padding: 0 calc((100vw - 600px)/2);
+        width: 100vw;
+    }
 `
 
 const MydiarySection = css`
     width: 932px;
     overflow: hidden;
+    @media only screen and (max-width: 631px) {
+        width: 100vw;
+    }
 `
 
 const FavoriteSection = styled.section`
@@ -277,6 +295,9 @@ const FavoriteSection = styled.section`
 
 const SectionTitle = styled.h2`
     margin-bottom: 1rem;
+    @media only screen and (hover: none) and (pointer: coarse) and (max-width: 631px) {
+        font-size: 1.3rem;
+    }
 `
 
 const FavoriteList = styled.ul`
@@ -314,6 +335,7 @@ const FavoriteCard = styled.li`
     }
 
     > div {
+        width: 207px;
         background-color: #fff;
         border: #997000 solid 3px;
         border-radius: 10px;
@@ -322,6 +344,12 @@ const FavoriteCard = styled.li`
         overflow: hidden;
         padding: 0.3rem 1rem;
         z-index: 1;
+
+        div {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
 
         > div:nth-child(3) {
             text-align: center;
@@ -355,6 +383,7 @@ const DiaryContainer = styled.div`
 `
 
 const DiaryList = styled.ul`
+    width: 100vw;
     display: flex;
     list-style: none;
     flex-wrap: wrap;
@@ -366,7 +395,7 @@ const DiaryCard = styled.li`
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    width: 300px;
+    min-width: 300px;
     height: 300px;
     background-color: skyblue;
     border-radius: 30px;
@@ -380,6 +409,12 @@ const DiaryCard = styled.li`
     &:not(:nth-child(3n)) {
         margin-right: 1rem;
     }
+
+
+    @media only screen and (max-width: 930px) {
+        margin-right: 1rem;
+    }
+    
 
     > img {
         position: absolute;
@@ -400,7 +435,6 @@ const DiaryCard = styled.li`
         z-index: 1;
 
         > div {
-            width: 169px;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;

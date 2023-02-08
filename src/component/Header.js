@@ -11,7 +11,7 @@ function Header({ backgroundOpacity }) {
     return (
         <Inner style={backgroundStyle}>
             <Title><Link to="/">산책 일기</Link></Title>
-            <Menu>
+            <Menu opacity={backgroundOpacity}>
                 <ul>
                     <li><Link to="/mydiary">내 일기장</Link></li>
                     <li><Link to="/write-diary">일기 쓰기</Link></li>
@@ -41,20 +41,35 @@ const Inner = styled.header`
             background-color: #fff;
         }
     }
+
+    & {
+        > nav {
+            @media only screen and (hover: none) and (pointer: coarse) {
+                display: block;
+            }
+        }
+    }
 `
   
 const Title = styled.h1`
     text-align: center;
     font-size: 2.2rem;
     line-height: 80px;
+    @media only screen and (max-width: 450px) {
+        font-size: 2rem;
+    }
 `
 
 const Menu = styled.nav`
-    width: 500px;
+    width: 530px;
     border-radius: 10px;
     display: none;
     margin: 0 auto;
     box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, ${props => props.opacity}); 
+    @media only screen and (max-width: 600px) {
+        width: 90%;
+    }
 
     > ul {
         height: 70px;
@@ -66,9 +81,15 @@ const Menu = styled.nav`
         padding-left: 0;
         margin-left: 0;
         top: 70px;
+        @media only screen and (hover: none) and (pointer: coarse) {
+            font-size: 1.2rem;
+        }
 
         > li:not(:last-child) {
             margin-right: 3rem;
+            @media only screen and (hover: none) and (pointer: coarse) {
+                margin-right: 1.5rem;
+            }
         }
     }
 `

@@ -140,7 +140,7 @@ function Banner({ checkCookie, apiUrl }) {
 
 // styled component
 const Inner = styled.div`
-    height: calc( 100vh - 80px);
+    height: calc(100vh - 80px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -150,6 +150,9 @@ const Title = styled.h2`
     font-size: 1.7rem;
     text-align: center;
     margin-bottom: 1rem;
+    @media only screen and (max-width: 700px) {
+        font-size: 1.5rem;
+    }
 `
 
 const CalendarTable = styled.table`
@@ -159,12 +162,18 @@ const CalendarTable = styled.table`
     border-collapse: collapse;
     border-radius: 30px;
     overflow: hidden;
+    @media only screen and (max-width: 700px) {
+        min-width: 352px;
+    }
 `
 
 const TableHeader = styled.th`
     font-size: 1.3rem;
     height: 50px;
     border: 2px solid white;
+    @media only screen and (max-width: 700px) {
+        font-size: 1rem;
+    }
 `
 
   
@@ -174,6 +183,11 @@ const TableCell = styled.td`
     height: 100px;
     border: 2px solid white;
     vertical-align: top;
+    @media only screen and (max-width: 700px) {
+        width: 50px;
+        height: 50px;
+        font-size: 0.8rem;
+    }
 `
 
 
@@ -190,6 +204,10 @@ const Attendance = styled.img.attrs(() => ({
     left: 25%;
     width: 50px;
     height: 50px;
+    @media only screen and (max-width: 700px) {
+        width: 25px;
+        height: 25px;
+    }
 `
   
 const Intro = styled.p`
@@ -198,4 +216,7 @@ const Intro = styled.p`
     line-height: 4rem;
     font-size: 1.8rem;
     color: black;
+    @media only screen and (max-width: 700px) {
+        font-size: 1.5rem;
+    }
 `

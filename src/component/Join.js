@@ -107,7 +107,10 @@ const Inner = styled.div`
 const Title = styled.h2`
     text-align: center;
     margin-bottom: 2rem;
-    font-size: 2rem;
+    font-size: 1.8rem;
+    @media only screen and (max-width: 450px) {
+        font-size: 1.5rem;
+    }
 `
 
 const Form = styled.form`
@@ -134,10 +137,13 @@ const Label = styled.label`
 `
 
 const Input = styled.input`
-    width: 200px;
+    width: 12rem;
     height: 40px;
     background-color: skyblue;
     color: #fff;
     font-size: 1.1rem;
     text-align: center;
+    @media only screen and (max-width: 450px) {
+        width: 10rem;
+    }
 `

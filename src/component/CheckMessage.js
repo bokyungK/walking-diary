@@ -25,7 +25,7 @@ export default CheckMessage;
 const Inner = styled.div`
     width: 300px;
     height: 200px;
-    position: absolute;
+    position: fixed;
     top : 50%;
     left: 50%;
     background-color: #fff;
@@ -33,6 +33,10 @@ const Inner = styled.div`
     border-radius: 10px;
     box-shadow: 1px 1px 3px 3px rgba(0, 0, 0, 0.3);
     z-index: 1;
+    @media only screen and (max-width: 450px) {
+        width: 250px;
+        height: 150px;
+    }
 
     > div {
         position: absolute;

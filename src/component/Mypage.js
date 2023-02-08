@@ -205,17 +205,24 @@ export default Mypage;
 
 // styled component
 const Inner = styled.div`
-    height: calc( 100vh - 80px);
+    height: calc(100vh - 80px);
     display: flex;
     position: relative;
     flex-direction: column;
     justify-content: center;
+    @media only screen and (hover: none) and (pointer: coarse) and (max-width: 450px) {
+        height: 100%;
+        margin-top: 80px;
+    }
 `
 
 const Title = styled.h2`
     text-align: center;
     margin-bottom: 2rem;
-    font-size: 2rem;
+    font-size: 1.8rem;
+    @media only screen and (max-width: 450px) {
+        font-size: 1.5rem;
+    }
 `
   
 const Form = styled.form`
@@ -230,6 +237,10 @@ const FormSection = styled.div`
     align-items: flex-end;
     margin-bottom: 1rem;
     padding-right: 7rem;
+    @media only screen and (max-width: 450px) {
+        padding-right: 0;
+        width: min-content;
+    }
 `
 
 const FormItem = styled.div`
@@ -240,6 +251,9 @@ const FormItem = styled.div`
 const ItemLabel = styled.label`
     margin-right: 1rem;
     font-size: 1.1rem;
+    @media only screen and (max-width: 450px) {
+        margin-right: 0;
+    }
 `
 
 const ItemInput = styled.input`
@@ -249,9 +263,12 @@ const ItemInput = styled.input`
     color: #fff;
     font-size: 1.1rem;
     text-align: center;
+    @media only screen and (max-width: 450px) {
+        margin-top: 0.3rem;
+    }
 `
 
-const ControlBoxButton = css`
+const AddBoxButton = styled.button`
     border: #997000 solid 3px;
     font-weight: bold;
     background-color: rgba(255, 255, 255, 0);
@@ -260,14 +277,15 @@ const ControlBoxButton = css`
     width: 50px;
     height: 100%;
     right: -60px;
+
+    @media only screen and (max-width: 450px) {
+        width: 50px;
+        height: 50px;
+        right: -60px;
+    }
 `
 
-const AddBoxButton = styled.button`
-    ${ControlBoxButton}
-`
-
-const RemovePetButton = styled.button`
-    ${ControlBoxButton}
+const RemovePetButton = styled(AddBoxButton)`
 `
 
 const AdditionalTab = styled.div`

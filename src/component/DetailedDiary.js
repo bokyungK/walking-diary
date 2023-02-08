@@ -209,7 +209,7 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
                         setImg(e.target.files[0]);
                         }} id='image-attach' type='file' accept='image/*' />
                     <DiaryInfo>
-                        <DiaryInfoItems>{diaryInfo.date}</DiaryInfoItems>
+                        <DiaryDate>{diaryInfo.date}</DiaryDate>
                         <WeatherRadio>
                             <input ref={sunny} type='radio' id='sunny' name='weather-radio' value='sunny' />
                             <label htmlFor='sunny'>☀</label>
@@ -220,11 +220,11 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
                             <input ref={snowy} type='radio' id='snowy'  name='weather-radio' value='snowy' />
                             <label htmlFor='snowy'>☃</label>
                         </WeatherRadio>
-                        <InfoItem ref={selectedDog}>
+                        <DogSelect ref={selectedDog}>
                             <option></option>
                             <option></option>
                             <option></option>
-                        </InfoItem>
+                        </DogSelect>
                     </DiaryInfo>
                     <Title ref={title} type='text' placeholder='제목을 입력하세요' maxLength='30' defaultValue={diaryInfo.title} />
                     <Content ref={content} placeholder='일기를 입력하세요' maxLength='500' defaultValue={diaryInfo.content}></Content>
@@ -235,7 +235,7 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
                 <>
                     <DiaryPhoto src={diaryInfo.imageSrc} alt='일기 사진' />
                     <DiaryInfo>
-                        <DiaryInfoItems>{diaryInfo.date}</DiaryInfoItems>
+                        <DiaryDate>{diaryInfo.date}</DiaryDate>
                         <WeatherRadio>
                             <input ref={sunny} type='radio' id='sunny' name='weather-radio' value='sunny' disabled />
                             <label htmlFor='sunny'>☀</label>
@@ -246,7 +246,7 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
                             <input ref={snowy} type='radio' id='snowy'  name='weather-radio' value='snowy' disabled />
                             <label htmlFor='snowy'>☃</label>
                         </WeatherRadio>
-                        <DiaryInfoItems>{diaryInfo.dog_name}</DiaryInfoItems>
+                        <DoxNameBox>{diaryInfo.dog_name}</DoxNameBox>
                     </DiaryInfo>
                     <Title ref={title} type='text' placeholder='제목을 입력하세요' maxLength='30' defaultValue={diaryInfo.title} disabled />
                     <Content ref={content} placeholder='일기를 입력하세요' maxLength='500' defaultValue={diaryInfo.content} disabled></Content>
@@ -266,12 +266,22 @@ export default DetailedDiary;
 const Inner = styled.div`
     width: 700px;
     margin: 0 auto;
+    @media only screen and (hover: none) and (pointer: coarse) {
+        margin-top: 90px;
+    }
+    @media only screen and (max-width: 450px) {
+        width: 98%;
+    }
+    @media only screen and (min-width: 451px) and (max-width: 700px) {
+        width: 440px;
+    }
 `
 
 const Icons = styled.div`
     display: flex;
     justify-content: flex-end;
     margin-bottom: 1rem;
+
 `
 
 const Icon = styled.div`
@@ -292,6 +302,10 @@ const IconImg = styled.img.attrs((props) => ({
 }))`
     width: 30px;
     height: 30px;
+    @media only screen and (hover: none) and (pointer: coarse) and (max-width: 700px) {
+        width: 25px;
+        height: 25px;
+    }
 `
 
 const AttachmentLabel = styled.label`
@@ -307,6 +321,10 @@ const AttachmentLabel = styled.label`
     align-items: center;
     border-radius: 30px;
     overflow: hidden;
+   @media only screen and (max-width: 700px) {
+        height: 300px;
+        line-height: 300px;
+   }
 
     > p {
         text-align: center;     
@@ -343,6 +361,10 @@ const DiaryPhoto = styled.img`
     height: 500px;
     margin-bottom: 1rem;
     border-radius: 30px;
+    @media only screen and (max-width: 700px) {
+        height: 300px;
+        line-height: 300px;
+   }
 `
 
 const DiaryInfo = styled.div`
@@ -354,17 +376,19 @@ const DiaryInfo = styled.div`
 `
 
 const DiaryInfoItemsCss = css`
-    background-color: white;
-    line-height: 2rem;
     flex-basis: 30%;
-    text-align: center;
     border: 3px solid #997000;
     border-radius: 10px;
-    padding: 0 1rem;
-    font-size: 1rem;
-    outline: none;
+    line-height: 2rem;
+    text-align: center;
+    background-color: #fff;
+    @media only screen and (max-width: 700px) {
+        font-size: 0.8rem;
+        flex-basis: 33%;
+    }
 `
-const DiaryInfoItems = styled.div`
+
+const DiaryDate = styled.div`
     ${DiaryInfoItemsCss}
 `
 
@@ -378,10 +402,16 @@ const WeatherRadio = styled.fieldset`
     input[type=radio] + label {
         font-size: 1.5rem;
         color: darkgray;
+        @media only screen and (max-width: 700px) {
+            font-size: 1.2rem;
+        }
     }
 
     input[type=radio] + label:not(:last-child) {
         margin-right: 1rem;
+        @media only screen and (max-width: 700px) {
+            margin-right: 0.8rem;
+        }
     }
 
     input[type=radio]:checked + label {
@@ -389,12 +419,18 @@ const WeatherRadio = styled.fieldset`
     }
 `
 
-const InfoItem = styled.select`
-    flex-basis: 30%;
-    border: 3px solid #997000;
-    border-radius: 10px;
-    width: 33%;
-    text-align: center;
+const DogSelect = styled.select`
+    ${DiaryInfoItemsCss}
+
+    > option {
+        background-color: #997000;
+        color: #fff;
+        border-radius: 10px;
+    }
+`
+
+const DoxNameBox = styled.div`
+    ${DiaryInfoItemsCss}
 `
 
 const Title = styled.input`
@@ -408,6 +444,9 @@ const Title = styled.input`
     font-weight: normal;
     padding: 0 1rem;
     outline: none;
+    @media only screen and (max-width: 700px) {
+        font-size: 1rem;
+    }
 `
 
 const Content = styled.textarea`
@@ -420,8 +459,11 @@ const Content = styled.textarea`
     line-height: 2rem;
     border: 3px solid #997000;
     border-bottom: 1px solid #997000;
-    margin-bottom: 3rem;
+    margin-bottom: 1.5rem;
     border-radius: 10px;
     font-weight: normal;
     outline: none;
+    @media only screen and (max-width: 700px) {
+        font-size: 1rem;
+    }
 `
