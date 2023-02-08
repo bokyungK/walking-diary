@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-
+var store = require('store');
 
 function Banner({ checkCookie, apiUrl }) {
-    const loginState = localStorage.getItem('loginState');
+    const loginState = store.get('loginState');
     const [calendar, setCalendar] = useState([]);
     const days = ['일', '월', '화', '수', '목', '금', '토'];
     const [writedDate, setWritedDate] = useState('');

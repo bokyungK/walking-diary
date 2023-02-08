@@ -3,7 +3,8 @@ import axios from "axios";
 import Buttons from "./Buttons.js"
 import CheckMessage from './CheckMessage.js';
 import Notice from './Notice.js';
-import styled, { css } from "styled-components";
+import styled from "styled-components";
+var store = require('store');
 
 function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMessage,
      setCheckMessage, checkCookie, apiUrl }) {
@@ -124,8 +125,8 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
             if (data === 'Fail') {
                 changeNotice('비밀번호가 틀렸습니다', 'warning.png', 'flex', 0);
             }
-            localStorage.removeItem('loginState');
-            localStorage.removeItem('imageName');
+            store.remove('loginState');
+            store.remove('imageName');
             changeNotice('탈퇴 완료', 'goodbye.png', 'flex', "/");
             setCheckMessage({ display: 'none' });
         });
@@ -141,8 +142,8 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
             }
             changeNotice('로그아웃 완료', 'goodbye.png', 'flex', "/");
             setTimeout(() => {
-                localStorage.removeItem('loginState');
-                localStorage.removeItem('imageName');
+                store.remove('loginState');
+                store.remove('imageName');
             }, 1000)
         });
     }

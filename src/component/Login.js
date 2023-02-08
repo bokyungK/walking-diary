@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Notice from './Notice.js';
 import styled from 'styled-components';
+var store = require('store');
 
 function Login({ notice, noticeIcon, display, changeNotice, apiUrl }) {
     const userId = useRef();
@@ -21,7 +22,7 @@ function Login({ notice, noticeIcon, display, changeNotice, apiUrl }) {
             axios.post(apiUrl + 'login', userInfo, { withCredentials: true })
             .then(res => {
                 if (res.data === 'Success') {
-                    localStorage.setItem('loginState', true);
+                    store.set('loginState', true);
                     changeNotice('로그인 성공', 'correct.png', 'flex', "/")
                     return;
                 }

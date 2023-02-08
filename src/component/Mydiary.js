@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from 'react-router-dom';
 import Notice from './Notice.js';
 import styled, { css } from "styled-components";
+var store = require('store');
 
 
 function MyDiary({ notice, noticeIcon, display, checkLogin, checkCookie,
@@ -11,22 +12,14 @@ function MyDiary({ notice, noticeIcon, display, checkLogin, checkCookie,
     const history = useHistory();
     const favoriteSlider = useRef();
     const sliderSection = useRef();
-    const getOrder = localStorage.getItem('order');
+    const getOrder = store.get('order');
     const [order, setOrder] = useState(getOrder);
     const [dogNames, setDogNames] = useState([]);
-    const [cards, setCards] = useState([{
-        title: '',
-        date: '',
-        dogName: '',
-    }]);
-    const [favoriteCards, setFavoriteCards] = useState([{
-        title: '',
-        date: '',
-        dogName: '',
-    }]);
+    const [cards, setCards] = useState([]);
+    const [favoriteCards, setFavoriteCards] = useState([]);
 
     function handleOpenDiary(imageName) {
-        localStorage.setItem('imageName', imageName);
+        store.set('imageName', imageName);
         history.push('/detail-diary');
     }
 
@@ -70,7 +63,7 @@ function MyDiary({ notice, noticeIcon, display, checkLogin, checkCookie,
                         imageName: item.image_name,
                         imageSrc: apiUrl + `${item.id}/${item.image_name}`,
                     }})
-                    setCards(diaryData);
+                setCards(diaryData);
             }
         })
 
@@ -91,7 +84,7 @@ function MyDiary({ notice, noticeIcon, display, checkLogin, checkCookie,
             return;
         }
 
-        localStorage.setItem('order', order);
+        store.set('order', order);
 
         axios.post(apiUrl + 'order', { order: order }, { withCredentials: true })
         .then(res => {
@@ -101,16 +94,20 @@ function MyDiary({ notice, noticeIcon, display, checkLogin, checkCookie,
                 return;
             }
 
-            const dataArr = data.map((item) => {
-                return {
-                    date: item.date.slice(0, 10),
-                    title: item.title,
-                    dogName: item.dog_name,
-                    imageName: item.image_name,
-                    imageSrc: apiUrl + `${item.id}/${item.image_name}`,
-                }
-            })
-            setCards(dataArr);
+            if (data === 'Nothing') {
+                setCards([]);
+            } else {
+                const dataArr = data.map((item) => {
+                    return {
+                        date: item.date.slice(0, 10),
+                        title: item.title,
+                        dogName: item.dog_name,
+                        imageName: item.image_name,
+                        imageSrc: apiUrl + `${item.id}/${item.image_name}`,
+                    }
+                })
+                setCards(dataArr);
+            }
         })
     }
 
@@ -207,7 +204,7 @@ function MyDiary({ notice, noticeIcon, display, checkLogin, checkCookie,
                 <FavoriteList
                  ref={favoriteSlider} onDragStart={startSlider} onDrag={moveSlider} onDragEnd={endSlider} data-movedist='0'>
                     {
-                        favoriteCards[0].title !== '' ? favoriteCards.map((item) => {
+                        favoriteCards.length > 0 ? favoriteCards.map((item) => {
                         return (
                         <FavoriteCard onClick={() => handleOpenDiary(item.imageName)} key={item.imageName}>
                             <img src={item.imageSrc} alt='산책 사진'/>
@@ -238,7 +235,7 @@ function MyDiary({ notice, noticeIcon, display, checkLogin, checkCookie,
                 <DiaryContainer>
                     <DiaryList>
                         {
-                            cards[0].title !== '' ? cards.map((item) => {
+                            cards.length > 0 ? cards.map((item) => {
                             return (
                             <DiaryCard onClick={() => handleOpenDiary(item.imageName)} key={item.imageName}>
                                 <img src={item.imageSrc} alt='산책 사진'/>

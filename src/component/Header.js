@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+var store = require('store');
 
 function Header({ backgroundOpacity }) {
-    const loginState = localStorage.getItem('loginState');
+    const loginState = store.get('loginState');
     const backgroundStyle = {
         backgroundColor: `rgba(255, 255, 255, ${backgroundOpacity})`,
     }
@@ -55,7 +56,7 @@ const Title = styled.h1`
     text-align: center;
     font-size: 2.2rem;
     line-height: 80px;
-    @media only screen and (max-width: 450px) {
+    @media only screen and (max-width: 700px) {
         font-size: 2rem;
     }
 `
@@ -81,13 +82,19 @@ const Menu = styled.nav`
         padding-left: 0;
         margin-left: 0;
         top: 70px;
-        @media only screen and (hover: none) and (pointer: coarse) {
-            font-size: 1.2rem;
+        @media only screen and (max-width: 450px) {
+            font-size: 1.1rem;
+        }
+        @media only screen and (min-width: 450px) and (max-width: 650px) {
+            font-size: 1.3rem;
         }
 
         > li:not(:last-child) {
             margin-right: 3rem;
-            @media only screen and (hover: none) and (pointer: coarse) {
+            @media only screen and (max-width: 450px) {
+                margin-right: 1.3rem;
+            }
+            @media only screen and (min-width: 450px) and (max-width: 650px) {
                 margin-right: 1.5rem;
             }
         }

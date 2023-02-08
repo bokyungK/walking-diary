@@ -3,6 +3,8 @@ import React, { useRef, useEffect } from "react";
 import Buttons from "./Buttons";
 import Notice from './Notice.js';
 import styled, { css } from "styled-components";
+var store = require('store');
+
 
 function WriteDiary({ notice, noticeIcon, display, changeNotice, checkLogin, checkCookie,
     apiUrl }) {
@@ -91,7 +93,7 @@ function WriteDiary({ notice, noticeIcon, display, changeNotice, checkLogin, che
             if (checkCookie(data, '/login')) {
                 return;
             }
-            localStorage.setItem('imageName', data);
+            store.set('imageName', data);
             changeNotice('저장 성공', 'correct.png', 'flex', "/detail-diary");
         })
     }

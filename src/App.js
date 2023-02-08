@@ -9,14 +9,15 @@ import Mypage from './component/Mypage.js';
 import MyDiary from './component/MyDiary.js';
 import DetailedDiary from './component/DetailedDiary.js';
 import WriteDiary from './component/WriteDiary.js';
+var store = require('store');
 
 function App() {
-  const apiUrl = "http://localhost:3001/";
-  // https://api.walking-diary-server.site/
+  const apiUrl = "https://api.walking-diary-server.site/";
   const history = useHistory();
   const wrapper = useRef();
   const [backgroundOpacity, setBackgroundOpacity] = useState(0);
   const [checkLocation, setCheckLocation] = useState(false);
+  
 
   useEffect(() => {
     const handleShowHeaderBc = (e) => {
@@ -61,7 +62,7 @@ function App() {
   const [checkMessage, setCheckMessage] = useState({ display: 'none' });
 
   function checkLogin() {
-    const loginState = localStorage.getItem('loginState');
+    const loginState = store.get('loginState');
     if (!loginState) {
       changeNotice('로그인 후 사용하세요', 'warning.png', 'flex', "/login");
       return true;
@@ -73,7 +74,7 @@ function App() {
   function checkCookie(data, path) {
     if (data === 'There is no access_token' || data === 'This is not a valid token') {
       changeNotice('로그인이 만료되었습니다', 'warning.png', 'flex', path);
-      localStorage.removeItem('loginState');
+      store.remove('loginState');
       return true;
     } else {
       return false;

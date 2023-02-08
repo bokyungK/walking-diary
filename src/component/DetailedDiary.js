@@ -5,6 +5,7 @@ import Buttons from './Buttons';
 import CheckMessage from './CheckMessage.js';
 import Notice from './Notice.js';
 import styled, { css } from 'styled-components';
+var store = require('store');
 
 function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, checkCookie,
     checkLocation, setCheckLocation, checkMessage, setCheckMessage, setBackgroundOpacity, apiUrl } ) {
@@ -27,7 +28,7 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
         if (checkLogin()) {
             return;
         }
-        const currentDiary = localStorage.getItem('imageName');
+        const currentDiary = store.get('imageName');
         const fetchData = async () => {
             try {
                 const res = await axios.post(apiUrl + 'get-diary', { imageName: currentDiary }, { withCredentials: true })
@@ -118,7 +119,7 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
                 return;
             }
 
-            localStorage.setItem('imageName', data);
+            store.set('imageName', data);
             changeNotice('변경되었습니다', 'correct.png', 'flex', 1);
             setCheckLocation(false);
             setBackgroundOpacity(0);
@@ -148,7 +149,7 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
     function handleStarImage() {
         const starred = [];
         const reverseState = diaryInfo.starred !== 1 ? 1 : 0;
-        const imageName = localStorage.getItem('imageName');
+        const imageName = store.get('imageName');
 
         setDiaryInfo({...diaryInfo, starred: reverseState});
         starred.push(reverseState);
