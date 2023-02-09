@@ -258,30 +258,23 @@ export default MyDiary;
 
 // styled component
 const Inner = styled.div`
-    width: max-content;
-    margin: 0 auto;
-    height: 100%;
-    padding: 0 1rem;
-    @media only screen and (hover: none) and (pointer: coarse){
+    width: 100%;
+    overflow: hidden;
+    padding: 0 3rem;
+    @media only screen and (hover: none) and (pointer: coarse) {
         margin-top: 80px;
-    }
-
-    @media only screen and (max-width: 631px) {
-        padding: 0 calc((100vw - 300px)/2);
-        width: 100vw;
-    }
-
-    @media only screen and (min-width: 632px) and (max-width: 930px) {
-        padding: 0 calc((100vw - 600px)/2);
-        width: 100vw;
     }
 `
 
 const MydiarySection = css`
     width: 932px;
+    margin: 0 auto;
     overflow: hidden;
     @media only screen and (max-width: 631px) {
-        width: 100vw;
+        max-width: 300px;
+    }
+    @media only screen and (min-width: 632px) and (max-width: 932px) {
+        max-width: 632px;
     }
 `
 
@@ -298,7 +291,6 @@ const SectionTitle = styled.h2`
 `
 
 const FavoriteList = styled.ul`
-    width: max-content;
     display: flex;
     list-style: none;
 `
@@ -308,7 +300,8 @@ const FavoriteCard = styled.li`
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    width: 300px;
+    flex-basis: 300px;
+    min-width: 300px;
     height: 300px;
     background-color: skyblue;
     border-radius: 30px;
@@ -329,6 +322,7 @@ const FavoriteCard = styled.li`
         top: 0;
         left: 0;
         width: 100%;
+        height: 100%;
     }
 
     > div {
@@ -374,13 +368,11 @@ const Sort = styled.select`
 `
 
 const DiaryContainer = styled.div`
-    width: 100%;
     display: flex;
     position: relative;
 `
 
 const DiaryList = styled.ul`
-    width: 100vw;
     display: flex;
     list-style: none;
     flex-wrap: wrap;
@@ -418,6 +410,7 @@ const DiaryCard = styled.li`
         top: 0;
         left: 0;
         width: 100%;
+        height: 100%;
     }
 
     > div {

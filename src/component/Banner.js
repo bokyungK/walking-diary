@@ -21,9 +21,9 @@ function Banner({ checkCookie, apiUrl }) {
             .then((res) => {
                 const data = res.data;
 
-                // if (checkCookie(data, false)) {
-                //     return;
-                // }
+                if (checkCookie(data, false)) {
+                    return;
+                }
 
                 if (data === 'Nothing') {
                     return;
