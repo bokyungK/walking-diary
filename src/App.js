@@ -17,7 +17,6 @@ function App() {
   const wrapper = useRef();
   const [backgroundOpacity, setBackgroundOpacity] = useState(0);
   const [checkLocation, setCheckLocation] = useState(false);
-  
 
   useEffect(() => {
     const handleShowHeaderBc = (e) => {

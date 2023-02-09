@@ -22,7 +22,7 @@ function Login({ notice, noticeIcon, display, changeNotice, apiUrl }) {
             axios.post(apiUrl + 'login', userInfo, { withCredentials: true })
             .then(res => {
                 if (res.data === 'Success') {
-                    store.set('loginState', true);
+                    store.set('loginState', 'true');
                     changeNotice('로그인 성공', 'correct.png', 'flex', "/")
                     return;
                 }

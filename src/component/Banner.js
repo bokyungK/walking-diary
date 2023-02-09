@@ -16,14 +16,14 @@ function Banner({ checkCookie, apiUrl }) {
 
 
     useEffect(() => {
-        if (loginState) {
+        if (loginState === 'true') {
             axios.get(apiUrl + 'calendar', { withCredentials: true })
             .then((res) => {
                 const data = res.data;
 
-                if (checkCookie(data, false)) {
-                    return;
-                }
+                // if (checkCookie(data, false)) {
+                //     return;
+                // }
 
                 if (data === 'Nothing') {
                     return;
@@ -88,7 +88,7 @@ function Banner({ checkCookie, apiUrl }) {
     return (
         <Inner>
             {
-                loginState ?
+                loginState === 'true' ?
                     <div>
                         <Title>{ `${currentYear}년 ${currentMonth + 1}월달의 기록` }</Title>
                         <CalendarTable>

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 var store = require('store');
 
 function Header({ backgroundOpacity }) {
-    const loginState = store.get('loginState');
+    const loginState = Boolean(store.get('loginState'));
     const backgroundStyle = {
         backgroundColor: `rgba(255, 255, 255, ${backgroundOpacity})`,
     }
@@ -16,9 +16,7 @@ function Header({ backgroundOpacity }) {
                 <ul>
                     <li><Link to="/mydiary">내 일기장</Link></li>
                     <li><Link to="/write-diary">일기 쓰기</Link></li>
-                    <li><Link to={
-                        Boolean(loginState) ? "/mypage" : "/login"
-                    } >{Boolean(loginState) ? '마이페이지' : '로그인'}</Link></li>
+                    <li><Link to={loginState ? "/mypage" : "/login"}>{loginState ? '마이페이지' : '로그인'}</Link></li>
                 </ul>
             </Menu>
         </Inner>
