@@ -41,14 +41,13 @@ export default Buttons;
 const Inner = styled.div`
     display: flex;
     justify-content: center;
-    margin-bottom: 3rem;
+    margin-bottom: 3rem;s
 `
 
 const Button = styled.button`
-    background-color: rgba(255, 255, 255, 0);
-    border: none;
     position: relative;
-
+    border: none;
+    
     &:first-child {
         margin-right: 1.5rem;
     }
@@ -64,9 +63,9 @@ const ButtonImg = styled.img.attrs((props) => ({
 
 const ButtonName = styled.div`
     position: absolute;
-    bottom: 9px;
-    left: 14px;
+    top: 55%;
+    left: 15px;
     color: #fff;
-    border: none;
+    font-size: 0.8rem;
     font-weight: bold;
 `

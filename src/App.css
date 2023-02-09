@@ -8,8 +8,7 @@ body {
   width: 100%;
   height: 100%;
   font-weight: bold;
-  background-image: url(../public/background.png);
-  /* user-select: none; */
+  background-image: url('../public/background.png');
 }
 
 a { 
@@ -33,6 +32,7 @@ input {
 
 button {
   background-color: rgba(255, 255, 255, 0);
+  color: rgba(0, 0, 0, 1);
 }
 
 button:hover {
