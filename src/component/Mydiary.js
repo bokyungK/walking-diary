@@ -207,7 +207,7 @@ function MyDiary({ notice, noticeIcon, display, checkLogin, checkCookie,
                         favoriteCards.length > 0 ? favoriteCards.map((item) => {
                         return (
                         <FavoriteCard onClick={() => handleOpenDiary(item.imageName)} key={item.imageName}>
-                            <img src={item.imageSrc} alt='산책 사진'/>
+                            <img src={item.imageSrc} alt='산책 사진' />
                             <div>
                                 <div>🦴제목🦴 {item.title}</div>
                                 <div>🦴날짜🦴 {item.date}</div>
@@ -327,13 +327,16 @@ const FavoriteCard = styled.li`
 
     > div {
         width: 207px;
+        height: 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         background-color: #fff;
         border: #997000 solid 3px;
         border-radius: 10px;
         margin-bottom: 1rem;
-        max-height: 80px;
         overflow: hidden;
-        padding: 0.3rem 1rem;
+        padding: 0 1rem;
         z-index: 1;
 
         div {

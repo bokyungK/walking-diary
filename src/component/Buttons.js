@@ -63,8 +63,9 @@ const ButtonImg = styled.img.attrs((props) => ({
 
 const ButtonName = styled.div`
     position: absolute;
-    top: 55%;
-    left: 15px;
+    top: 53%;
+    left: 50%;
+    transform: translateX(-50%);
     color: #fff;
     font-size: 0.8rem;
     font-weight: bold;

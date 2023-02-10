@@ -239,6 +239,9 @@ const DateBox = styled.input`
 
 const WeatherBox = styled.fieldset`
     ${InfoItem};
+    display: flex;
+    justify-content: center;
+    flex-wrap: norwap;
 
     input[type=radio] {
         display: none;
@@ -266,6 +269,7 @@ const WeatherBox = styled.fieldset`
 
 const DogBox = styled.select`
     ${InfoItem}
+    color: rgba(0, 0, 0, 1);
 
     > option {
         background-color: #997000;

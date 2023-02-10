@@ -422,6 +422,7 @@ const WeatherRadio = styled.fieldset`
 
 const DogSelect = styled.select`
     ${DiaryInfoItemsCss}
+    color: rgba(0, 0, 0, 1);
 
     > option {
         background-color: #997000;
