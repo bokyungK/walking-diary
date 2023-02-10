@@ -260,7 +260,7 @@ export default MyDiary;
 const Inner = styled.div`
     width: 100%;
     overflow: hidden;
-    padding: 0 3rem;
+    padding: 0 1rem;
     @media only screen and (hover: none) and (pointer: coarse) {
         margin-top: 80px;
     }

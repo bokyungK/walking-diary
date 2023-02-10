@@ -212,14 +212,14 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
                     <DiaryInfo>
                         <DiaryDate>{diaryInfo.date}</DiaryDate>
                         <WeatherRadio>
-                            <input ref={sunny} type='radio' id='sunny' name='weather-radio' value='sunny' />
-                            <label htmlFor='sunny'>☀</label>
-                            <input ref={cloudy} type='radio' id='cloudy' name='weather-radio' value='cloudy' />
-                            <label htmlFor='cloudy'>☁</label>
-                            <input ref={rainy} type='radio' id='rainy'  name='weather-radio' value='rainy' />
-                            <label htmlFor='rainy'>☂</label>
-                            <input ref={snowy} type='radio' id='snowy'  name='weather-radio' value='snowy' />
-                            <label htmlFor='snowy'>☃</label>
+                            <WeatherInput ref={sunny} type='radio' id='sunny' name='weather-radio' value='sunny' selectedUrl='sunny.png' />
+                            <WeatherLabel htmlFor='sunny' url='blank_sunny.png'></WeatherLabel>
+                            <WeatherInput ref={cloudy} type='radio' id='cloudy' name='weather-radio' value='cloudy' selectedUrl='cloudy.png' />
+                            <WeatherLabel htmlFor='cloudy' url='blank_cloudy.png'></WeatherLabel>
+                            <WeatherInput ref={rainy} type='radio' id='rainy'  name='weather-radio' value='rainy' selectedUrl='rainy.png' />
+                            <WeatherLabel htmlFor='rainy' url='blank_rainy.png'></WeatherLabel>
+                            <WeatherInput ref={snowy} type='radio' id='snowy'  name='weather-radio' value='snowy' selectedUrl='snowy.png' />
+                            <WeatherLabel htmlFor='snowy' url='blank_snowy.png'></WeatherLabel>
                         </WeatherRadio>
                         <DogSelect ref={selectedDog}>
                             <option></option>
@@ -238,14 +238,14 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
                     <DiaryInfo>
                         <DiaryDate>{diaryInfo.date}</DiaryDate>
                         <WeatherRadio>
-                            <input ref={sunny} type='radio' id='sunny' name='weather-radio' value='sunny' disabled />
-                            <label htmlFor='sunny'>☀</label>
-                            <input ref={cloudy} type='radio' id='cloudy' name='weather-radio' value='cloudy' disabled />
-                            <label htmlFor='cloudy'>☁</label>
-                            <input ref={rainy} type='radio' id='rainy'  name='weather-radio' value='rainy' disabled />
-                            <label htmlFor='rainy'>☂</label>
-                            <input ref={snowy} type='radio' id='snowy'  name='weather-radio' value='snowy' disabled />
-                            <label htmlFor='snowy'>☃</label>
+                            <WeatherInput ref={sunny} type='radio' id='sunny' name='weather-radio' value='sunny' selectedUrl='sunny.png'  disabled />
+                            <WeatherLabel htmlFor='sunny' url='blank_sunny.png'></WeatherLabel>
+                            <WeatherInput ref={cloudy} type='radio' id='cloudy' name='weather-radio' value='cloudy' selectedUrl='cloudy.png'  disabled />
+                            <WeatherLabel htmlFor='cloudy' url='blank_cloudy.png'></WeatherLabel>
+                            <WeatherInput ref={rainy} type='radio' id='rainy'  name='weather-radio' value='rainy' selectedUrl='rainy.png'  disabled />
+                            <WeatherLabel htmlFor='rainy' url='blank_rainy.png'></WeatherLabel>
+                            <WeatherInput ref={snowy} type='radio' id='snowy'  name='weather-radio' value='snowy' selectedUrl='snowy.png'  disabled />
+                            <WeatherLabel htmlFor='snowy' url='blank_snowy.png'></WeatherLabel>
                         </WeatherRadio>
                         <DogNameBox>{diaryInfo.dog_name}</DogNameBox>
                     </DiaryInfo>
@@ -370,21 +370,23 @@ const DiaryPhoto = styled.img`
 
 const DiaryInfo = styled.div`
     display: flex;
+    flex-wrap: norwap;
+    height: 2.3rem;
+    justify-content: space-between;
     margin-bottom: 1rem;
     font-weight: normal;
-    justify-content: space-between;
     font-size: 1rem;
 `
 
 const DiaryInfoItemsCss = css`
     flex-basis: 30%;
-    border: 3px solid #997000;
-    border-radius: 10px;
-    line-height: 2rem;
-    background-color: #fff;
+    heightL 2.3rem;
     display: flex;
     justify-content: center;
-    flex-wrap: norwap;
+    align-items: center;
+    border: 3px solid #997000;
+    border-radius: 10px;
+    background-color: #fff;
     @media only screen and (max-width: 700px) {
         font-size: 0.8rem;
         flex-basis: 33%;
@@ -397,29 +399,41 @@ const DiaryDate = styled.div`
 
 const WeatherRadio = styled.fieldset`
     ${DiaryInfoItemsCss}
+`
 
-    input[type=radio] {
+const WeatherInput = styled.input`
+    &[type=radio] {
         display: none;
     }
 
-    input[type=radio] + label {
+    &[type=radio] + label {
         font-size: 1.5rem;
-        color: darkgray;
         @media only screen and (max-width: 700px) {
             font-size: 1.2rem;
         }
     }
 
-    input[type=radio] + label:not(:last-child) {
+    &[type=radio] + label:not(:last-child) {
         margin-right: 1rem;
         @media only screen and (max-width: 700px) {
             margin-right: 0.8rem;
         }
     }
 
-    input[type=radio]:checked + label {
+    &[type=radio]:checked + label {
         color: black;
+        width: 1rem;
+        height: 1rem;
+        background-image: url(${props => props.selectedUrl});
+        background-size: cover;
     }
+`
+
+const WeatherLabel = styled.label`
+    width: 1rem;
+    height: 1rem;
+    background-image: url(${props => props.url});
+    background-size: cover;
 `
 
 const DogSelect = styled.select`
@@ -427,6 +441,7 @@ const DogSelect = styled.select`
     color: rgba(0, 0, 0, 1);
     text-overflow: ellipsis;
     white-space: nowrap;
+    text-align: center;
 
     > option {
         background-color: #997000;
