@@ -295,6 +295,21 @@ const FavoriteList = styled.ul`
     list-style: none;
 `
 
+const CardInfo = css`
+    width: 207px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #fff;
+    border: #997000 solid 3px;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    padding: 0 1rem;
+    z-index: 1;
+`
+
 const FavoriteCard = styled.li`
     position: relative;
     display: flex;
@@ -326,18 +341,7 @@ const FavoriteCard = styled.li`
     }
 
     > div {
-        width: 207px;
-        height: 80px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        background-color: #fff;
-        border: #997000 solid 3px;
-        border-radius: 10px;
-        margin-bottom: 1rem;
-        overflow: hidden;
-        padding: 0 1rem;
-        z-index: 1;
+        ${CardInfo}
 
         div {
             overflow: hidden;
@@ -417,15 +421,7 @@ const DiaryCard = styled.li`
     }
 
     > div {
-        background-color: #fff;
-        border: #997000 solid 3px;
-        border-radius: 10px;
-        margin-bottom: 1rem;
-        width: 207px;
-        height: 80px;
-        overflow: hidden;
-        padding: 0.3rem 1rem;
-        z-index: 1;
+        ${CardInfo}
 
         > div {
             overflow: hidden;

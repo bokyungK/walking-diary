@@ -247,7 +247,7 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
                             <input ref={snowy} type='radio' id='snowy'  name='weather-radio' value='snowy' disabled />
                             <label htmlFor='snowy'>☃</label>
                         </WeatherRadio>
-                        <DoxNameBox>{diaryInfo.dog_name}</DoxNameBox>
+                        <DogNameBox>{diaryInfo.dog_name}</DogNameBox>
                     </DiaryInfo>
                     <Title ref={title} type='text' placeholder='제목을 입력하세요' maxLength='30' defaultValue={diaryInfo.title} disabled />
                     <Content ref={content} placeholder='일기를 입력하세요' maxLength='500' defaultValue={diaryInfo.content} disabled></Content>
@@ -381,8 +381,10 @@ const DiaryInfoItemsCss = css`
     border: 3px solid #997000;
     border-radius: 10px;
     line-height: 2rem;
-    text-align: center;
     background-color: #fff;
+    display: flex;
+    justify-content: center;
+    flex-wrap: norwap;
     @media only screen and (max-width: 700px) {
         font-size: 0.8rem;
         flex-basis: 33%;
@@ -423,6 +425,8 @@ const WeatherRadio = styled.fieldset`
 const DogSelect = styled.select`
     ${DiaryInfoItemsCss}
     color: rgba(0, 0, 0, 1);
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
     > option {
         background-color: #997000;
@@ -431,8 +435,10 @@ const DogSelect = styled.select`
     }
 `
 
-const DoxNameBox = styled.div`
+const DogNameBox = styled.div`
     ${DiaryInfoItemsCss}
+    text-overflow: ellipsis;
+    white-space: nowrap;
 `
 
 const Title = styled.input`

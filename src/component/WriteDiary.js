@@ -227,7 +227,9 @@ const InfoItem = css`
     border: 3px solid #997000;
     border-radius: 10px;
     line-height: 2rem;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    flex-wrap: norwap;
     @media only screen and (max-width: 700px) {
         flex-basis: 33%
     }
@@ -239,9 +241,6 @@ const DateBox = styled.input`
 
 const WeatherBox = styled.fieldset`
     ${InfoItem};
-    display: flex;
-    justify-content: center;
-    flex-wrap: norwap;
 
     input[type=radio] {
         display: none;
@@ -270,6 +269,8 @@ const WeatherBox = styled.fieldset`
 const DogBox = styled.select`
     ${InfoItem}
     color: rgba(0, 0, 0, 1);
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
     > option {
         background-color: #997000;
