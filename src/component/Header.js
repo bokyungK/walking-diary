@@ -1,16 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { useRecoilValue } from 'recoil';
+import { opacityState } from '../recoil/Atom';
 var store = require('store');
 
-function Header({ backgroundOpacity }) {
+function Header() {
+    const backgroundOpacity = useRecoilValue(opacityState);
     const loginState = Boolean(store.get('loginState'));
-    const backgroundStyle = {
-        backgroundColor: `rgba(255, 255, 255, ${backgroundOpacity})`,
-    }
 
     return (
-        <Inner style={backgroundStyle}>
+        <Inner opacity={backgroundOpacity}>
             <Title><Link to="/">산책 일기</Link></Title>
             <Menu opacity={backgroundOpacity}>
                 <ul>
@@ -33,6 +33,7 @@ const Inner = styled.header`
     position: fixed;
     top: 0;
     z-index: 3;
+    background-color: rgba(255, 255, 255, ${props => props.opacity}); 
 
     &:hover {
         > nav {

@@ -3,9 +3,12 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Notice from './Notice.js';
 import styled from 'styled-components';
+import { useRecoilValue } from 'recoil';
+import { apiUrlState } from '../recoil/Atom';
 var store = require('store');
 
-function Login({ notice, noticeIcon, display, changeNotice, apiUrl }) {
+function Login({ changeNotice }) {
+    const apiUrl = useRecoilValue(apiUrlState);
     const userId = useRef();
     const userPw = useRef();
 
@@ -37,7 +40,7 @@ function Login({ notice, noticeIcon, display, changeNotice, apiUrl }) {
     }
     return (
         <Inner>
-            <Notice message={notice} icon={noticeIcon} display={display} />
+            <Notice />
             <Form method='post'>
                 <div>
                     <div>

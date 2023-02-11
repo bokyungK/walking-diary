@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Route, useHistory } from 'react-router-dom';
 import './App.css';
 import Header from './component/Header.js';
@@ -9,14 +9,21 @@ import Mypage from './component/Mypage.js';
 import MyDiary from './component/MyDiary.js';
 import DetailedDiary from './component/DetailedDiary.js';
 import WriteDiary from './component/WriteDiary.js';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { opacityState, locationState, noticeState, noticeIconState, displayState, messageState } from './recoil/Atom';
 var store = require('store');
 
+
 function App() {
-  const apiUrl = "https://api.walking-diary-server.site/";
   const history = useHistory();
   const wrapper = useRef();
-  const [backgroundOpacity, setBackgroundOpacity] = useState(0);
-  const [checkLocation, setCheckLocation] = useState(false);
+
+  const [notice, setNotice] = useRecoilState(noticeState);
+  const [checkMessage, setCheckMessage] = useRecoilState(messageState);
+  const [backgroundOpacity, setBackgroundOpacity] = useRecoilState(opacityState);
+  const setNoticeIcon = useSetRecoilState(noticeIconState);
+  const setDisplay = useSetRecoilState(displayState)
+  const setCheckLocation = useSetRecoilState(locationState);
 
   useEffect(() => {
     const handleShowHeaderBc = (e) => {
@@ -27,16 +34,13 @@ function App() {
 
       setBackgroundOpacity((scrollPosition / scrollHeight).toFixed(1));
     }
+
     window.addEventListener('scroll', handleShowHeaderBc);
 
     return () => {
-    window.removeEventListener('scroll', handleShowHeaderBc);
+      window.removeEventListener('scroll', handleShowHeaderBc);
     };
   }, []);
-
-  const [notice, setNotice] = useState('');
-  const [noticeIcon, setNoticeIcon] = useState('warning.png');
-  const [display, setDisplay] = useState('none')
 
   function changeNotice(notice, icon, display, path) {
     setNotice(notice);
@@ -57,8 +61,6 @@ function App() {
       }, 1000);
     }
   }
-
-  const [checkMessage, setCheckMessage] = useState({ display: 'none' });
 
   function checkLogin() {
     const loginState = store.get('loginState');
@@ -82,15 +84,12 @@ function App() {
 
   useEffect(() => {
     history.listen((path) => {
+      // reset opacity
+      setBackgroundOpacity(0);
+      
       // check location
       if (path.pathname !== 'detail-diary') {
         setCheckLocation(false);
-      }
-
-      // reset opacity
-      const opacity = backgroundOpacity;
-      if (opacity > 0) {
-        setBackgroundOpacity(0);
       }
 
       // reset message box
@@ -110,34 +109,25 @@ function App() {
   }, [history, notice, backgroundOpacity, checkMessage])
 
   return (
-  <div ref={wrapper}>
-    <Header backgroundOpacity={backgroundOpacity} />
-    <main>
-      <Route path="/" exact={true} render={() =>
-        <Banner checkCookie={checkCookie} apiUrl={apiUrl} />} />
-      <Route path="/login" render={() =>
-        <Login changeNotice={changeNotice} notice={notice}
-        noticeIcon={noticeIcon} display={display} apiUrl={apiUrl} />} />
-      <Route path="/join" render={() =>
-        <Join changeNotice={changeNotice} notice={notice} noticeIcon={noticeIcon} display={display} 
-        apiUrl={apiUrl} />} />
-      <Route path="/mypage" render={() =>
-        <Mypage changeNotice={changeNotice} checkLogin={checkLogin} checkMessage={checkMessage}
-        setCheckMessage={setCheckMessage} checkCookie={checkCookie} notice={notice} noticeIcon={noticeIcon}
-        display={display} apiUrl={apiUrl} /> } />
-      <Route path="/mydiary" render={() =>
-        <MyDiary notice={notice} noticeIcon={noticeIcon} display={display} checkLogin={checkLogin}
-        checkCookie={checkCookie} apiUrl={apiUrl} />} />
-      <Route path="/detail-diary" render={() =>
-        <DetailedDiary notice={notice} noticeIcon={noticeIcon} display={display} changeNotice={changeNotice}
-        checkLogin={checkLogin} checkLocation={checkLocation} setCheckLocation={setCheckLocation} 
-        checkMessage={checkMessage} setCheckMessage={setCheckMessage} checkCookie={checkCookie}
-        setBackgroundOpacity={setBackgroundOpacity} apiUrl={apiUrl} /> } />
-      <Route path="/write-diary" render={() =>
-       <WriteDiary notice={notice} noticeIcon={noticeIcon} display={display} changeNotice={changeNotice}
-       checkLogin={checkLogin} checkCookie={checkCookie} apiUrl={apiUrl} />} />
-    </main>
-  </div>
+    <div ref={wrapper}>
+      <Header/>
+      <main>
+        <Route path="/" exact={true} render={() =>
+          <Banner checkCookie={checkCookie} />} />
+        <Route path="/login" render={() =>
+          <Login changeNotice={changeNotice} />} />
+        <Route path="/join" render={() =>
+          <Join changeNotice={changeNotice} />} />
+        <Route path="/mypage" render={() =>
+          <Mypage changeNotice={changeNotice} checkLogin={checkLogin} checkCookie={checkCookie} /> } />
+        <Route path="/mydiary" render={() =>
+          <MyDiary checkLogin={checkLogin} checkCookie={checkCookie} />} />
+        <Route path="/detail-diary" render={() =>
+          <DetailedDiary changeNotice={changeNotice} checkLogin={checkLogin} checkCookie={checkCookie} /> } />
+        <Route path="/write-diary" render={() =>
+        <WriteDiary changeNotice={changeNotice} checkLogin={checkLogin} checkCookie={checkCookie} />} />
+      </main>
+    </div>
   )
 }
 

@@ -1,31 +1,36 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { useSetRecoilState } from 'recoil';
+import { locationState, opacityState } from '../recoil/Atom';
 
-function Buttons ({ buttonName, cancelLink, handleFormSubmit, setCheckLocation, setBackgroundOpacity }) {
+function Buttons ({ buttonName, cancelLink, handleFormSubmit }) {
+    const setCheckLocation = useSetRecoilState(locationState);
+    const setBackgroundOpacity = useSetRecoilState(opacityState);
     return (
         <Inner>
+            {/* cancel */}
             {
                 cancelLink === '/detail-diary' ?
-                <Button onClick={() =>
-                cancelLink === '/detail-diary' ?
-                (
-                    setCheckLocation(false),
-                    setBackgroundOpacity(0)
-                )
-                : 
-                ''}>
-                    <ButtonImg buttonAlt={buttonName.cancel} />
-                    <ButtonName>{buttonName.cancel}</ButtonName>
-                </Button>
-                :
-                <Link to={cancelLink.path}>
-                    <Button>
+                    <Button onClick={() => cancelLink === '/detail-diary' ?
+                        (
+                            setCheckLocation(false),
+                            setBackgroundOpacity(0)
+                        )
+                        : 
+                        ''}>
                         <ButtonImg buttonAlt={buttonName.cancel} />
                         <ButtonName>{buttonName.cancel}</ButtonName>
                     </Button>
-                </Link>
+                    :
+                    <Link to={cancelLink.path}>
+                        <Button>
+                            <ButtonImg buttonAlt={buttonName.cancel} />
+                            <ButtonName>{buttonName.cancel}</ButtonName>
+                        </Button>
+                    </Link>
             }
+            {/* submit */}
             <Button onClick={handleFormSubmit} type='button'>
                 <ButtonImg buttonAlt={buttonName.submit} />
                 <ButtonName>{buttonName.submit}</ButtonName>

@@ -3,16 +3,19 @@ import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from 'react-router-dom';
 import Notice from './Notice.js';
 import styled, { css } from "styled-components";
+import { useRecoilValue } from 'recoil';
+import { apiUrlState } from '../recoil/Atom';
 var store = require('store');
 
 
-function MyDiary({ notice, noticeIcon, display, checkLogin, checkCookie,
-    apiUrl }) {
+function MyDiary({ checkLogin, checkCookie }) {
+    const apiUrl = useRecoilValue(apiUrlState);
 
     const history = useHistory();
     const favoriteSlider = useRef();
     const sliderSection = useRef();
     const getOrder = store.get('order');
+    
     const [order, setOrder] = useState(getOrder);
     const [dogNames, setDogNames] = useState([]);
     const [cards, setCards] = useState([]);
@@ -198,7 +201,7 @@ function MyDiary({ notice, noticeIcon, display, checkLogin, checkCookie,
 
     return (
         <Inner>
-            <Notice message={notice} icon={noticeIcon} display={display} />
+            <Notice />
             <FavoriteSection ref={sliderSection}>
                 <SectionTitle>즐겨찾기</SectionTitle>
                 <FavoriteList

@@ -4,10 +4,14 @@ import Buttons from "./Buttons.js"
 import CheckMessage from './CheckMessage.js';
 import Notice from './Notice.js';
 import styled from "styled-components";
+import { useRecoilValue , useSetRecoilState } from 'recoil';
+import { apiUrlState, messageState, messageOptionState } from '../recoil/Atom';
 var store = require('store');
 
-function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMessage,
-     setCheckMessage, checkCookie, apiUrl }) {
+function Mypage({ changeNotice, checkLogin, checkCookie }) {
+    const apiUrl = useRecoilValue(apiUrlState);
+    const setCheckMessage = useSetRecoilState(messageState);
+    const setOption = useSetRecoilState(messageOptionState);
 
     const userPw = useRef();
     const userNewPw = useRef();
@@ -80,7 +84,7 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
 
         // 비밀 번호를 입력하지 않은 경우
         if (userInfo.userPw === '') {
-            changeNotice('정보 변경을 위해, 비밀번호를 입력하세요', 'warning.png', 'flex', 0); 
+            changeNotice('정보 변경을 위해 비밀번호를 입력하세요', 'warning.png', 'flex', 0); 
             return;
         }
 
@@ -151,7 +155,7 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
     return (
         <Inner>
             <Title>마이페이지</Title>
-            <Notice message={notice} icon={noticeIcon} display={display} />
+            <Notice />
             <Form>
                 <FormSection>
                     <FormItem>
@@ -189,12 +193,12 @@ function Mypage({ notice, noticeIcon, display, changeNotice, checkLogin, checkMe
                     <AdditionalTab>
                         <button onClick={() => {
                             setCheckMessage({ display: 'block' });
+                            setOption({ cancel: '취소', submit: '탈퇴' });
                         }} type='button'>회원탈퇴</button>
                         <button onClick={handleLogout} type='button'>로그아웃</button>
                     </AdditionalTab>
                 </FormSection>
-                <CheckMessage checkMessage={checkMessage} setCheckMessage={setCheckMessage} handleShowMessage={handleWithdrawal}
-                 option={{ cancel: '취소', submit: '탈퇴' }} />
+                <CheckMessage handleShowMessage={handleWithdrawal} />
                 <Buttons handleFormSubmit={handleFormSubmit} buttonName={{cancel: '취소', submit: '저장'}} cancelLink={{path: '/'}} />
             </Form>
         </Inner>

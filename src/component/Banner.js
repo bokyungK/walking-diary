@@ -1,19 +1,21 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useRecoilValue } from 'recoil';
+import { apiUrlState } from '../recoil/Atom';
 var store = require('store');
 
-function Banner({ checkCookie, apiUrl }) {
+function Banner({ checkCookie }) {
+    const apiUrl = useRecoilValue(apiUrlState);
     const loginState = store.get('loginState');
     const [calendar, setCalendar] = useState([]);
-    const days = ['일', '월', '화', '수', '목', '금', '토'];
     const [writedDate, setWritedDate] = useState('');
 
     // get current year, month
+    const days = ['일', '월', '화', '수', '목', '금', '토'];
     const today = new Date();
     const currentYear = today.getFullYear();
     const currentMonth = today.getMonth();
-
 
     useEffect(() => {
         if (loginState === 'true') {

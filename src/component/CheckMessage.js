@@ -1,8 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { messageState, messageOptionState } from '../recoil/Atom';
 
 
-function CheckMessage ({ checkMessage, setCheckMessage, handleShowMessage, option }) {
+function CheckMessage ({ handleShowMessage }) {
+    const [checkMessage, setCheckMessage] = useRecoilState(messageState);
+    const option = useRecoilValue(messageOptionState);
+    
     return (
         <Inner style={checkMessage}>
             <div>
@@ -61,6 +66,7 @@ const Inner = styled.div`
         border: none;
         border-radius: 10px;
         font-weight: bold;
+        color: #fff;
     }
 
     button:first-child {

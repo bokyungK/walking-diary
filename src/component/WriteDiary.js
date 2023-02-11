@@ -3,12 +3,14 @@ import React, { useRef, useEffect } from "react";
 import Buttons from "./Buttons";
 import Notice from './Notice.js';
 import styled, { css } from "styled-components";
+import { useRecoilValue } from 'recoil';
+import { apiUrlState } from '../recoil/Atom';
 var store = require('store');
 
 
-function WriteDiary({ notice, noticeIcon, display, changeNotice, checkLogin, checkCookie,
-    apiUrl }) {
-
+function WriteDiary({ changeNotice, checkLogin, checkCookie }) {
+    const apiUrl = useRecoilValue(apiUrlState);
+    
     const imageAttach = useRef();;
     const date = useRef();
     date.value = `${new Date().getFullYear()}-${new Date().getMonth() + 1 < 10 ? '0' + (new Date().getMonth() + 1) : new Date().getMonth() + 1}-${new Date().getDate() < 10 ? '0' + new Date().getDate() : new Date().getDate()}`;
@@ -22,7 +24,6 @@ function WriteDiary({ notice, noticeIcon, display, changeNotice, checkLogin, che
     const content = useRef();
     const [img, setImg] = React.useState('');
     const [imageSrc, setImageSrc] = React.useState('');
-    const [weather, setWeather] = React.useState([]);
 
     useEffect(() => {
         if (checkLogin()) {
@@ -44,11 +45,6 @@ function WriteDiary({ notice, noticeIcon, display, changeNotice, checkLogin, che
                 :
                 selectedDog.current[idx].innerText = dogName;
             })
-
-            const weatherState = weathers.map((weather) => {
-                return weather.current.checked;
-            })
-            setWeather(...weatherState);
         })
     }, [])
 
@@ -107,7 +103,7 @@ function WriteDiary({ notice, noticeIcon, display, changeNotice, checkLogin, che
 
     return (
         <WritingSection>    
-            <Notice message={notice} icon={noticeIcon} display={display} />
+            <Notice />
             <Inner>
                 <form encType='multipart/form-data'>
                     <AttachmentLabel htmlFor='image-attach'>

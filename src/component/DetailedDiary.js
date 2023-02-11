@@ -5,10 +5,17 @@ import Buttons from './Buttons';
 import CheckMessage from './CheckMessage.js';
 import Notice from './Notice.js';
 import styled, { css } from 'styled-components';
+import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
+import { apiUrlState, locationState, messageState, messageOptionState, opacityState } from '../recoil/Atom';
 var store = require('store');
 
-function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, checkCookie,
-    checkLocation, setCheckLocation, checkMessage, setCheckMessage, setBackgroundOpacity, apiUrl } ) {
+function DetailedDiary({ changeNotice, checkLogin, checkCookie } ) {
+
+    const apiUrl = useRecoilValue(apiUrlState);
+    const [checkLocation, setCheckLocation] = useRecoilState(locationState);
+    const setCheckMessage = useSetRecoilState(messageState);
+    const setOption = useSetRecoilState(messageOptionState);
+    const setBackgroundOpacity = useSetRecoilState(opacityState);
 
     const history = useHistory();
     const sunny = useRef();
@@ -168,7 +175,7 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
     return (
     <section>
         <Inner>
-            <Notice message={notice} icon={noticeIcon} display={display} />
+            <Notice />
             <Icons>
                 <Icon onClick={handleStarImage}>
                     <IconImg imgSrc={diaryInfo.starred ? 'filled_star.png':'empty_star.png'} imgAlt='즐겨찾기 버튼'/>
@@ -176,8 +183,12 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
                 <Icon onClick={handleDiaryUpdate}>
                     <IconImg imgSrc='edit.png' imgAlt='수정 버튼' />
                 </Icon>
-                <Icon onClick={() => {
-                    setCheckMessage({ display: 'block' });
+                <Icon onClick={() => 
+                    // option={{ cancel: '취소', submit: '삭제' }}
+                    {
+                        setCheckMessage({ display: 'block' });
+                        setOption({ cancel: '취소', submit: '삭제' });
+                        setCheckMessage({ display: 'block' });
                     }}><IconImg imgSrc='delete.png' imgAlt='삭제 버튼' />
                 </Icon>
                 <Icon onClick={() => history.push("/mydiary")}>
@@ -253,8 +264,7 @@ function DetailedDiary({ notice, noticeIcon, display, changeNotice, checkLogin, 
                     <Content ref={content} placeholder='일기를 입력하세요' maxLength='500' defaultValue={diaryInfo.content} disabled></Content>
                 </>
             }
-            <CheckMessage checkMessage={checkMessage} setCheckMessage={setCheckMessage} handleShowMessage={handleDiaryDelete}
-            option={{ cancel: '취소', submit: '삭제' }} />
+            <CheckMessage handleShowMessage={handleDiaryDelete} />
         </Inner>
     </section>
     )

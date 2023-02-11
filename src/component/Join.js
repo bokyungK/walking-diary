@@ -3,8 +3,11 @@ import axios from 'axios';
 import Buttons from './Buttons.js';
 import Notice from './Notice.js';
 import styled from 'styled-components';
+import { useRecoilValue } from 'recoil';
+import { apiUrlState } from '../recoil/Atom';
 
-function Join({ notice, noticeIcon, display, changeNotice, apiUrl }) {
+function Join({ changeNotice }) {
+    const apiUrl = useRecoilValue(apiUrlState);
     const buttonName = {
         cancel: '취소',
         submit: '가입'
@@ -71,7 +74,7 @@ function Join({ notice, noticeIcon, display, changeNotice, apiUrl }) {
     return (
         <Inner>
             <Title>회원가입</Title>
-            <Notice message={notice} icon={noticeIcon} display={display} />
+            <Notice />
             <Form>
                 <div>
                     <FormItem>
