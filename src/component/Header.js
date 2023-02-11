@@ -7,7 +7,7 @@ var store = require('store');
 
 function Header() {
     const backgroundOpacity = useRecoilValue(opacityState);
-    const loginState = Boolean(store.get('loginState'));
+    const loginState = store.get('loginState');
 
     return (
         <Inner opacity={backgroundOpacity}>
@@ -16,7 +16,9 @@ function Header() {
                 <ul>
                     <li><Link to="/mydiary">내 일기장</Link></li>
                     <li><Link to="/write-diary">일기 쓰기</Link></li>
-                    <li><Link to={loginState ? "/mypage" : "/login"}>{loginState ? '마이페이지' : '로그인'}</Link></li>
+                    <li>
+                        <Link to={loginState === 'true' ? "/mypage" : "/login"}>{loginState === 'true' ? '마이페이지' : '로그인'}</Link>
+                        </li>
                 </ul>
             </Menu>
         </Inner>

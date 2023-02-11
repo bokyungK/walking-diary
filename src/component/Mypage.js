@@ -145,10 +145,8 @@ function Mypage({ changeNotice, checkLogin, checkCookie }) {
                 return;
             }
             changeNotice('로그아웃 완료', 'goodbye.png', 'flex', "/");
-            setTimeout(() => {
-                store.remove('loginState');
-                store.remove('imageName');
-            }, 1000)
+            store.remove('loginState');
+            store.remove('imageName');
         });
     }
 
