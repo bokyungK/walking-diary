@@ -7,7 +7,6 @@ import { useRecoilValue } from 'recoil';
 import { apiUrlState } from '../recoil/Atom';
 var store = require('store');
 
-
 function MyDiary({ checkLogin, checkCookie }) {
     const apiUrl = useRecoilValue(apiUrlState);
 
@@ -31,52 +30,57 @@ function MyDiary({ checkLogin, checkCookie }) {
             return;
         }
 
-        axios.post(apiUrl + "diaries", { order: getOrder }, { withCredentials: true })
-        .then(res => {
-            const data = res.data;
-
-            if (checkCookie(data, '/login')) {
-                return;
-            }
-
-            if (data[0] !== 'Nothing') {
-                // favorite cards
-                const starredData = [];
-                data[0].forEach((item) => {
-                    if (item.starred === 1) {
-                        starredData.push({
+        const fetchDiary = async () => {
+            try {
+                const res = await axios.post(apiUrl + "diaries", { order: getOrder }, { withCredentials: true });
+                const data = await res.data;
+    
+                if (checkCookie(data, '/login')) {
+                    return;
+                }
+    
+                if (data[0] !== 'Nothing') {
+                    // favorite cards
+                    const starredData = [];
+                    data[0].forEach((item) => {
+                        if (item.starred === 1) {
+                            starredData.push({
+                                date: item.date.slice(0, 10),
+                                dogName: item.dog_name,               
+                                title: item.title,
+                                imageName: item.image_name,
+                                imageSrc: apiUrl + `${item.id}/${item.image_name}`
+                            })
+                        }
+                    })
+                    setFavoriteCards(starredData);
+                }
+    
+                if (data[1] !== 'Nothing') {
+                    // cards
+                    const diaryData = data[1].map((item) => {
+                        return {
                             date: item.date.slice(0, 10),
-                            dogName: item.dog_name,               
+                            dogName: item.dog_name,
                             title: item.title,
                             imageName: item.image_name,
-                            imageSrc: apiUrl + `${item.id}/${item.image_name}`
-                        })
-                    }
+                            imageSrc: apiUrl + `${item.id}/${item.image_name}`,
+                        }})
+                    setCards(diaryData);
+                }
+    
+                axios.get(apiUrl + 'get-dogs', { withCredentials: true })
+                .then(res => {
+                    const data = res.data;
+                    const clearData = Object.values(data).filter((name) => name !== '');
+                    setDogNames(clearData);
                 })
-                setFavoriteCards(starredData);
+            } catch (err) {
+                console.error(err);
             }
-
-            if (data[1] !== 'Nothing') {
-                // cards
-                const diaryData = data[1].map((item) => {
-                    return {
-                        date: item.date.slice(0, 10),
-                        dogName: item.dog_name,
-                        title: item.title,
-                        imageName: item.image_name,
-                        imageSrc: apiUrl + `${item.id}/${item.image_name}`,
-                    }})
-                setCards(diaryData);
-            }
-        })
-
-        axios.get(apiUrl + 'get-dogs', { withCredentials: true })
-        .then(res => {
-            const data = res.data;
-            const clearData = Object.values(data).filter((name) => name !== '');
-            setDogNames(clearData);
-        })
-    }, []);
+        }
+        fetchDiary();
+    }, [apiUrl, getOrder, checkCookie, checkLogin]);
 
     // control order
     function handleOrderSelect(e) {
@@ -197,7 +201,7 @@ function MyDiary({ checkLogin, checkCookie }) {
         return () => {
         window.removeEventListener('scroll', showMoreData);
         };
-      }, [cards]);
+      }, [apiUrl, cards, checkCookie, getOrder]);
 
     return (
         <Inner>
@@ -270,11 +274,11 @@ const Inner = styled.div`
 `
 
 const MydiarySection = css`
-    width: 932px;
+    width: 937px;
     margin: 0 auto;
     overflow: hidden;
     @media only screen and (max-width: 631px) {
-        max-width: 300px;
+        max-width: 305px;
     }
     @media only screen and (min-width: 632px) and (max-width: 932px) {
         max-width: 632px;
@@ -310,6 +314,7 @@ const CardInfo = css`
     margin-bottom: 1rem;
     overflow: hidden;
     padding: 0 1rem;
+    font-size: 0.9rem;
     z-index: 1;
 `
 
@@ -326,9 +331,11 @@ const FavoriteCard = styled.li`
     margin-bottom: 1rem;
     margin-right: 1rem;
     overflow: hidden;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
 
     &:hover {
         cursor: pointer;
+        box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.4);
     }
 
     &:not(:nth-child(3n)) {
@@ -367,13 +374,13 @@ const Sort = styled.select`
     width: max-content;
     height: 30px;
     margin-bottom: 1rem;
-    font-weight: bold;
     color: rgb(103, 103, 103);
     border: rgb(103, 103, 103) solid 3px;
     outline: none;
 
     > option {
-        font-weight: bold;        
+        font-weight: bold;   
+        background-color: #F0CA61;
     }
 `
 
@@ -400,9 +407,12 @@ const DiaryCard = styled.li`
     border-radius: 30px;
     margin-bottom: 1rem;
     overflow: hidden;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+    
 
     &:hover {
-        cursor: pointer;       
+        cursor: pointer;
+        box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.4);
     }
 
     &:not(:nth-child(3n)) {

@@ -60,7 +60,7 @@ function Mypage({ changeNotice, checkLogin, checkCookie }) {
             })
             setDogNames([...getFilteredDogNames]);
         })
-    }, [])
+    }, [apiUrl, checkCookie, checkLogin])
 
     function handleInputValue(e) {
         const isRegExp = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,}$/.test(e.target.value);
@@ -268,8 +268,15 @@ const ItemInput = styled.input`
     color: #fff;
     font-size: 1.1rem;
     text-align: center;
+    border: none;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
     @media only screen and (max-width: 450px) {
         margin-top: 0.3rem;
+    }
+
+    &:focus {
+        border: none;
+        box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.5);
     }
 `
 
@@ -282,6 +289,7 @@ const AddBoxButton = styled.button`
     width: 50px;
     height: 100%;
     right: -60px;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
 
     @media only screen and (max-width: 450px) {
         width: 50px;
@@ -304,5 +312,8 @@ const AdditionalTab = styled.div`
         border: 3px solid #997000;
         font-weight: bold;
         border-radius: 10px;
+        width: max-content;
+        padding: 0.3rem;
+        box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
     }
 `

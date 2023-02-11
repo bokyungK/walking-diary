@@ -46,7 +46,7 @@ function WriteDiary({ changeNotice, checkLogin, checkCookie }) {
                 selectedDog.current[idx].innerText = dogName;
             })
         })
-    }, [])
+    }, [apiUrl, checkCookie, checkLogin])
 
     function handleImagePreview(fileBlob) {
         const reader = new FileReader();
@@ -126,14 +126,14 @@ function WriteDiary({ changeNotice, checkLogin, checkCookie }) {
                     <DiaryInfo>
                         <DateBox ref={date}>{date.value}</DateBox>
                         <WeatherBox>
-                                <WeatherInput ref={sunny} type='radio' id='sunny' name='weather-radio' value='sunny' selectedUrl='sunny.png' defaultChecked />
-                                <WeatherLabel htmlFor='sunny' url='blank_sunny.png'></WeatherLabel>
-                                <WeatherInput ref={cloudy} type='radio' id='cloudy' name='weather-radio' value='cloudy' selectedUrl='cloudy.png' />
-                                <WeatherLabel htmlFor='cloudy' url='blank_cloudy.png'></WeatherLabel>
-                                <WeatherInput ref={rainy} type='radio' id='rainy'  name='weather-radio' value='rainy' selectedUrl='rainy.png' />
-                                <WeatherLabel htmlFor='rainy' url='blank_rainy.png'></WeatherLabel>
+                                <WeatherInput ref={sunny} type='radio' id='sunny' name='weather-radio' value='sunny' defaultChecked />
+                                <WeatherLabel htmlFor='sunny' url='sunny.png'></WeatherLabel>
+                                <WeatherInput ref={cloudy} type='radio' id='cloudy' name='weather-radio' value='cloudy' />
+                                <WeatherLabel htmlFor='cloudy' url='cloudy.png'></WeatherLabel>
+                                <WeatherInput ref={rainy} type='radio' id='rainy'  name='weather-radio' value='rainy' />
+                                <WeatherLabel htmlFor='rainy' url='rainy.png'></WeatherLabel>
                                 <WeatherInput ref={snowy} type='radio' id='snowy'  name='weather-radio' value='snowy' selectedUrl='snowy.png' />
-                                <WeatherLabel htmlFor='snowy' url='blank_snowy.png'></WeatherLabel>
+                                <WeatherLabel htmlFor='snowy' url='snowy.png'></WeatherLabel>
                         </WeatherBox>
                         <DogBox ref={selectedDog}>
                             <option></option>
@@ -166,7 +166,7 @@ const Inner = styled.div`
     width: 700px;
     margin: 0 auto;
     @media only screen and (max-width: 450px) {
-        width: 98%;
+        width: 90%;
     }
     @media only screen and (min-width: 451px) and (max-width: 700px) {
         width: 440px;
@@ -186,6 +186,7 @@ const AttachmentLabel = styled.label`
     line-height: 500px;
     border-radius: 30px;
     overflow: hidden;
+    box-shadow: 4px 4px 4px 1px rgba(0, 0, 0, 0.2);
     @media only screen and (max-width: 700px) {
         height: 300px;
         line-height: 300px;
@@ -240,10 +241,11 @@ const InfoItem = css`
     align-items: center;
     text-overflow: ellipsis;
     white-space: nowrap;
-@media only screen and (max-width: 700px) {
-    font-size: 0.8rem;
-    flex-basis: 33%;
-}
+    box-shadow: 4px 4px 4px 1px rgba(0, 0, 0, 0.2);
+    @media only screen and (max-width: 700px) {
+        font-size: 0.8rem;
+        flex-basis: 28%;
+    }
 `
 
 const DateBox = styled.div`
@@ -252,6 +254,9 @@ const DateBox = styled.div`
 
 const WeatherBox = styled.fieldset`
     ${InfoItem};
+    @media only screen and (max-width: 700px) {
+        padding: 0 0.3rem;
+    }
 `
 
 const WeatherInput = styled.input`
@@ -260,9 +265,9 @@ const WeatherInput = styled.input`
     }
 
     &[type=radio] + label {
-        font-size: 1.5rem;
         @media only screen and (max-width: 700px) {
-            font-size: 1.2rem;
+            width: 1rem;
+            height: 1rem;
         }
     }
 
@@ -274,28 +279,25 @@ const WeatherInput = styled.input`
     }
 
     &[type=radio]:checked + label {
-        color: black;
-        width: 1rem;
-        height: 1rem;
-        background-image: url(${props => props.selectedUrl});
-        background-size: cover;
+        filter: brightness(1);
     }
 `
 
 const WeatherLabel = styled.label`
-    width: 1rem;
-    height: 1rem;
+    width: 1.3rem;
+    height: 1.3rem;
     background-image: url(${props => props.url});
     background-size: cover;
+    filter: opacity(30%);
 `
 
 
 const DogBox = styled.select`
     ${InfoItem}
+    max-width: 
     color: rgba(0, 0, 0, 1);
 
     > option {
-        background-color: #997000;
         color: #fff;
         border-radius: 10px;
     }
@@ -311,6 +313,8 @@ const WritingInfo = css`
     border-radius: 10px;
     font-weight: normal;
     font-size: 1.3rem;
+    outline: none;
+    box-shadow: 4px 4px 4px 1px rgba(0, 0, 0, 0.2);
     @media only screen and (max-width: 700px) {
         font-size: 1rem;
     }

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { Route, useHistory } from 'react-router-dom';
 import './App.css';
 import Header from './component/Header.js';
@@ -10,7 +10,8 @@ import MyDiary from './component/MyDiary.js';
 import DetailedDiary from './component/DetailedDiary.js';
 import WriteDiary from './component/WriteDiary.js';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { opacityState, locationState, noticeState, noticeIconState, displayState, messageState } from './recoil/Atom';
+import { opacityState, locationState, noticeState,
+        noticeIconState, displayState, messageState } from './recoil/Atom';
 var store = require('store');
 
 
@@ -40,9 +41,9 @@ function App() {
     return () => {
       window.removeEventListener('scroll', handleShowHeaderBc);
     };
-  }, []);
+  }, [setBackgroundOpacity]);
 
-  function changeNotice(notice, icon, display, path) {
+  const changeNotice = useCallback((notice, icon, display, path) => {
     setNotice(notice);
     setNoticeIcon(icon);
     setDisplay(display);
@@ -60,9 +61,9 @@ function App() {
         history.push(path);
       }, 1000);
     }
-  }
+  }, [history, setDisplay, setNotice, setNoticeIcon])
 
-  function checkLogin() {
+  const checkLogin = useCallback(() => {
     const loginState = store.get('loginState');
     if (!loginState) {
       changeNotice('로그인 후 사용하세요', 'warning.png', 'flex', "/login");
@@ -70,9 +71,9 @@ function App() {
     } else {
       return false;
     }
-  }
+  }, [changeNotice])
 
-  function checkCookie(data, path) {
+  const checkCookie = useCallback((data, path) => {
     if (data === 'There is no access_token' || data === 'This is not a valid token') {
       changeNotice('로그인이 만료되었습니다', 'warning.png', 'flex', path);
       store.remove('loginState');
@@ -80,10 +81,13 @@ function App() {
     } else {
       return false;
     }
-  }
+  }, [changeNotice])
 
   useEffect(() => {
     history.listen((path) => {
+      // reset scroll
+      window.scrollTo(0, 0);
+
       // reset opacity
       setBackgroundOpacity(0);
       
@@ -106,7 +110,8 @@ function App() {
       setNoticeIcon('');
       setDisplay('none');
     })
-  }, [history, notice, backgroundOpacity, checkMessage])
+  }, [history, notice, backgroundOpacity, checkMessage, setBackgroundOpacity,
+      setCheckLocation, setCheckMessage, setDisplay, setNotice, setNoticeIcon])
 
   return (
     <div ref={wrapper}>

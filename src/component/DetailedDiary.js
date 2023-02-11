@@ -80,7 +80,7 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie } ) {
         }
 
         fetchData();
-    }, [checkLocation])
+    }, [checkLocation, apiUrl, checkCookie, checkLogin, diaryInfo.dog_name, diaryInfo.imageSrc])
 
     function handleImagePreview(fileBlob) {
         const reader = new FileReader();
@@ -223,14 +223,14 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie } ) {
                     <DiaryInfo>
                         <DiaryDate>{diaryInfo.date}</DiaryDate>
                         <WeatherRadio>
-                            <WeatherInput ref={sunny} type='radio' id='sunny' name='weather-radio' value='sunny' selectedUrl='sunny.png' />
-                            <WeatherLabel htmlFor='sunny' url='blank_sunny.png'></WeatherLabel>
-                            <WeatherInput ref={cloudy} type='radio' id='cloudy' name='weather-radio' value='cloudy' selectedUrl='cloudy.png' />
-                            <WeatherLabel htmlFor='cloudy' url='blank_cloudy.png'></WeatherLabel>
-                            <WeatherInput ref={rainy} type='radio' id='rainy'  name='weather-radio' value='rainy' selectedUrl='rainy.png' />
-                            <WeatherLabel htmlFor='rainy' url='blank_rainy.png'></WeatherLabel>
-                            <WeatherInput ref={snowy} type='radio' id='snowy'  name='weather-radio' value='snowy' selectedUrl='snowy.png' />
-                            <WeatherLabel htmlFor='snowy' url='blank_snowy.png'></WeatherLabel>
+                            <WeatherInput ref={sunny} type='radio' id='sunny' name='weather-radio' value='sunny' />
+                            <WeatherLabel htmlFor='sunny' url='sunny.png'></WeatherLabel>
+                            <WeatherInput ref={cloudy} type='radio' id='cloudy' name='weather-radio' value='cloudy' />
+                            <WeatherLabel htmlFor='cloudy' url='cloudy.png'></WeatherLabel>
+                            <WeatherInput ref={rainy} type='radio' id='rainy'  name='weather-radio' value='rainy' />
+                            <WeatherLabel htmlFor='rainy' url='rainy.png'></WeatherLabel>
+                            <WeatherInput ref={snowy} type='radio' id='snowy'  name='weather-radio' value='snowy' />
+                            <WeatherLabel htmlFor='snowy' url='snowy.png'></WeatherLabel>
                         </WeatherRadio>
                         <DogSelect ref={selectedDog}>
                             <option></option>
@@ -249,14 +249,14 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie } ) {
                     <DiaryInfo>
                         <DiaryDate>{diaryInfo.date}</DiaryDate>
                         <WeatherRadio>
-                            <WeatherInput ref={sunny} type='radio' id='sunny' name='weather-radio' value='sunny' selectedUrl='sunny.png'  disabled />
-                            <WeatherLabel htmlFor='sunny' url='blank_sunny.png'></WeatherLabel>
-                            <WeatherInput ref={cloudy} type='radio' id='cloudy' name='weather-radio' value='cloudy' selectedUrl='cloudy.png'  disabled />
-                            <WeatherLabel htmlFor='cloudy' url='blank_cloudy.png'></WeatherLabel>
-                            <WeatherInput ref={rainy} type='radio' id='rainy'  name='weather-radio' value='rainy' selectedUrl='rainy.png'  disabled />
-                            <WeatherLabel htmlFor='rainy' url='blank_rainy.png'></WeatherLabel>
-                            <WeatherInput ref={snowy} type='radio' id='snowy'  name='weather-radio' value='snowy' selectedUrl='snowy.png'  disabled />
-                            <WeatherLabel htmlFor='snowy' url='blank_snowy.png'></WeatherLabel>
+                            <WeatherInput ref={sunny} type='radio' id='sunny' name='weather-radio' value='sunny'  disabled />
+                            <WeatherLabel htmlFor='sunny' url='sunny.png'></WeatherLabel>
+                            <WeatherInput ref={cloudy} type='radio' id='cloudy' name='weather-radio' value='cloudy'  disabled />
+                            <WeatherLabel htmlFor='cloudy' url='cloudy.png'></WeatherLabel>
+                            <WeatherInput ref={rainy} type='radio' id='rainy'  name='weather-radio' value='rainy'  disabled />
+                            <WeatherLabel htmlFor='rainy' url='rainy.png'></WeatherLabel>
+                            <WeatherInput ref={snowy} type='radio' id='snowy'  name='weather-radio' value='snowy'  disabled />
+                            <WeatherLabel htmlFor='snowy' url='snowy.png'></WeatherLabel>
                         </WeatherRadio>
                         <DogNameBox>{diaryInfo.dog_name}</DogNameBox>
                     </DiaryInfo>
@@ -292,7 +292,6 @@ const Icons = styled.div`
     display: flex;
     justify-content: flex-end;
     margin-bottom: 1rem;
-
 `
 
 const Icon = styled.div`
@@ -332,6 +331,8 @@ const AttachmentLabel = styled.label`
     align-items: center;
     border-radius: 30px;
     overflow: hidden;
+    border: none;
+    box-shadow: 4px 4px 4px 1px rgba(0, 0, 0, 0.2);
    @media only screen and (max-width: 700px) {
         height: 300px;
         line-height: 300px;
@@ -372,6 +373,7 @@ const DiaryPhoto = styled.img`
     height: 500px;
     margin-bottom: 1rem;
     border-radius: 30px;
+    box-shadow: 4px 4px 4px 1px rgba(0, 0, 0, 0.2);
     @media only screen and (max-width: 700px) {
         height: 300px;
         line-height: 300px;
@@ -397,6 +399,7 @@ const DiaryInfoItemsCss = css`
     border: 3px solid #997000;
     border-radius: 10px;
     background-color: #fff;
+    box-shadow: 4px 4px 4px 1px rgba(0, 0, 0, 0.2);
     @media only screen and (max-width: 700px) {
         font-size: 0.8rem;
         flex-basis: 33%;
@@ -417,9 +420,9 @@ const WeatherInput = styled.input`
     }
 
     &[type=radio] + label {
-        font-size: 1.5rem;
         @media only screen and (max-width: 700px) {
-            font-size: 1.2rem;
+            width: 1rem;
+            height: 1rem;
         }
     }
 
@@ -431,19 +434,16 @@ const WeatherInput = styled.input`
     }
 
     &[type=radio]:checked + label {
-        color: black;
-        width: 1rem;
-        height: 1rem;
-        background-image: url(${props => props.selectedUrl});
-        background-size: cover;
+        filter: brightness(1);
     }
 `
 
 const WeatherLabel = styled.label`
-    width: 1rem;
-    height: 1rem;
+    width: 1.3rem;
+    height: 1.3rem;
     background-image: url(${props => props.url});
     background-size: cover;
+    filter: opacity(30%);
 `
 
 const DogSelect = styled.select`
@@ -451,10 +451,8 @@ const DogSelect = styled.select`
     color: rgba(0, 0, 0, 1);
     text-overflow: ellipsis;
     white-space: nowrap;
-    text-align: center;
 
     > option {
-        background-color: #997000;
         color: #fff;
         border-radius: 10px;
     }
@@ -466,7 +464,7 @@ const DogNameBox = styled.div`
     white-space: nowrap;
 `
 
-const Title = styled.input`
+const WritingBox = css`
     width: 100%;
     background-color: white;
     margin-bottom: 1rem;
@@ -477,25 +475,24 @@ const Title = styled.input`
     font-weight: normal;
     padding: 0 1rem;
     outline: none;
+    box-shadow: 4px 4px 4px 1px rgba(0, 0, 0, 0.2);
+`
+
+const Title = styled.input`
+    ${WritingBox}
     @media only screen and (max-width: 700px) {
         font-size: 1rem;
     }
 `
 
 const Content = styled.textarea`
-    width: 100%;
+    ${WritingBox}
     height: 200px;
     word-break: break-word;
     background: repeating-linear-gradient(white, white 30px, #997000 30px, #997000 33px);
     font-size: 1.2rem;
-    padding: 0 1rem;
-    line-height: 2rem;
-    border: 3px solid #997000;
-    border-bottom: 1px solid #997000;
+    border-bottom: 3px solid #997000;
     margin-bottom: 1.5rem;
-    border-radius: 10px;
-    font-weight: normal;
-    outline: none;
     @media only screen and (max-width: 700px) {
         font-size: 1rem;
     }

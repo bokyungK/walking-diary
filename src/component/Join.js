@@ -146,7 +146,14 @@ const Input = styled.input`
     color: #fff;
     font-size: 1.1rem;
     text-align: center;
+    border: none;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
     @media only screen and (max-width: 450px) {
         width: 10rem;
+    }
+
+    &:focus {
+        border: none;
+        box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.6);
     }
 `

@@ -62,8 +62,15 @@ const ButtonImg = styled.img.attrs((props) => ({
     src: 'button.png',
     alt: props.buttonAlt + '버튼',
 }))`
+    filter: contrast(200%);
     width: 55px;
     height: 50px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+
+    &:hover {
+        filter: contrast(80%);
+    }
 `
 
 const ButtonName = styled.div`

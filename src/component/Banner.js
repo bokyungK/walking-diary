@@ -45,7 +45,7 @@ function Banner({ checkCookie }) {
                 })
             })
         }
-    }, [])
+    }, [apiUrl, checkCookie, currentMonth, currentYear, loginState])
 
     useEffect(() => {
         const previousLastDate = new Date(currentYear, currentMonth, 0).getDate();
@@ -71,10 +71,10 @@ function Banner({ checkCookie }) {
             const date = (i + 1) - currentFirstDay;
             const previousDate = previousLastDate - currentFirstDay + (i + 1);
             const num = i < currentFirstDay ? 
-                            currentMonth === 0 ? `12/` + `${previousDate}` : `${currentMonth}/` + `${previousDate}` 
+                            currentMonth === 0 ? `12/${previousDate}` : `${currentMonth}/${previousDate}` 
                             :
                             date > currentLastDate ?
-                                currentMonth === 11 ? `1/` + `${date - currentLastDate}` : `${currentMonth + 2}/` + `${date - currentLastDate}`
+                                currentMonth === 11 ? `1/${date - currentLastDate}` : `${currentMonth + 2}/${date - currentLastDate}`
                                 :
                                 date;
 
@@ -85,14 +85,14 @@ function Banner({ checkCookie }) {
             }
         }
         setCalendar(dateArr);
-    }, [])
+    }, [currentMonth, currentYear])
 
     return (
         <Inner>
             {
                 loginState === 'true' ?
                     <div>
-                        <Title>{ `${currentYear}년 ${currentMonth + 1}월달의 기록` }</Title>
+                        <Title>{ `${currentYear}년 ${currentMonth + 1}월 출석` }</Title>
                         <CalendarTable>
                             <thead>
                                 <tr>
@@ -158,12 +158,14 @@ const Title = styled.h2`
 `
 
 const CalendarTable = styled.table`
-    min-width: 702px;
+    min-width: 700px;
+    hieght: 250px;
     color: white;
     background-color: skyblue;
     border-collapse: collapse;
     border-radius: 30px;
     overflow: hidden;
+    box-shadow: 4px 4px 4px 1px rgba(0, 0, 0, 0.2);
     @media only screen and (max-width: 700px) {
         min-width: 352px;
     }
@@ -173,8 +175,18 @@ const TableHeader = styled.th`
     font-size: 1.3rem;
     height: 50px;
     border: 2px solid white;
+    border-right: none;
+    border-top: none;
     @media only screen and (max-width: 700px) {
         font-size: 1rem;
+    }
+    
+    &:first-child {
+        border-left: none;
+    }
+
+    &:last-child {
+        border-right: none;
     }
 `
 
@@ -185,10 +197,19 @@ const TableCell = styled.td`
     height: 100px;
     border: 2px solid white;
     vertical-align: top;
+    border-bottom: none;
     @media only screen and (max-width: 700px) {
         width: 50px;
         height: 50px;
         font-size: 0.8rem;
+    }
+
+    &:first-child {
+        border-left: none;
+    }
+
+    &:last-child {
+        border-right: none;
     }
 `
 
