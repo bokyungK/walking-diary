@@ -317,7 +317,6 @@ const DogBox = styled.select`
     }
 `
 
-
 const WritingInfo = css`
     width: 100%;
     margin-bottom: 1rem;

@@ -143,13 +143,11 @@ const JoinButton = styled.button`
     font-weight: bold;
     font-size: 1rem;
     box-shadow: unset;
-    -webkit-box-shadow: unset;
     @media only screen and (max-width: 450px) {
         font-size: 1rem;
     }
 
     &:hover {
         box-shadow: unset;
-        -webkit-box-shadow: unset;
     }
 `
