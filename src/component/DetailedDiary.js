@@ -45,7 +45,7 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie } ) {
                     return;
                 }
 
-                setDiaryInfo({...data, 
+                setDiaryInfo({...data,
                     date: String(data.date).substring(0, 10),
                     imageSrc: apiUrl + `${data.id}/${data.image_name}`,
                     imageName: data.image_name,
@@ -74,6 +74,9 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie } ) {
                     })
                     selectedDog.current.value = diaryInfo.dog_name;
                 }
+
+                title.current.value = data.title;
+                content.current.value = data.content
             } catch (e) {
                 console.error(e);
             }
@@ -126,7 +129,7 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie } ) {
             }
     
             if (img === '') {
-                postData.push('newDiaryInfo');
+                postData.push(newDiaryInfo);
             } else {
                 const formData = new FormData();
                 formData.append('img', img);
@@ -145,6 +148,7 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie } ) {
             changeNotice('변경되었습니다', 'correct.png', 'flex', 1);
             setCheckLocation(false);
             setBackgroundOpacity(0);
+
         } catch (e) {
             console.error(e);
         }
@@ -260,8 +264,8 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie } ) {
                             <option></option>
                         </DogSelect>
                     </DiaryInfo>
-                    <Title ref={title} type='text' placeholder='제목을 입력하세요' maxLength='30' defaultValue={diaryInfo.title} />
-                    <Content ref={content} placeholder='일기를 입력하세요' maxLength='500' defaultValue={diaryInfo.content}></Content>
+                    <Title ref={title} type='text' placeholder='제목을 입력하세요' maxLength='30' />
+                    <Content ref={content} placeholder='일기를 입력하세요' maxLength='500'></Content>
                     <Buttons buttonName={{cancel: '취소' ,submit: '변경'}} cancelLink='/detail-diary' handleFormSubmit={handleFormSubmit}
                     setCheckLocation={setCheckLocation} setBackgroundOpacity={setBackgroundOpacity} />
                 </>
@@ -290,8 +294,8 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie } ) {
                         </WeatherRadio>
                         <DogNameBox>{diaryInfo.dog_name}</DogNameBox>
                     </DiaryInfo>
-                    <Title ref={title} type='text' placeholder='제목을 입력하세요' maxLength='30' defaultValue={diaryInfo.title} disabled />
-                    <Content ref={content} placeholder='일기를 입력하세요' maxLength='500' defaultValue={diaryInfo.content} disabled></Content>
+                    <Title ref={title} type='text' placeholder='제목을 입력하세요' maxLength='30' disabled />
+                    <Content ref={content} placeholder='일기를 입력하세요' maxLength='500' disabled></Content>
                 </>
             }
             <CheckMessage handleShowMessage={handleDiaryDelete} />

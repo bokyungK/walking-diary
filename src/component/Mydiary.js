@@ -377,7 +377,6 @@ const Sort = styled.select`
     margin-bottom: 1rem;
     color: rgb(103, 103, 103);
     border: rgb(103, 103, 103) solid 3px;
-    outline: none;
 
     > option {
         font-weight: bold;   

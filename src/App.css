@@ -57,6 +57,7 @@ select {
   text-align: center;
   border-radius: 10px;
   color: #333;
+  outline: none;
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
 }
 
