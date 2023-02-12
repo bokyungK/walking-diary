@@ -82,6 +82,26 @@ function MyDiary({ checkLogin, checkCookie }) {
         fetchDiary();
     }, [apiUrl, getOrder, checkCookie, checkLogin]);
 
+    useEffect(() => {
+        function handleFollowingSlider() {
+            const sliderSectionWidth = sliderSection.current.clientWidth;
+            const favoriteSliderWidth = favoriteSlider.current.clientWidth;
+            const previousMoveDist = Math.abs(parseInt(favoriteSlider.current.attributes[0].value));
+
+            if (favoriteSliderWidth - previousMoveDist <= sliderSectionWidth) {
+                const willMoveDist = favoriteSliderWidth - sliderSectionWidth;
+                favoriteSlider.current.style.transform = `translateX(-${willMoveDist}px)`;
+                favoriteSlider.current.attributes[0].value = -(willMoveDist);
+            }
+        }
+
+        window.addEventListener("resize", handleFollowingSlider);
+
+        return () => {
+            window.removeEventListener('resize', handleFollowingSlider);
+        };
+    });
+
     // control order
     function handleOrderSelect(e) {
         const order = e.target.value;
@@ -135,7 +155,7 @@ function MyDiary({ checkLogin, checkCookie }) {
         favoriteSlider.current.style.transform = `translateX(${currentX}px)`;
     }
 
-    function endSlider(e) {
+    function endSlider() {
         const sliderSectionWidth = sliderSection.current.clientWidth;
         const favoriteSliderWidth = favoriteSlider.current.clientWidth;
         if (currentX > 0) {
@@ -144,17 +164,25 @@ function MyDiary({ checkLogin, checkCookie }) {
             return
         }
 
-        const subWidth = -(favoriteSliderWidth - sliderSectionWidth);
-        if (sliderSectionWidth > favoriteSliderWidth + currentX) {
-            if (sliderSectionWidth >= favoriteSliderWidth) {
-                favoriteSlider.current.style.transform = `translateX(0)`;
-                favoriteSlider.current.attributes[0].value = 0;
-                return
-            }
-            favoriteSlider.current.style.transform = `translateX(${subWidth}px)`;
-            favoriteSlider.current.attributes[0].value = subWidth;
+        const restWidth = favoriteSliderWidth - Math.abs(currentX);
+        if (sliderSectionWidth >= restWidth) {
+            const willMoveDist = favoriteSliderWidth - sliderSectionWidth;
+            favoriteSlider.current.style.transform = `translateX(-${willMoveDist}px)`;
+            favoriteSlider.current.attributes[0].value = -(willMoveDist);
+        } else {
+            favoriteSlider.current.attributes[0].value = currentX;
         }
-        favoriteSlider.current.attributes[0].value = currentX;
+    }
+
+    function startTouchSlider(e) {
+        setStartX(parseInt(e.touches[0].clientX));
+    }
+
+    function moveTouchSlider(e) {
+        const clientX = parseInt(e.touches[0].clientX)
+        const previousMoveDist = parseInt(favoriteSlider.current.attributes[0].value);
+        setCurrentX(previousMoveDist + (clientX - startX));
+        favoriteSlider.current.style.transform = `translateX(${currentX}px)`;
     }
 
     // show more data when scrolling
@@ -209,7 +237,8 @@ function MyDiary({ checkLogin, checkCookie }) {
             <FavoriteSection ref={sliderSection}>
                 <SectionTitle>즐겨찾기</SectionTitle>
                 <FavoriteList
-                 ref={favoriteSlider} onDragStart={startSlider} onDrag={moveSlider} onDragEnd={endSlider} data-movedist='0'>
+                 ref={favoriteSlider} onDragStart={startSlider} onDrag={moveSlider} onDragEnd={endSlider} data-movedist='0'
+                    onTouchStart={startTouchSlider} onTouchMove={moveTouchSlider} onTouchEnd={endSlider}>
                     {
                         favoriteCards.length > 0 ? favoriteCards.map((item) => {
                         return (
@@ -299,6 +328,7 @@ const SectionTitle = styled.h2`
 `
 
 const FavoriteList = styled.ul`
+    width: max-content;
     display: flex;
     list-style: none;
 `
