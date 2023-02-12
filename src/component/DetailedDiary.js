@@ -184,7 +184,6 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie } ) {
                     <IconImg imgSrc='edit.png' imgAlt='수정 버튼' />
                 </Icon>
                 <Icon onClick={() => 
-                    // option={{ cancel: '취소', submit: '삭제' }}
                     {
                         setCheckMessage({ display: 'block' });
                         setOption({ cancel: '취소', submit: '삭제' });
@@ -223,14 +222,22 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie } ) {
                     <DiaryInfo>
                         <DiaryDate>{diaryInfo.date}</DiaryDate>
                         <WeatherRadio>
-                            <WeatherInput ref={sunny} type='radio' id='sunny' name='weather-radio' value='sunny' />
-                            <WeatherLabel htmlFor='sunny' url='sunny.png'></WeatherLabel>
-                            <WeatherInput ref={cloudy} type='radio' id='cloudy' name='weather-radio' value='cloudy' />
-                            <WeatherLabel htmlFor='cloudy' url='cloudy.png'></WeatherLabel>
-                            <WeatherInput ref={rainy} type='radio' id='rainy'  name='weather-radio' value='rainy' />
-                            <WeatherLabel htmlFor='rainy' url='rainy.png'></WeatherLabel>
-                            <WeatherInput ref={snowy} type='radio' id='snowy'  name='weather-radio' value='snowy' />
-                            <WeatherLabel htmlFor='snowy' url='snowy.png'></WeatherLabel>
+                            <WeatherInput ref={sunny} type='radio' id='sunny' name='weather-radio' value='sunny'/>
+                                <WeatherLabel htmlFor='sunny'>
+                                    <img src='sunny.svg' alt='맑은 날 아이콘'></img>
+                                </WeatherLabel>
+                                <WeatherInput ref={cloudy} type='radio' id='cloudy' name='weather-radio' value='cloudy' />
+                                <WeatherLabel htmlFor='cloudy'>
+                                    <img src='cloudy.svg' alt='흐린 날 아이콘'></img>
+                                </WeatherLabel>
+                                <WeatherInput ref={rainy} type='radio' id='rainy'  name='weather-radio' value='rainy' />
+                                <WeatherLabel htmlFor='rainy'>
+                                    <img src='rainy.svg' alt='비오는 날 아이콘'></img>
+                                </WeatherLabel>
+                                <WeatherInput ref={snowy} type='radio' id='snowy'  name='weather-radio' value='snowy' />
+                                <WeatherLabel htmlFor='snowy'>
+                                    <img src='snowy.svg' alt='눈 오는 날 아이콘'></img>
+                                </WeatherLabel>
                         </WeatherRadio>
                         <DogSelect ref={selectedDog}>
                             <option></option>
@@ -249,14 +256,22 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie } ) {
                     <DiaryInfo>
                         <DiaryDate>{diaryInfo.date}</DiaryDate>
                         <WeatherRadio>
-                            <WeatherInput ref={sunny} type='radio' id='sunny' name='weather-radio' value='sunny'  disabled />
-                            <WeatherLabel htmlFor='sunny' url='sunny.png'></WeatherLabel>
-                            <WeatherInput ref={cloudy} type='radio' id='cloudy' name='weather-radio' value='cloudy'  disabled />
-                            <WeatherLabel htmlFor='cloudy' url='cloudy.png'></WeatherLabel>
-                            <WeatherInput ref={rainy} type='radio' id='rainy'  name='weather-radio' value='rainy'  disabled />
-                            <WeatherLabel htmlFor='rainy' url='rainy.png'></WeatherLabel>
-                            <WeatherInput ref={snowy} type='radio' id='snowy'  name='weather-radio' value='snowy'  disabled />
-                            <WeatherLabel htmlFor='snowy' url='snowy.png'></WeatherLabel>
+                            <WeatherInput ref={sunny} type='radio' id='sunny' name='weather-radio' value='sunny' disabled/>
+                                <WeatherLabel htmlFor='sunny'>
+                                    <img src='sunny.svg' alt='맑은 날 아이콘'></img>
+                                </WeatherLabel>
+                                <WeatherInput ref={cloudy} type='radio' id='cloudy' name='weather-radio' value='cloudy'disabled />
+                                <WeatherLabel htmlFor='cloudy'>
+                                    <img src='cloudy.svg' alt='흐린 날 아이콘'></img>
+                                </WeatherLabel>
+                                <WeatherInput ref={rainy} type='radio' id='rainy'  name='weather-radio' value='rainy' disabled />
+                                <WeatherLabel htmlFor='rainy'>
+                                    <img src='rainy.svg' alt='비오는 날 아이콘'></img>
+                                </WeatherLabel>
+                                <WeatherInput ref={snowy} type='radio' id='snowy'  name='weather-radio' value='snowy' disabled />
+                                <WeatherLabel htmlFor='snowy'>
+                                    <img src='snowy.svg' alt='눈 오는 날 아이콘'></img>
+                                </WeatherLabel>
                         </WeatherRadio>
                         <DogNameBox>{diaryInfo.dog_name}</DogNameBox>
                     </DiaryInfo>
@@ -277,9 +292,7 @@ export default DetailedDiary;
 const Inner = styled.div`
     width: 700px;
     margin: 0 auto;
-    @media only screen and (hover: none) and (pointer: coarse) {
-        margin-top: 90px;
-    }
+    margin-top: 90px;
     @media only screen and (max-width: 450px) {
         width: 98%;
     }
@@ -312,6 +325,10 @@ const IconImg = styled.img.attrs((props) => ({
 }))`
     width: 30px;
     height: 30px;
+    @media only screen and (hover: hover) and (pointer: coarse) and (max-width: 700px) {
+        width: 25px;
+        height: 25px;
+    }
     @media only screen and (hover: none) and (pointer: coarse) and (max-width: 700px) {
         width: 25px;
         height: 25px;
@@ -330,6 +347,7 @@ const AttachmentLabel = styled.label`
     justify-content: center;
     align-items: center;
     border-radius: 30px;
+    border: none;
     overflow: hidden;
     border: none;
     box-shadow: 4px 4px 4px 1px rgba(0, 0, 0, 0.2);
@@ -348,6 +366,7 @@ const AttachmentLabel = styled.label`
         top: 10px;
         right: 10px;
         z-index: 1;
+        box-shadow: unset;
 
         img {
             width: 30px;
@@ -412,6 +431,31 @@ const DiaryDate = styled.div`
 
 const WeatherRadio = styled.fieldset`
     ${DiaryInfoItemsCss}
+    overflow: hidden;
+    @media only screen and (max-width: 700px) {
+        label {
+            width: 2rem;
+            height: 2rem;
+        }
+    }
+
+    label:nth-child(6) {
+        width: 2.9rem;
+        height: 2.9rem;
+        @media only screen and (max-width: 700px) {
+            width: 2.4rem;
+            height: 2.4rem;
+        }
+    }
+
+    label:nth-child(8) {
+        width: 2.9rem;
+        height: 2.9rem;
+        @media only screen and (max-width: 700px) {
+            width: 2.4rem;
+            height: 2.4rem;
+        }
+    }
 `
 
 const WeatherInput = styled.input`
@@ -419,36 +463,21 @@ const WeatherInput = styled.input`
         display: none;
     }
 
-    &[type=radio] + label {
-        @media only screen and (max-width: 700px) {
-            width: 1rem;
-            height: 1rem;
-        }
-    }
-
-    &[type=radio] + label:not(:last-child) {
-        margin-right: 1rem;
-        @media only screen and (max-width: 700px) {
-            margin-right: 0.8rem;
-        }
-    }
-
     &[type=radio]:checked + label {
-        filter: brightness(1);
+        opacity: 1;
     }
 `
 
 const WeatherLabel = styled.label`
-    width: 1.3rem;
-    height: 1.3rem;
+    width: 2.5rem;
+    height: 2.5rem;
     background-image: url(${props => props.url});
     background-size: cover;
-    filter: opacity(30%);
+    opacity: 0.3;
 `
 
 const DogSelect = styled.select`
     ${DiaryInfoItemsCss}
-    color: rgba(0, 0, 0, 1);
     text-overflow: ellipsis;
     white-space: nowrap;
 
@@ -492,7 +521,7 @@ const Content = styled.textarea`
     background: repeating-linear-gradient(white, white 30px, #997000 30px, #997000 33px);
     font-size: 1.2rem;
     border-bottom: 3px solid #997000;
-    margin-bottom: 1.5rem;
+    margin-bottom: 3rem;
     @media only screen and (max-width: 700px) {
         font-size: 1rem;
     }

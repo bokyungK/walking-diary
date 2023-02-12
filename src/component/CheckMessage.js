@@ -16,7 +16,10 @@ function CheckMessage ({ handleShowMessage }) {
                     <button onClick={() => {
                         setCheckMessage({ display: 'none' });
                     }} type='button'>{option.cancel}</button>
-                    <button onClick={handleShowMessage} type='button'>{option.submit}</button>
+                    <button onClick={() => {
+                        window.scrollTo(0, 0);
+                        handleShowMessage();
+                    }} type='button'>{option.submit}</button>
                 </div>
             </div>
         </Inner>

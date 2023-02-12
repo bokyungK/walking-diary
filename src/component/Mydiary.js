@@ -268,9 +268,7 @@ const Inner = styled.div`
     width: 100%;
     overflow: hidden;
     padding: 0 1rem;
-    @media only screen and (hover: none) and (pointer: coarse) {
-        margin-top: 80px;
-    }
+    margin-top: 80px;
 `
 
 const MydiarySection = css`
@@ -292,6 +290,9 @@ const FavoriteSection = styled.section`
 
 const SectionTitle = styled.h2`
     margin-bottom: 1rem;
+    @media only screen and (hover: hover) and (pointer: coarse) and (max-width: 631px) {
+        font-size: 1.3rem;
+    }
     @media only screen and (hover: none) and (pointer: coarse) and (max-width: 631px) {
         font-size: 1.3rem;
     }

@@ -107,14 +107,12 @@ const Input = styled.input`
     font-size: 1.5rem;
     text-align: center;
     border: none;
-    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
     @media only screen and (max-width: 450px) {
         width: 10rem;
     }
 
     &:focus {
         border: none;
-        box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.6);
     }
 `
 
@@ -129,7 +127,6 @@ const LoginButton = styled.button`
     background-color: rgba(255, 255, 255, 0.5);
     font-size: 1.3rem;
     font-weight: bold;
-    box-shadow: 4px 4px 4px 1px rgba(0, 0, 0, 0.2);
     @media only screen and (max-width: 450px) {
         width: 90px;
         font-size: 1.1rem;
@@ -145,7 +142,14 @@ const JoinButton = styled.button`
     color: darkgray;
     font-weight: bold;
     font-size: 1rem;
+    box-shadow: unset;
+    -webkit-box-shadow: unset;
     @media only screen and (max-width: 450px) {
         font-size: 1rem;
+    }
+
+    &:hover {
+        box-shadow: unset;
+        -webkit-box-shadow: unset;
     }
 `

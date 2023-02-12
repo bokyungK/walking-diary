@@ -32,30 +32,37 @@ input {
   outline: none;
   font-family: inherit;
   border-radius: 10px;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
 }
 
 input:focus {
   border: 3px solid #F0CA61;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.5);
 }
 
 button {
   background-color: rgba(255, 255, 255, 0);
   color: rgba(0, 0, 0, 1);
   font-family: inherit;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
 }
 
 button:hover {
   cursor: pointer;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.4);
 }
 
 select {
   font-family: inherit;
   text-align: center;
   border-radius: 10px;
+  color: #333;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
 }
 
 select:focus {
   border: 3px solid #F0CA61;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.5);
 }
 
 option {
@@ -64,10 +71,13 @@ option {
 
 textarea {
   font-family: inherit;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+
 }
 
 textarea:focus {
   border: 3px solid #F0CA61;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.5);
 }
 
 .button {

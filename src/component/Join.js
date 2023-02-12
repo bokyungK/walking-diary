@@ -20,7 +20,7 @@ function Join({ changeNotice }) {
     const userName = useRef();
     const userArr = [userId, userPw, userName];
     const regExp = {
-        userId: [/^[a-z]+[a-z0-9]{4,}$/, 'ID 작성 : 영문과 숫자 조합(5~15자)'], 
+        userId: [/^[a-z]+[a-z0-9]{4,}$/, 'ID 작성 : 영문, 숫자만 사용 가능(5~15자)'], 
         userPw: [/^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,}$/,
                 'PW 작성 : 영문과 숫자, 특수문자 최소 한가지 조합(8~15자)'],
         userName: [/^[가-힣]{1,}$/, '이름 작성 : 한글 사용(1~10자)'],
@@ -147,13 +147,11 @@ const Input = styled.input`
     font-size: 1.1rem;
     text-align: center;
     border: none;
-    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
     @media only screen and (max-width: 450px) {
         width: 10rem;
     }
 
     &:focus {
         border: none;
-        box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.6);
     }
 `

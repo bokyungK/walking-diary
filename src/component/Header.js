@@ -46,6 +46,9 @@ const Inner = styled.header`
 
     & {
         > nav {
+            @media only screen and (hover: hover) and (pointer: coarse) {
+                display: block;
+            }
             @media only screen and (hover: none) and (pointer: coarse) {
                 display: block;
             }
@@ -71,6 +74,10 @@ const Menu = styled.nav`
     background-color: rgba(255, 255, 255, ${props => props.opacity}); 
     @media only screen and (max-width: 600px) {
         width: 90%;
+    }
+
+    &:last-child {
+        line-height: 80px;
     }
 
     > ul {

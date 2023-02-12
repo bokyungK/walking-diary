@@ -144,9 +144,10 @@ function Mypage({ changeNotice, checkLogin, checkCookie }) {
             if (checkCookie(data, '/login')) {
                 return;
             }
-            changeNotice('로그아웃 완료', 'goodbye.png', 'flex', "/");
             store.remove('loginState');
             store.remove('imageName');
+            window.scrollTo(0, 0);
+            changeNotice('로그아웃 완료', 'goodbye.png', 'flex', "/");
         });
     }
 
@@ -213,6 +214,10 @@ const Inner = styled.div`
     position: relative;
     flex-direction: column;
     justify-content: center;
+    @media only screen and (hover: hover) and (pointer: coarse) and (max-width: 450px) {
+        height: 100%;
+        margin-top: 80px;
+    }
     @media only screen and (hover: none) and (pointer: coarse) and (max-width: 450px) {
         height: 100%;
         margin-top: 80px;
@@ -267,27 +272,24 @@ const ItemInput = styled.input`
     font-size: 1.1rem;
     text-align: center;
     border: none;
-    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
     @media only screen and (max-width: 450px) {
         margin-top: 0.3rem;
     }
 
     &:focus {
         border: none;
-        box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.5);
     }
 `
 
 const AddBoxButton = styled.button`
     border: #997000 solid 3px;
     font-weight: bold;
-    background-color: rgba(255, 255, 255, 0);
+    background-color: rgba(255, 255, 240, 1);
     border-radius: 10px;
     position: absolute;
     width: 50px;
     height: 100%;
     right: -60px;
-    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
 
     @media only screen and (max-width: 450px) {
         width: 50px;
@@ -312,6 +314,6 @@ const AdditionalTab = styled.div`
         border-radius: 10px;
         width: max-content;
         padding: 0.3rem;
-        box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+        background-color: rgba(255, 255, 240, 1);
     }
 `

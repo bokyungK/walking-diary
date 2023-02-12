@@ -31,7 +31,10 @@ function Buttons ({ buttonName, cancelLink, handleFormSubmit }) {
                     </Link>
             }
             {/* submit */}
-            <Button onClick={handleFormSubmit} type='button'>
+            <Button onClick={() => {
+                window.scrollTo(0, 0);
+                handleFormSubmit();
+            }} type='button'>
                 <ButtonImg buttonAlt={buttonName.submit} />
                 <ButtonName>{buttonName.submit}</ButtonName>
             </Button>
@@ -52,7 +55,10 @@ const Inner = styled.div`
 const Button = styled.button`
     position: relative;
     border: none;
-    
+    width: 55px;
+    height: 50px;
+    border-radius: 10px;
+    overflow: hidden;
     &:first-child {
         margin-right: 1.5rem;
     }
@@ -62,20 +68,14 @@ const ButtonImg = styled.img.attrs((props) => ({
     src: 'button.png',
     alt: props.buttonAlt + '버튼',
 }))`
-    filter: contrast(200%);
-    width: 55px;
-    height: 50px;
-    border-radius: 10px;
-    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
-
-    &:hover {
-        filter: contrast(80%);
-    }
+    width: inherit;
+    height: inherit;
+    background-color: rgb(255,255,240);
 `
 
 const ButtonName = styled.div`
     position: absolute;
-    top: 53%;
+    top: 58%;
     left: 50%;
     transform: translateX(-50%);
     color: #fff;
