@@ -2,8 +2,9 @@ import { atom } from 'recoil';
 
 export const apiUrlState = atom({
     key: 'apiUrl',
-    default: 'https://api.walking-diary-server.site/',
+    default: 'http://localhost:3001/',
 });
+// https://api.walking-diary-server.site/
 
 export const opacityState = atom({
     key: 'backgroundOpacity',

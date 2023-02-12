@@ -110,6 +110,21 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie } ) {
             }
             const postData = [];
     
+            if (newDiaryInfo.dogName === '') {
+                changeNotice('마이페이지에서 강아지를 추가 후 이름을 선택해주세요', 'warning.png', 'flex', 0);
+                return; 
+            }
+    
+            if (newDiaryInfo.title === '') {
+                changeNotice('제목을 입력해주세요', 'warning.png', 'flex', 0);
+                return; 
+            }
+    
+            if (newDiaryInfo.content === '') {
+                changeNotice('일기 내용을 입력해주세요', 'warning.png', 'flex', 0);
+                return; 
+            }
+    
             if (img === '') {
                 postData.push('newDiaryInfo');
             } else {

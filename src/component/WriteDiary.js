@@ -80,9 +80,24 @@ function WriteDiary({ changeNotice, checkLogin, checkCookie }) {
             content: content.current.value,
         };
 
-        if (img === '' || userInfo.selectedDog === ''  || userInfo.title === '' || userInfo.content === '') {
-            changeNotice('모든 항목을 입력해주세요', 'warning.png', 'flex', 0);
+        if (img === '' ) {
+            changeNotice('이미지를 첨부해주세요', 'warning.png', 'flex', 0);
             return;
+        }
+
+        if (userInfo.selectedDog === '') {
+            changeNotice('마이페이지에서 강아지를 추가 후 이름을 선택해주세요', 'warning.png', 'flex', 0);
+            return; 
+        }
+
+        if (userInfo.title === '') {
+            changeNotice('제목을 입력해주세요', 'warning.png', 'flex', 0);
+            return; 
+        }
+
+        if (userInfo.content === '') {
+            changeNotice('일기 내용을 입력해주세요', 'warning.png', 'flex', 0);
+            return; 
         }
 
         const formData = new FormData();

@@ -179,10 +179,10 @@ function Mypage({ changeNotice, checkLogin, checkCookie }) {
                                         <ItemLabel>반려견 이름 {idx + 1}</ItemLabel>
                                         <ItemInput ref={inputDogNames[idx]} type='text' defaultValue={name} maxLength='10' />
                                         {
-                                            idx === 0 ? <AddBoxButton onClick={handleAddPetName} type='button'>추가</AddBoxButton>
+                                            idx === 0 ? <AddBoxButton onClick={handleAddPetName} type='button'>Box<br />추가</AddBoxButton>
                                             :
                                             idx === dogNames.length - 1 ?
-                                                <RemovePetButton onClick={() => {handleRemovePetName(idx)}} type='button'>삭제</RemovePetButton>
+                                                <RemovePetButton onClick={() => {handleRemovePetName(idx)}} type='button'>Box<br />삭제</RemovePetButton>
                                                 :
                                                 ''
                                         }
@@ -284,11 +284,13 @@ const ItemInput = styled.input`
 const AddBoxButton = styled.button`
     border: #997000 solid 3px;
     font-weight: bold;
+    font-size: 0.7rem;
     background-color: rgba(255, 255, 240, 1);
     border-radius: 10px;
     position: absolute;
     width: 50px;
     height: 100%;
+    line-height: 100%;
     right: -60px;
 
     @media only screen and (max-width: 450px) {
