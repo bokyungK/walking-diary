@@ -5,7 +5,7 @@ import { useRecoilValue } from 'recoil';
 import { apiUrlState } from '../recoil/Atom';
 var store = require('store');
 
-function Banner({ checkCookie, changeNotice }) {
+function Banner({ checkCookie }) {
     const apiUrl = useRecoilValue(apiUrlState);
     const loginState = store.get('loginState');
     const [calendar, setCalendar] = useState([]);
@@ -51,7 +51,7 @@ function Banner({ checkCookie, changeNotice }) {
             
             fetchCalendar();
         }
-    }, [apiUrl, checkCookie, currentMonth, currentYear, loginState, changeNotice]);
+    }, [apiUrl, checkCookie, currentMonth, currentYear, loginState]);
 
     useEffect(() => {
         const previousLastDate = new Date(currentYear, currentMonth, 0).getDate();
