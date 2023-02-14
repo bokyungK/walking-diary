@@ -14,7 +14,6 @@ import { opacityState, locationState, noticeState,
         noticeIconState, displayState, messageState } from './recoil/Atom';
 var store = require('store');
 
-
 function App() {
   const history = useHistory();
   const wrapper = useRef();
@@ -118,7 +117,7 @@ function App() {
       <Header/>
       <main>
         <Route path="/" exact={true} render={() =>
-          <Banner checkCookie={checkCookie} />} />
+          <Banner checkCookie={checkCookie} changeNotice={changeNotice} />} />
         <Route path="/login" render={() =>
           <Login changeNotice={changeNotice} />} />
         <Route path="/join" render={() =>

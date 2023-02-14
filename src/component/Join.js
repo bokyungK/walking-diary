@@ -41,34 +41,41 @@ function Join({ changeNotice }) {
         }
     }
 
-    function handleFormSubmit() {
+    async function handleFormSubmit() {
         const userInfo = {
             userId: userId.current.value,
             userPw: userPw.current.value,
             userName: userName.current.value,
         }
         const condition = userInfo.userId === '' || userInfo.userPw === '' || userInfo.userName === '';
+
         if(condition) {
             changeNotice('모든 정보를 입력하세요', 'warning.png', 'flex', 0);
             return;
         }
+
         const regExpBooleanArr = userArr.map((item) => {
             return item.current.attributes.regExp.value;
         })
 
         if (regExpBooleanArr.includes("false")) {
             changeNotice('정보를 규칙에 맞게 입력해주세요', 'warning.png', 'flex', 0);
-        } else {
-            axios.post(apiUrl + 'join', userInfo)
-            .then(res => {
-                if (res.data === 'Success') {
-                    changeNotice('가입 성공', 'correct.png', 'flex', "/login");
-                    return
-                }
-                if (res.data === 'Fail') {
-                    changeNotice('이미 존재하는 ID 입니다', 'warning.png', 'flex', 0);
-                }
-            })
+            return;
+        }
+
+        try {
+            const res = await axios.post(apiUrl + 'join', userInfo);
+            const data = await res.data;
+
+            if (data === 'Success') {
+                changeNotice('가입 성공', 'correct.png', 'flex', "/login");
+                return
+            }
+            if (data === 'Fail') {
+                changeNotice('이미 존재하는 ID 입니다', 'warning.png', 'flex', 0);
+            }
+        } catch (err) {
+            console.error(err);
         }
     }
     return (

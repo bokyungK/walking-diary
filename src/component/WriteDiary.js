@@ -30,22 +30,28 @@ function WriteDiary({ changeNotice, checkLogin, checkCookie }) {
             return;
         }
 
-        axios.get(apiUrl + 'get-dogs', { withCredentials: true })
-        .then(res => {
-            const data = res.data;
-
-            if (checkCookie(data, '/login')) {
-                return;
+        const fetchDog = async () => {
+            try {
+                const res = await axios.get(apiUrl + 'get-dogs', { withCredentials: true });
+                const data = res.data;
+        
+                if (checkCookie(data, '/login')) {
+                    return;
+                }
+    
+                const dogNames = [data.dog_name_1, data.dog_name_2, data.dog_name_3];
+                dogNames.forEach((dogName, idx) => {
+                    dogName === undefined ?
+                    selectedDog.current[idx].innerText = ''
+                    :
+                    selectedDog.current[idx].innerText = dogName;
+                })
+            } catch (err) {
+                console.error(err);
             }
+        }
 
-            const dogNames = [data.dog_name_1, data.dog_name_2, data.dog_name_3];
-            dogNames.forEach((dogName, idx) => {
-                dogName === undefined ?
-                selectedDog.current[idx].innerText = ''
-                :
-                selectedDog.current[idx].innerText = dogName;
-            })
-        })
+        fetchDog();
     }, [apiUrl, checkCookie, checkLogin])
 
     function handleImagePreview(fileBlob) {
@@ -68,7 +74,7 @@ function WriteDiary({ changeNotice, checkLogin, checkCookie }) {
         return timeString;
     }
 
-    function handleFormSubmit() {
+    async function handleFormSubmit() {
         const weather = weathers.filter((item) => {
             return item.current.checked === true;
         })
@@ -104,16 +110,15 @@ function WriteDiary({ changeNotice, checkLogin, checkCookie }) {
         formData.append('img', img);
         formData.append('info', JSON.stringify(userInfo));
 
-        axios.post(apiUrl + 'write-diary', formData, { withCredentials: true })
-        .then(res => {
-            const data = res.data;
+        const res = await axios.post(apiUrl + 'write-diary', formData, { withCredentials: true });
+        const data = res.data;
 
-            if (checkCookie(data, '/login')) {
-                return;
-            }
-            store.set('imageName', data);
-            changeNotice('저장 성공', 'correct.png', 'flex', "/detail-diary");
-        })
+        if (checkCookie(data, '/login')) {
+            return;
+        }
+        
+        store.set('imageName', data);
+        changeNotice('저장 성공', 'correct.png', 'flex', "/detail-diary");
     }
 
     return (

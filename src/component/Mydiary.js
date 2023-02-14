@@ -69,16 +69,18 @@ function MyDiary({ checkLogin, checkCookie }) {
                     setCards(diaryData);
                 }
     
-                axios.get(apiUrl + 'get-dogs', { withCredentials: true })
-                .then(res => {
-                    const data = res.data;
-                    const clearData = Object.values(data).filter((name) => name !== '');
+                const res2 = await axios.get(apiUrl + 'get-dogs', { withCredentials: true })
+                const data2 = await res2.data;
+
+                if (data2 !== 'Nothing') {
+                    const clearData = Object.values(data2).filter((name) => name !== '');
                     setDogNames(clearData);
-                })
+                }
             } catch (err) {
                 console.error(err);
             }
         }
+
         fetchDiary();
     }, [apiUrl, getOrder, checkCookie, checkLogin]);
 
@@ -113,17 +115,20 @@ function MyDiary({ checkLogin, checkCookie }) {
 
         store.set('order', order);
 
-        axios.get(apiUrl + 'order', { withCredentials: true, params: { order: order }})
-        .then(res => {
-            const data = res.data;
-            
-            if (checkCookie(data, '/login')) {
-                return;
-            }
+        const fetchOrder = async () => {
+            try {
+                const res = await axios.get(apiUrl + 'order', { withCredentials: true, params: { order: order }})
+                const data = await res.data;
+                    
+                if (checkCookie(data, '/login')) {
+                    return;
+                }
+    
+                if (data === 'Nothing') {
+                    setCards([]);
+                    return;
+                }
 
-            if (data === 'Nothing') {
-                setCards([]);
-            } else {
                 const dataArr = data.map((item) => {
                     return {
                         date: item.date.slice(0, 10),
@@ -133,9 +138,14 @@ function MyDiary({ checkLogin, checkCookie }) {
                         imageSrc: apiUrl + `${item.id}/${item.image_name}`,
                     }
                 })
+
                 setCards(dataArr);
+            } catch (err) {
+                console.error(err);
             }
-        })
+        }
+
+        fetchOrder();
     }
 
     // favorite slider
@@ -198,28 +208,34 @@ function MyDiary({ checkLogin, checkCookie }) {
             const share = length / 9; // 몫
 
             if (length % 9 === 0) {
-                axios.get(apiUrl + 'more-diaries', { withCredentials: true, params: { share: share, order: getOrder }})
-                .then(res => {
-                    const data = res.data;
+                const fetchMoreDiary = async () => {
+                    try {
+                        const res = await axios.get(apiUrl + 'more-diaries', { withCredentials: true, params: { share: share, order: getOrder }});
+                        const data = await res.data;
 
-                    if (checkCookie(data, '/login')) {
-                        return;
+                        if (checkCookie(data, '/login')) {
+                            return;
+                        }
+                        
+                        if (data === 'Nothing') {
+                            return;
+                        }
+    
+                        const diaryData = data.map((item) => {
+                            return {
+                                date: item.date.slice(0, 10),
+                                dogName: item.dog_name,
+                                title: item.title,
+                                imageName: item.image_name,
+                                imageSrc: apiUrl + `${item.id}/${item.image_name}`,
+                            }})
+                        setCards([...cards].concat(diaryData));
+                    } catch (err) {
+                        console.error(err);
                     }
-                    
-                    if (data === 'Nothing') {
-                        return;
-                    }
+                }
 
-                    const diaryData = data.map((item) => {
-                        return {
-                            date: item.date.slice(0, 10),
-                            dogName: item.dog_name,
-                            title: item.title,
-                            imageName: item.image_name,
-                            imageSrc: apiUrl + `${item.id}/${item.image_name}`,
-                        }})
-                    setCards([...cards].concat(diaryData));
-                })
+                fetchMoreDiary();
             }
           }
         }

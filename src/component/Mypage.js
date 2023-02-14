@@ -42,24 +42,32 @@ function Mypage({ changeNotice, checkLogin, checkCookie }) {
             return;
         }
 
-        axios.get(apiUrl + 'info', { withCredentials: true })
-        .then(res => {
-            const data = res.data;
+        const fetchUserInfo = async () => {
+            try {
+                const res = await axios.get(apiUrl + 'info', { withCredentials: true });
+                const data = await res.data;
+        
+                if (checkCookie(data, '/login')) {
+                    return;
+                }
+    
+                setUserName(data.name);
+                setUserId(data.id);
 
-            if (checkCookie(data, '/login')) {
-                return;
+                const getDogNames = [data.dog_name_1 === undefined ? '' : data.dog_name_1,
+                                        data.dog_name_2 === undefined ? '' : data.dog_name_2,
+                                        data.dog_name_3 === undefined ? '' : data.dog_name_3];
+                const getFilteredDogNames = getDogNames.filter((dogName, idx) => {
+                    return dogName !== '' || idx === 0;
+                })
+
+                setDogNames([...getFilteredDogNames]);
+            } catch (err) {
+                console.error(err);
             }
+        }
 
-            setUserName(data.name);
-            setUserId(data.id);
-            const getDogNames = [data.dog_name_1 === undefined ? '' : data.dog_name_1,
-                                 data.dog_name_2 === undefined ? '' : data.dog_name_2,
-                                 data.dog_name_3 === undefined ? '' : data.dog_name_3];
-            const getFilteredDogNames = getDogNames.filter((dogName, idx) => {
-                return dogName !== '' || idx === 0;
-            })
-            setDogNames([...getFilteredDogNames]);
-        })
+        fetchUserInfo();
     }, [apiUrl, checkCookie, checkLogin])
 
     function handleInputValue(e) {
@@ -73,7 +81,7 @@ function Mypage({ changeNotice, checkLogin, checkCookie }) {
         changeNotice('', '', 'none', 0);
     }
 
-    function handleFormSubmit() {
+    async function handleFormSubmit() {
         const userInfo = {
             userPw: userPw.current.value,
             userNewPw: userNewPw.current.value,
@@ -96,9 +104,9 @@ function Mypage({ changeNotice, checkLogin, checkCookie }) {
         }
 
             // 2. 비밀번호가 규칙에 맞거나 반려견 이름 변경
-        axios.post(apiUrl + 'info', userInfo, { withCredentials: true })
-        .then(res => {
-            const data = res.data;
+        try {
+            const res = await axios.post(apiUrl + 'info', userInfo, { withCredentials: true });
+            const data = await res.data;
 
             if (checkCookie(data, '/login')) {
                 return;
@@ -108,48 +116,58 @@ function Mypage({ changeNotice, checkLogin, checkCookie }) {
                 changeNotice('저장되었습니다', 'correct.png', 'flex', 1);
                 return;
             }
+
             changeNotice('비밀번호가 틀렸습니다', 'warning.png', 'flex', 0);
-        });
+        } catch (err) {
+            console.error(err);
+        }
     }
 
-    function handleWithdrawal() {
+    async function handleWithdrawal() {
         if (userPw.current.value === '') {
             changeNotice('비밀번호를 입력해주세요', 'goodbye.png', 'flex', 0);
             setCheckMessage({ display: 'none' });
             return;
         }
 
-        axios.delete(apiUrl + 'withdrawal', { withCredentials: true, data: { userPw: userPw.current.value } })
-        .then(res => {
+        try {
+            const res = await axios.delete(apiUrl + 'withdrawal', { withCredentials: true, data: { userPw: userPw.current.value } });
             const data = res.data;
-
+    
             if (checkCookie(data, '/login')) {
                 return;
             }
+
             if (data === 'Fail') {
                 changeNotice('비밀번호가 틀렸습니다', 'warning.png', 'flex', 0);
             }
+
             store.remove('loginState');
             store.remove('imageName');
+            store.remove('order');
             changeNotice('탈퇴 완료', 'goodbye.png', 'flex', "/");
             setCheckMessage({ display: 'none' });
-        });
+        } catch (err) {
+            console.error(err);
+        }
     }
 
-    function handleLogout() {
-        axios.get(apiUrl + 'logout', { withCredentials: true })
-        .then(res => {
-            const data = res.data;
-
-            if (checkCookie(data, '/login')) {
-                return;
+    async function handleLogout() {
+            try {
+                const res = await axios.get(apiUrl + 'logout', { withCredentials: true })
+                const data = await res.data;
+        
+                if (checkCookie(data, '/login')) {
+                    return;
+                }
+                
+                store.remove('loginState');
+                store.remove('imageName');
+                window.scrollTo(0, 0);
+                changeNotice('로그아웃 완료', 'goodbye.png', 'flex', "/");
+            } catch (err) {
+                console.error(err);
             }
-            
-            store.remove('loginState');
-            store.remove('imageName');
-            window.scrollTo(0, 0);
-            changeNotice('로그아웃 완료', 'goodbye.png', 'flex', "/");
-        });
     }
 
     return (
@@ -168,17 +186,17 @@ function Mypage({ changeNotice, checkLogin, checkCookie }) {
                     </FormItem>
                     <FormItem>
                         <ItemLabel>비밀번호</ItemLabel>
-                        <ItemInput ref={userPw} type='password' autoComplete="off" maxLength='15' />
+                        <ItemInput ref={userPw} type='password' autoComplete="off" maxLength='15' placeholder='정보 변경 시 필수 작성' />
                     </FormItem>
                     <FormItem>
                         <ItemLabel>새 비밀번호</ItemLabel>
-                        <ItemInput ref={userNewPw} onChange={handleInputValue} type='password' autoComplete="off" maxLength='15' />
+                        <ItemInput ref={userNewPw} onChange={handleInputValue} type='password' autoComplete="off" maxLength='15' placeholder='변경할 비밀번호 작성' />
                     </FormItem>
                     {
                         dogNames.map((name, idx) => {
                             return  <FormItem key={name + idx}>
                                         <ItemLabel>반려견 이름 {idx + 1}</ItemLabel>
-                                        <ItemInput ref={inputDogNames[idx]} type='text' defaultValue={name} maxLength='10' />
+                                        <ItemInput ref={inputDogNames[idx]} type='text' defaultValue={name} maxLength='10' placeholder='이름 작성 후 저장' />
                                         {
                                             idx === 0 ? <AddBoxButton onClick={handleAddPetName} type='button'>Box<br />추가</AddBoxButton>
                                             :

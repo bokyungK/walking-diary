@@ -159,14 +159,14 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie } ) {
     }
 
     // delete
-    function handleDiaryDelete() {
+    async function handleDiaryDelete() {
         if (checkLogin()) {
             return;
         }
 
-        axios.delete(apiUrl + 'delete-diary', { withCredentials: true, data: diaryInfo })
-        .then(res => {
-            const data = res.data;
+        try {
+            const res = await axios.delete(apiUrl + 'delete-diary', { withCredentials: true, data: diaryInfo });
+            const data = await res.data;
 
             if (checkCookie(data, '/login')) {
                 return;
@@ -176,11 +176,13 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie } ) {
                 changeNotice('삭제되었습니다', 'correct.png', 'flex', '/mydiary');
                 setCheckMessage({ display: 'none' });
             }
-        })
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     // control star state
-    function handleStarImage() {
+    async function handleStarImage() {
         if (checkLogin()) {
             return;
         }
@@ -192,15 +194,16 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie } ) {
         setDiaryInfo({...diaryInfo, starred: reverseState});
         starred.push(reverseState);
 
-        axios.patch(apiUrl + 'starred', { starred: starred[0], imageName: imageName }, { withCredentials: true })
-        
-        .then((res) => {
-            const data = res.data;
+        try {
+            const res = await axios.patch(apiUrl + 'starred', { starred: starred[0], imageName: imageName }, { withCredentials: true });
+            const data = await res.data;
             
             if (checkCookie(data, '/login')) {
                 return;
             }
-        })
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     return (

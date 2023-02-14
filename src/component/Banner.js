@@ -5,7 +5,7 @@ import { useRecoilValue } from 'recoil';
 import { apiUrlState } from '../recoil/Atom';
 var store = require('store');
 
-function Banner({ checkCookie }) {
+function Banner({ checkCookie, changeNotice }) {
     const apiUrl = useRecoilValue(apiUrlState);
     const loginState = store.get('loginState');
     const [calendar, setCalendar] = useState([]);
@@ -19,33 +19,39 @@ function Banner({ checkCookie }) {
 
     useEffect(() => {
         if (loginState === 'true') {
-            axios.get(apiUrl + 'calendar', { withCredentials: true })
-            .then((res) => {
-                const data = res.data;
-
-                if (checkCookie(data, false)) {
-                    return;
-                }
-
-                if (data === 'Nothing') {
-                    return;
-                }
-
-                const writedArr = [];
-
-                data.forEach((item) => {
-                    const year = parseInt(item.date.slice(0, 4));
-                    const month = parseInt(item.date.slice(5, 7));
-                    const date = parseInt(item.date.slice(8, 10));
-
-                    if (currentYear === year && (currentMonth + 1) === month) {
-                        writedArr.push(date);
+            const fetchCalendar = async () => {
+                try {
+                    const res = await axios.get(apiUrl + 'calendar', { withCredentials: true })
+                    const data = await res.data;
+        
+                    if (checkCookie(data, false)) {
+                        return;
                     }
-                    setWritedDate(writedArr);
-                })
-            })
+    
+                    if (data === 'Nothing') {
+                        return;
+                    }
+    
+                    const writedArr = [];
+    
+                    data.forEach((item) => {
+                        const year = parseInt(item.date.slice(0, 4));
+                        const month = parseInt(item.date.slice(5, 7));
+                        const date = parseInt(item.date.slice(8, 10));
+    
+                        if (currentYear === year && (currentMonth + 1) === month) {
+                            writedArr.push(date);
+                        }
+                        setWritedDate(writedArr);
+                    })
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+            
+            fetchCalendar();
         }
-    }, [apiUrl, checkCookie, currentMonth, currentYear, loginState])
+    }, [apiUrl, checkCookie, currentMonth, currentYear, loginState, changeNotice]);
 
     useEffect(() => {
         const previousLastDate = new Date(currentYear, currentMonth, 0).getDate();

@@ -12,7 +12,7 @@ function Login({ changeNotice }) {
     const userId = useRef();
     const userPw = useRef();
 
-    function handleFormSubmit() {
+    async function handleFormSubmit() {
         const userInfo = {
             userId: userId.current.value,
             userPw: userPw.current.value
@@ -21,21 +21,29 @@ function Login({ changeNotice }) {
 
         if (condition) {
             changeNotice('모든 정보를 입력하세요', 'warning.png', 'flex', 0);
-        } else {
-            axios.post(apiUrl + 'login', userInfo, { withCredentials: true })
-            .then(res => {
-                if (res.data === 'Success') {
-                    store.set('loginState', 'true');
-                    changeNotice('로그인 성공', 'correct.png', 'flex', "/")
-                    return;
-                }
-                if (res.data === 'Fail_id') {
-                    changeNotice('ID가 존재하지 않습니다', 'warning.png', 'flex', 0)
-                }
-                if (res.data === 'Fail_pw') {
-                    changeNotice('PW가 틀렸습니다', 'warning.png', 'flex', 0)
-                }
-            })
+            return;
+        }
+
+        try {
+            const res = await axios.post(apiUrl + 'login', userInfo, { withCredentials: true });
+            const data = await res.data;
+
+            if (data === 'Success') {
+                store.set('loginState', 'true');
+                changeNotice('로그인 성공', 'correct.png', 'flex', "/");
+                return;
+            }
+
+            if (data === 'Fail_id') {
+                changeNotice('ID가 존재하지 않습니다', 'warning.png', 'flex', 0);
+                return;
+            }
+
+            if (data === 'Fail_pw') {
+                changeNotice('PW가 틀렸습니다', 'warning.png', 'flex', 0);
+            }
+        } catch (err) {
+            console.error(err);
         }
     }
     return (
