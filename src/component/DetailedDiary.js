@@ -38,7 +38,7 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie } ) {
         const currentDiary = store.get('imageName');
         const fetchData = async () => {
             try {
-                const res = await axios.post(apiUrl + 'get-diary', { imageName: currentDiary }, { withCredentials: true })
+                const res = await axios.get(apiUrl + 'get-diary', { withCredentials: true, params: { imageName: currentDiary }})
                 const data = await res.data;
 
                 if (checkCookie(data, '/login')) {
@@ -101,6 +101,10 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie } ) {
     }
 
     async function handleFormSubmit() {
+        if (checkLogin()) {
+            return;
+        }
+
         try {
             const weathers = [sunny, cloudy, rainy, snowy];
             const weather = weathers.filter((item) => item.current.checked === true);
@@ -137,7 +141,7 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie } ) {
                 postData.push(formData);
             }
 
-            const res = await axios.post(apiUrl + 'update-diary', postData[0], { withCredentials: true })
+            const res = await axios.put(apiUrl + 'update-diary', postData[0], { withCredentials: true })
             const data = await res.data;
 
             if (checkCookie(data, '/login')) {
@@ -156,7 +160,11 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie } ) {
 
     // delete
     function handleDiaryDelete() {
-        axios.post(apiUrl + 'delete-diary', diaryInfo, { withCredentials: true })
+        if (checkLogin()) {
+            return;
+        }
+
+        axios.delete(apiUrl + 'delete-diary', { withCredentials: true, data: diaryInfo })
         .then(res => {
             const data = res.data;
 
@@ -173,6 +181,10 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie } ) {
 
     // control star state
     function handleStarImage() {
+        if (checkLogin()) {
+            return;
+        }
+        
         const starred = [];
         const reverseState = diaryInfo.starred !== 1 ? 1 : 0;
         const imageName = store.get('imageName');
@@ -180,7 +192,7 @@ function DetailedDiary({ changeNotice, checkLogin, checkCookie } ) {
         setDiaryInfo({...diaryInfo, starred: reverseState});
         starred.push(reverseState);
 
-        axios.post(apiUrl + 'starred', {starred: starred[0], imageName: imageName}, { withCredentials: true })
+        axios.patch(apiUrl + 'starred', { starred: starred[0], imageName: imageName }, { withCredentials: true })
         
         .then((res) => {
             const data = res.data;

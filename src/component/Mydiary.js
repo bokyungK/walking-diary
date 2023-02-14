@@ -32,7 +32,7 @@ function MyDiary({ checkLogin, checkCookie }) {
 
         const fetchDiary = async () => {
             try {
-                const res = await axios.post(apiUrl + "diaries", { order: getOrder }, { withCredentials: true });
+                const res = await axios.get(apiUrl + 'diaries', { withCredentials: true, params: { order: getOrder }});
                 const data = await res.data;
     
                 if (checkCookie(data, '/login')) {
@@ -113,7 +113,7 @@ function MyDiary({ checkLogin, checkCookie }) {
 
         store.set('order', order);
 
-        axios.post(apiUrl + 'order', { order: order }, { withCredentials: true })
+        axios.get(apiUrl + 'order', { withCredentials: true, params: { order: order }})
         .then(res => {
             const data = res.data;
             
@@ -198,7 +198,7 @@ function MyDiary({ checkLogin, checkCookie }) {
             const share = length / 9; // 몫
 
             if (length % 9 === 0) {
-                axios.post(apiUrl + 'more-diaries', { share: share, order: getOrder }, { withCredentials: true })
+                axios.get(apiUrl + 'more-diaries', { withCredentials: true, params: { share: share, order: getOrder }})
                 .then(res => {
                     const data = res.data;
 

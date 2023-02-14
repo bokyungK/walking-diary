@@ -119,7 +119,7 @@ function Mypage({ changeNotice, checkLogin, checkCookie }) {
             return;
         }
 
-        axios.post(apiUrl + 'withdrawal', { userPw: userPw.current.value }, { withCredentials: true })
+        axios.delete(apiUrl + 'withdrawal', { withCredentials: true, data: { userPw: userPw.current.value } })
         .then(res => {
             const data = res.data;
 
@@ -144,6 +144,7 @@ function Mypage({ changeNotice, checkLogin, checkCookie }) {
             if (checkCookie(data, '/login')) {
                 return;
             }
+            
             store.remove('loginState');
             store.remove('imageName');
             window.scrollTo(0, 0);
