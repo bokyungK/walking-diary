@@ -391,7 +391,10 @@ const AttachmentLabel = styled.label`
    }
 
     > p {
-        text-align: center;     
+        text-align: center;
+        @media only screen and (max-width: 700px) {
+            line-height: 100%;
+       }
     }
 
     > button {
@@ -412,6 +415,7 @@ const PreviewImage = styled.img`
     position: absolute;
     width: 100%;
     height: 100%;
+    object-fit: cover;
     top: 0;
     left: 0;
     z-index: 1;
@@ -424,12 +428,13 @@ const AttachmentInput = styled.input`
 const DiaryPhoto = styled.img`
     width: 100%;
     height: 500px;
+    object-fit: cover;
     margin-bottom: 1rem;
     border-radius: 30px;
     box-shadow: 4px 4px 4px 1px rgba(0, 0, 0, 0.2);
+    background-color: skyblue;
     @media only screen and (max-width: 700px) {
         height: 300px;
-        line-height: 300px;
    }
 `
 
