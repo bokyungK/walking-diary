@@ -35,25 +35,7 @@ const Inner = styled.header`
     position: fixed;
     top: 0;
     z-index: 3;
-    background-color: rgba(255, 255, 255, ${props => props.opacity}); 
-
-    &:hover {
-        > nav {
-            display: block;
-            background-color: #fff;
-        }
-    }
-
-    & {
-        > nav {
-            @media only screen and (hover: hover) and (pointer: coarse) {
-                display: block;
-            }
-            @media only screen and (hover: none) and (pointer: coarse) {
-                display: block;
-            }
-        }
-    }
+    background-color: rgba(255, 255, 255, ${props => props.opacity});
 `
   
 const Title = styled.h1`
@@ -68,7 +50,6 @@ const Title = styled.h1`
 const Menu = styled.nav`
     width: 530px;
     border-radius: 10px;
-    display: none;
     margin: 0 auto;
     box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.1);
     background-color: rgba(255, 255, 255, ${props => props.opacity}); 
