@@ -1,23 +1,65 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css';
 import App from './App';
+import Banner from './pages/Banner/Banner';
+import MyDiary from './pages/MyDiary/MyDiary';
+import WriteDiary from './pages/WriteDiary';
+import DetailedDiary from './pages/DetailedDiary';
+import Join from './pages/Join/Join';
+import Login from './pages/Login/Login';
+import Mypage from './pages/MyPage/MyPage';
 import reportWebVitals from './reportWebVitals';
-import { RecoilRoot } from 'recoil'
+import { RecoilRoot } from 'recoil';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        index: "/",
+        element: <Banner />,
+      },
+      {
+        path: "/diary",
+        element: <MyDiary />,
+      },
+      {
+        path: "/diary/id",
+        element: <DetailedDiary />,
+      },
+      // {
+      //   path: "/diary/id",
+      //   element: <WriteDiary />,
+      // },
+      {
+        path: "/join",
+        element: <Join />
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/mypage",
+        element: <Mypage />,
+      },
+    ]
+  },
+  {
+
+  }
+]);
+
 root.render(
   <React.StrictMode>
     <RecoilRoot>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <RouterProvider router={router} />
     </RecoilRoot>
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

@@ -1,0 +1,67 @@
+
+.section {
+  width: max-content;
+  margin: 0 auto;
+  height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.form  {
+  display: flex;
+  height: 150px;
+  margin-bottom: 1.5rem;
+}
+
+.form > div {
+  display: flex;
+  flex-direction: column;
+  text-align: end;
+  margin-right: 1.5rem;
+}
+
+.form > div > div:first-child {
+  margin-bottom: 1.5rem;
+}
+
+.label {
+  margin-right: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #212121;
+}
+
+.login {
+  width: 100px;
+  height: inherit;
+  padding: 0 0.5rem;
+  text-align: center;
+  color: var(--brand-border-color);
+  border: solid 3px var(--brand-border-color);
+  border-radius: 20px;
+  background-color: white;
+  font-size: 1.3rem;
+  font-weight: bold;
+  box-shadow: var(--shadow-small);
+}
+
+.login:hover {
+  transform: translate(3px, 3px);
+  box-shadow: none;
+}
+
+.joinWrap {
+  display: flex;
+  justify-content: center;
+}
+
+.join {
+  color: #BCBCBC;
+  text-align: center;
+  transition: var(--transition-color);
+}
+
+.join:hover {
+  color: var(--brand-point-color);
+}

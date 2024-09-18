@@ -1,12 +1,12 @@
 import React, { useRef } from 'react';
+import styles from './Join.module.css';
 import axios from 'axios';
-import Buttons from './Buttons.js';
-import Notice from './Notice.js';
-import styled from 'styled-components';
+import Buttons from '../../component/Buttons/Buttons.jsx';
+import Notice from '../../component/Notice.jsx';
 import { useRecoilValue } from 'recoil';
-import { apiUrlState } from '../recoil/Atom';
+import { apiUrlState } from '../../recoil/Atom.js';
 
-function Join({ changeNotice }) {
+export default function Join({ changeNotice }) {
     const apiUrl = useRecoilValue(apiUrlState);
     const buttonName = {
         cancel: '취소',
@@ -27,9 +27,9 @@ function Join({ changeNotice }) {
     }
 
     function handleInfoRules(e) {
-        const getInputId = e.target.id;
+        const getinputId = e.target.id;
         const keys = Object.keys(regExp);
-        const keyIndex = keys.indexOf(getInputId);
+        const keyIndex = keys.indexOf(getinputId);
         const isRegExp = regExp[keys[keyIndex]][0].test(e.target.value);
 
         if (isRegExp) {
@@ -79,86 +79,26 @@ function Join({ changeNotice }) {
         }
     }
     return (
-        <Inner>
-            <Title>회원가입</Title>
-            <Notice />
-            <Form>
-                <div>
-                    <FormItem>
-                        <Label htmlFor='userId'>ID</Label>
-                        <Input onChange={handleInfoRules} ref={userId} id='userId' type='text' maxLength='15'/>
-                    </FormItem>
-                    <FormItem>                       
-                        <Label htmlFor='userPw'>PW</Label>
-                        <Input onChange={handleInfoRules} ref={userPw} id='userPw' type='password' autoComplete="off" maxLength='15'/>
-                    </FormItem>
-                    <FormItem>
-                        <Label htmlFor='userName'>이름</Label>
-                        <Input onChange={handleInfoRules} ref={userName} id='userName' type='text' maxLength='10'/>
-                    </FormItem>
-                </div>
-            </Form>
-            <Buttons buttonName={buttonName} cancelLink={cancelLink} handleFormSubmit={handleFormSubmit} disabled />
-        </Inner>
+      <section className={styles.section}>
+        <h2>회원가입</h2>
+        <Notice />
+        <form className={styles.form}>
+          <div>
+            <div>
+              <label className={styles.label} htmlFor='userId'>ID</label>
+              <input onChange={handleInfoRules} ref={userId} id='userId' type='text' maxLength='15'/>
+            </div>
+            <div>                       
+              <label className={styles.label} htmlFor='userPw'>PW</label>
+              <input onChange={handleInfoRules} ref={userPw} id='userPw' type='password' autoComplete="off" maxLength='15'/>
+            </div>
+            <div>
+              <label className={styles.label} htmlFor='userName'>이름</label>
+              <input onChange={handleInfoRules} ref={userName} id='userName' type='text' maxLength='10'/>
+            </div>
+          </div>
+        </form>
+        <Buttons buttonName={buttonName} cancelLink={cancelLink} handleFormSubmit={handleFormSubmit} disabled />
+      </section>
     )
 }
-
-export default Join;
-
-
-// styled component
-const Inner = styled.div`
-    height: calc(100vh - 80px);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-`
-
-const Title = styled.h2`
-    text-align: center;
-    margin-bottom: 2rem;
-    font-size: 1.8rem;
-    @media only screen and (max-width: 450px) {
-        font-size: 1.5rem;
-    }
-`
-
-const Form = styled.form`
-    text-align: center;
-
-    > div {
-        width: max-content;
-        margin: 0 auto;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        margin-bottom: 1rem;
-        padding-right: 3rem;
-    }
-`
-
-const FormItem = styled.div`
-    margin-bottom: 1rem;
-`
-
-const Label = styled.label`
-    margin-right: 1rem;
-    font-size: 1.1rem;
-`
-
-const Input = styled.input`
-    width: 12rem;
-    height: 40px;
-    background-color: skyblue;
-    color: #fff;
-    font-size: 1.1rem;
-    text-align: center;
-    border: none;
-    @media only screen and (max-width: 450px) {
-        width: 10rem;
-    }
-
-    &:focus {
-        border: none;
-    }
-`

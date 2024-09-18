@@ -1,0 +1,160 @@
+@font-face {
+  font-family: 'IM_Hyemin-Bold';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2106@1.1/IM_Hyemin-Bold.woff2') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+#root {
+  --brand-color: #A6DAF4;
+  --brand-title-color: #00AFF0;
+   --brand-point-color: #997000;
+  /* --brand-point-color: #F0CA61; */
+  --brand-border-color: #997000;
+  --transition-color: color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow-small: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  --brand-font: 'IM_Hyemin-Bold';
+  font-family: 'IM_Hyemin-Bold';
+  color: #292a2f;
+}
+
+button {
+  font-family: 'IM_Hyemin-Bold';
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+}
+
+button > svg {
+  transition: var(--color-transition);
+}
+
+/* app.css 임시 */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  background-image: url('../public/background.png');
+  font-family: 'GmarketSansMedium';
+  color: #333;
+  font-weight: normal;
+}
+
+a { 
+  text-decoration: none;
+  color: inherit;
+}
+
+input {
+  background-color: var(--brand-color);
+  color: #fff;
+  width: 12rem;
+  height: 4rem;
+  font-size: 1.5rem;
+  text-align: center;
+  border: none;
+  border-radius: 10px;
+  box-shadow: var(--shadow-small);
+  background: var(--brand-color);
+  font-family: var(--brand-font);
+}
+
+input:focus {
+  outline: none;
+  box-shadow: none;
+  transform: translate(3px, 3px);
+}
+
+h2 {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+}
+
+/* a:hover { 
+  color: #F0CA61;
+}
+
+main {
+  width: 100%;
+  height: 100%;
+  padding-top: 80px;
+}
+
+input {
+  outline: none;
+  font-family: inherit;
+  border-radius: 10px;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+input:focus {
+  border: 3px solid #F0CA61;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.5);
+}
+
+select {
+  font-family: inherit;
+  text-align: center;
+  border-radius: 10px;
+  color: #333;
+  outline: none;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+select:focus {
+  border: 3px solid #F0CA61;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.5);
+}
+
+option {
+  background-color: #F0CA61;
+}
+
+textarea {
+  font-family: inherit;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+
+}
+
+textarea:focus {
+  border: 3px solid #F0CA61;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.5);
+}
+
+.notice {
+  line-height: 30px;
+  margin-bottom: 0.5rem;
+}
+
+.notice > div {
+  width: max-content;
+  margin: 0 auto;
+  display: flex;
+}
+
+.notice img {
+  width: 30px;
+  height: 30px;
+  margin-right: 0.5rem;
+}
+
+@font-face {
+  font-family: 'GmarketSansMedium';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media only screen and (hover: none) and (pointer: coarse) {
+  body {
+    overflow-x: hidden;
+  }
+} */
