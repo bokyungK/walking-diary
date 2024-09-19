@@ -173,7 +173,7 @@ export default function Mypage() {
     }
 
     return (
-        <section className={styles.section}>
+        <section className='column'>
             <h2>마이페이지</h2>
             <Notice />
             <form className={styles.form}>

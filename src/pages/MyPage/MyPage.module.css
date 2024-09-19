@@ -1,9 +1,5 @@
 .section {
-  height: calc(100vh - 80px);
-  display: flex;
   position: relative;
-  flex-direction: column;
-  justify-content: center;
   /* @media only screen and (hover: hover) and (pointer: coarse) and (max-width: 450px) {
       height: 100%;
       margin-top: 80px;

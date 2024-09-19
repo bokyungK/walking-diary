@@ -11,7 +11,7 @@ const INITIAL_MENU = [
   { name: '일기장', destination: 'diary' },
   { name: '일기 쓰기', destination: 'diary/id' },
   { name: '마이페이지', destination: 'mypage' },
-  { name: '알아봅시다! 반려견 산책 매너', destination: 'mypage' },
+  { name: '반려견 산책 매너!', destination: 'mypage' },
 ]
 
 export default function Header() {

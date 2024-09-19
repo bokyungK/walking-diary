@@ -1,13 +1,3 @@
-
-.section {
-  width: max-content;
-  margin: 0 auto;
-  height: calc(100vh - 80px);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
 .form  {
   display: flex;
   height: 150px;

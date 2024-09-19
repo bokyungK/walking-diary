@@ -79,7 +79,7 @@ export default function Join({ changeNotice }) {
         }
     }
     return (
-      <section className={styles.section}>
+      <section className='column'>
         <h2>회원가입</h2>
         <Notice />
         <form className={styles.form}>

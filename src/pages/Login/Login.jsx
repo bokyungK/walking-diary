@@ -47,7 +47,7 @@ export default function Login({ changeNotice }) {
         }
     }
     return (
-      <section className={styles.section}>
+      <section className='column'>
           <Notice />
           <form className={styles.form} method='post'>
             <div>

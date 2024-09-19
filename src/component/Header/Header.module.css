@@ -8,7 +8,7 @@ header {
   font-size: 20px;
   font-weight: bold;
   border-bottom: 1px solid #BCBCBC;
-  background-color: white;
+  background-color: var(--brand-bg-color);
 }
 
 .title {
