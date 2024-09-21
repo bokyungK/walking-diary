@@ -1,0 +1,331 @@
+.section {
+  width: 100%;
+  height: 100%;
+  margin-top: 80px;
+  padding-bottom: 1.5rem;
+}
+
+.ruleButtonWrap {
+  display: flex;
+  justify-content: flex-end;
+  width: 75% !important;
+  text-align: right;
+  margin-bottom: 1rem !important;
+  column-gap: 0.5rem;
+}
+
+.ruleButton {
+  width: max-content;
+  height: inherit;
+  padding: 3px;
+  text-align: center;
+  color: var(--brand-border-color);
+  border: solid 3px var(--brand-border-color);
+  border-radius: 20px;
+  background-color: var(--brand-text-color-light);
+  font-size: 1.1rem;
+  font-weight: bold;
+  box-shadow: var(--shadow-small);
+  border-radius: var(--brand-rounded);
+}
+
+.ruleButton:hover {
+  box-shadow: none;
+  transform: var(--translate-3d);
+}
+
+.controlButton {
+  width: 2.5rem;
+  height: 2.5rem;
+  box-shadow: var(--shadow-small);
+  border-radius: 100%;
+  padding: 5px;
+}
+
+.controlButton:hover {
+  box-shadow: none;
+  transform: var(--translate-3d);
+}
+
+.controlButton > img {
+  width: 100%;
+  height: 100%;
+  transform: translateX(1px);
+}
+
+.fileWrap {
+  width: 100%;
+  height: calc(100vw * 0.75);
+  position: relative;
+  border-radius: var(--brand-rounded);
+  overflow: hidden;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow-small);
+}
+
+.fileWrap:has(img.userFile) {
+  transform: none;
+  box-shadow: var(--shadow-small);
+}
+
+.fileWrap:hover {
+  transform: var(--translate-3d);
+  box-shadow: none;
+}
+
+.filePreview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.fileCloseWrap {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 25px;
+  height: 25px;
+  color: var(--brand-text-color-dark);
+  z-index: 2;
+  background-color: var(--brand-text-color-light);
+  border-radius: var(--brand-rounded);
+  border: 3px solid var(--brand-border-color);
+  box-shadow: var(--shadow-small);
+}
+
+.fileClose {
+  color: var(--brand-border-color);
+  width: 100%;
+  height: 100%;
+}
+
+.fileLabel {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  background-color: var(--brand-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  color: var(--brand-text-color-light);
+  text-align: center;
+  line-height: 500px;
+  border-radius: 5px;
+  border: none;
+  overflow: hidden;
+  font-size: 1.2rem;
+}
+
+.previewImage {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.userFile {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: calc(100vw * 0.75);
+  margin: 0 auto;
+  object-fit: cover;
+  background-color: var(--brand-color);
+  top: 0;
+  left: 0;
+  /* line-height: calc(100vw * 0.75);
+  text-align: center; */
+}
+
+.fileInput {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 99%;
+  z-index: -1;
+}
+
+.fileWrap:has(input:disabled) label:hover {
+  transform: none;
+  box-shadow: var(--shadow-small);
+}
+
+.diaryInfo {
+  width: 75%;
+  margin: 0 auto;
+}
+
+.diaryOptions {
+  display: flex;
+  flex-direction: column;
+  border: none;
+  border: 3px solid var(--brand-border-color);
+  border-radius: var(--brand-rounded);
+  background-color: var(--brand-text-color-light);
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow-small);
+}
+
+.diaryOptions:active {
+  transform: var(--translate-3d);
+  box-shadow: none;
+}
+
+.diaryOptions:active:has(select:disabled) {
+  transform: none;
+  box-shadow: var(--shadow-small);
+}
+
+.diaryOptions > * {
+  border: none;
+  outline: none;
+  height: 2.3rem;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+}
+
+.diaryOptions > *:not(:last-child) {
+  border-bottom: 3px solid var(--brand-border-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.weatherBox > input[type=radio] {
+  display: none;
+}
+
+.weatherBox > label {
+  width: 2.1rem;
+  height: 2.1rem;
+  background-size: cover;
+  opacity: 0.3;
+}
+
+.weatherBox > input[type=radio]:checked + label {
+  opacity: 1;
+}
+
+.weatherBox > label {
+  transform: translateY(-3px);
+}
+
+.weatherBox > label:nth-child(6),
+.weatherBox > label:nth-child(8) {
+  width: 2.5rem;
+  height: 2.5rem;
+  transform: translateY(-2px);
+}
+
+.dogSelect {
+  color: var(--brand-text-color-dark);
+  font-family: var(--brand-font);
+  font-size: 1.1rem;
+}
+
+.dogSelect:disabled {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  opacity: 1;
+}
+
+.dogSelect > option {
+  border-radius: 10px;
+}
+
+.writingInfo {
+  width: 100%;
+  height: 2.3rem;
+  margin-bottom: 1rem;
+  line-height: 2rem;
+  padding: 0 1rem;
+  border: 3px solid var(--brand-border-color);
+  border-radius: var(--brand-rounded);
+  font-weight: normal;
+  font-size: 1.3rem;
+  outline: none;
+  background-color: var(--brand-text-color-light);
+  color: var(--brand-text-color-dark);
+  text-align: left;
+}
+
+.writingInfo:focus {
+  background-color: var(--brand-text-color-light);
+}
+
+.contentInfo {
+  resize: none;
+  height: 200px;
+  background: repeating-linear-gradient(var(--brand-text-color-light), var(--brand-text-color-light) 30px, var(--brand-border-color) 30px, var(--brand-border-color) 33px);
+  font-size: 1.2rem;
+  box-shadow: var(--shadow-small);
+  font-family: var(--brand-font);
+}
+
+.contentInfo:focus {
+  transform: var(--translate-3d);
+  background-color: var(--brand-focus-color);
+  box-shadow: none;
+}
+
+.buttonWrap > a {
+  margin-right: 0;
+}
+
+@media (min-width: 768px) {
+  .diaryOptions {
+    flex-direction: row;
+    height: 2.3rem;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+
+  .diaryOptions > * {
+    height: 100%;
+    flex: 1;
+    box-shadow: none;
+    margin-bottom: 0;
+    border-radius: unset;
+    border: unset;
+  }
+
+  .diaryOptions > *:not(:last-child) {
+    border-bottom: unset;
+    border-right: 3px solid var(--brand-border-color);
+    justify-content: center;
+    align-items: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .diaryInfo {
+    max-width: 768px;
+  }
+
+  .weatherBox > label {
+    transform: translateY(0);
+  }
+
+  .weatherBox > label:nth-child(6),
+  .weatherBox > label:nth-child(8) {
+    transform: translateY(1px);
+  }
+
+  .userFile {
+    object-fit: contain;
+  }
+}

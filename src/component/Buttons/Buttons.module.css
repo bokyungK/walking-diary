@@ -28,20 +28,10 @@
 }
 
 .button:hover {
-  transform: translate(3px, 3px);
+  transform: var(--translate-3d);
   box-shadow: none;
 }
 
 .button:first-child {
   margin-right: 1.5rem;
-}
-
-.span {
-  position: absolute;
-  top: 58%;
-  left: 50%;
-  transform: translateX(-50%);
-  color: #fff;
-  font-size: 0.8rem;
-  font-weight: bold;
 }
