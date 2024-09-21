@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import styles from './Banner.module.css'
-import { Link } from 'react-router-dom'
+import styles from './Banner.module.css';
+import { Link } from 'react-router-dom';
+import { useUserContext } from '../../context/userContext';
 // import { useRecoilValue } from 'recoil';
 // import { apiUrlState } from '../recoil/Atom';
-var store = require('store');
 
 function Banner({ checkCookie }) {
+  const { user } =  useUserContext();
+  
   // const apiUrl = useRecoilValue(apiUrlState);
-  const loginState = store.get('loginState');
+  // const loginState = store.get('loginState');
   const [calendar, setCalendar] = useState([]);
   const [writedDate, setWritedDate] = useState('');
 
@@ -76,12 +78,12 @@ function Banner({ checkCookie }) {
           const date = (i + 1) - currentFirstDay;
           const previousDate = previousLastDate - currentFirstDay + (i + 1);
           const num = i < currentFirstDay ? 
-                          currentMonth === 0 ? `12/${previousDate}` : `${currentMonth}/${previousDate}` 
-                          :
-                          date > currentLastDate ?
-                              currentMonth === 11 ? `1/${date - currentLastDate}` : `${currentMonth + 2}/${date - currentLastDate}`
-                              :
-                              date;
+            currentMonth === 0 ? `12/${previousDate}` : `${currentMonth}/${previousDate}` 
+            :
+            date > currentLastDate ?
+                currentMonth === 11 ? `1/${date - currentLastDate}` : `${currentMonth + 2}/${date - currentLastDate}`
+                :
+                date;
 
           if (dateArr[index] === undefined) {
               dateArr[index] = [num, ]
@@ -96,7 +98,7 @@ function Banner({ checkCookie }) {
   return (
       <section className={styles.section}>
         {
-          test &&
+          user &&
               <div>
                   <h2>{ `${currentYear}년 ${currentMonth + 1}월 출석` }</h2>
                   <table className={styles.table}>
@@ -114,15 +116,19 @@ function Banner({ checkCookie }) {
                               calendar.map((arr, idx) => {
                                   return <tr className={styles.rows} key={`week-${idx + 1}`}>
                                       {
-                                          arr.map((num) => { 
-                                              return typeof num === 'string' ? 
-                                              <td className={`${styles.td} ${styles.otherMonth}`} key={`current-${num}`}>&nbsp;{num}</td>
-                                              :
-                                              <td className={styles.td}  key={`current-${num}`}>{ writedDate.includes(num) ?
-                                                  <>&nbsp;{num}<img src='/attendance.png' alt={num} /></>
-                                                  :
-                                                  <>&nbsp;{num}</>
-                                              }</td>
+                                          arr.map((num) => {
+                                            const today = new Date();
+                                            const todayDate = today.getDate();
+                                            const todayClassName = num === todayDate && styles.today;
+                                            
+                                            return typeof num === 'string' ? 
+                                            <td className={`${styles.td} ${styles.otherMonth} ${todayClassName}`} key={`current-${num}`}>&nbsp;{num}</td>
+                                            :
+                                            <td className={`${styles.td} ${todayClassName}`}  key={`current-${num}`}>{ writedDate.includes(num) ?
+                                                <>&nbsp;{num}<img src='/attendance.png' alt={num} /></>
+                                                :
+                                                <>&nbsp;{num}</>
+                                            }</td>
                                           })
                                       }
                                   </tr>;
@@ -133,7 +139,7 @@ function Banner({ checkCookie }) {
               </div>
         }
         {
-          !test &&
+          !user &&
           <>
             <p className={styles.intro}>
               매일 매일<br />

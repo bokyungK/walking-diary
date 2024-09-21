@@ -8,28 +8,16 @@
   border-collapse: collapse;
   border-radius: 5px;
   overflow: hidden;
-  /* 오늘 날짜면 border color로 포인트 주기! */
   box-shadow: var(--shadow-small);
-  /* max-width: 650px;
-  max-height: 650px; */
-
-  /* @media only screen and (max-width: 700px) {
-    min-width: 352px;
-  } */
 }
 
 .th {
   font-size: 1.3rem;
-  /* width: 10%; */
   height: 50px;
   border: 2px solid white;
   border-right: none;
   border-top: none;
-  background-color: var(--brand-title-color);
-
-  /* @media only screen and (max-width: 700px) {
-    font-size: 1rem;
-  } */
+  background-color: var(--brand-point-color);
 }
     
 .th:first-child {
@@ -39,21 +27,24 @@
 .th:last-child {
     border-right: none;
 }
+
+.rows > .td:first-child {
+  color: var(--brand-gray-color);
+}
   
 .td {
   position: relative;
   width: calc((100vw * 0.1));
   height: calc((100vw * 0.1));
-  border: 2px solid white;
+  border: 2px solid var(--brand-text-color-light);
   vertical-align: top;
   border-bottom: none;
-  padding: 5px 1px;
+  padding: 3px 0px;
+  font-size: 0.9rem;
+}
 
-  /* @media only screen and (max-width: 700px) {
-    width: 50px;
-    height: 50px;
-    font-size: 0.8rem;
-  } */
+.td.today {
+  color: var(--brand-point-color);
 }
 
 .td:first-child {
