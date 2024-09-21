@@ -4,14 +4,14 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css';
 import App from './App';
 import Banner from './pages/Banner/Banner';
-import MyDiary from './pages/MyDiary/MyDiary';
-import WriteDiary from './pages/WriteDiary/WriteDiary';
-import DetailedDiary from './pages/DetailDiary/DetailDiary';
+import Diaries from './pages/Diaries/Diaries';
+// import DetailedDiary from './pages/DetailDiary/DetailDiary';
 import Join from './pages/Join/Join';
 import Login from './pages/Login/Login';
 import Mypage from './pages/MyPage/MyPage';
 import reportWebVitals from './reportWebVitals';
 import { RecoilRoot } from 'recoil';
+import Diary from './pages/Diary/Diary';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter([
@@ -25,16 +25,20 @@ const router = createBrowserRouter([
       },
       {
         path: "/diary",
-        element: <MyDiary />,
+        element: <Diaries />,
       },
       {
-        path: "/diary/id",
-        element: <DetailedDiary />,
+        path: "/diary/:id",
+        element: <Diary />,
       },
-      // {
-      //   path: "/diary/id",
-      //   element: <WriteDiary />,
-      // },
+      {
+        path: "/diary/update",
+        element: <Diary />,
+      },
+      {
+        path: "/diary/new",
+        element: <Diary />,
+      },
       {
         path: "/join",
         element: <Join />
@@ -55,11 +59,11 @@ const router = createBrowserRouter([
 ]);
 
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <RecoilRoot>
       <RouterProvider router={router} />
     </RecoilRoot>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 
 reportWebVitals();
