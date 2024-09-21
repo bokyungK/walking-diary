@@ -1,4 +1,7 @@
 header {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   padding: 20px;
   display: flex;
@@ -7,8 +10,9 @@ header {
   height: 80px;
   font-size: 20px;
   font-weight: bold;
-  border-bottom: 1px solid #BCBCBC;
+  border-bottom: 1px solid var(--brand-gray-color);
   background-color: var(--brand-bg-color);
+  z-index: 10;
 }
 
 .title {
@@ -16,7 +20,7 @@ header {
 }
 
 .title:hover {
-  color: var(--brand-point-color);
+  color: var(--brand-border-color);
 }
 
 .menuIcon {
@@ -26,7 +30,7 @@ header {
 
 .menuIcon:hover {
   cursor: pointer;
-  color: var(--brand-point-color);
+  color: var(--brand-border-color);
 }
 
 .menu {
@@ -35,7 +39,7 @@ header {
   right: 0;
   width: 100%;
   height: 100%;
-  background-color: white;
+  background-color: var(--brand-text-color-light);
   z-index: 10;
 }
 
@@ -47,7 +51,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #BCBCBC;
+  border-bottom: 1px solid var(--brand-gray-color);
 }
 
 .login {
@@ -67,7 +71,7 @@ header {
 }
 
 .login:hover {
-  transform: translate(3px, 3px);
+  transform: var(--translate-3d);
   box-shadow: none;
 }
 
@@ -83,7 +87,7 @@ header {
 }
 
 .cancel > svg:hover {
-  color: var(--brand-point-color);
+  color: var(--brand-border-color);
 }
 
 .menuBottom {

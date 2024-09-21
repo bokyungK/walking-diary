@@ -1,27 +1,41 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './Header.module.css';
 import { TfiClose } from "react-icons/tfi";
 import { useRecoilValue } from 'recoil';
 import { CiMenuBurger } from "react-icons/ci";
 import { opacityState } from '../../recoil/Atom';
+import { useUserContext } from '../../context/userContext';
+import { logout } from '../../api/firebase';
+
 
 const INITIAL_MENU = [
   // { name: '로그인', destination: 'login' },
   { name: '일기장', destination: 'diary' },
-  { name: '일기 쓰기', destination: 'diary/id' },
+  { name: '일기 쓰기', destination: 'diary/new' },
   { name: '마이페이지', destination: 'mypage' },
-  { name: '반려견 산책 매너!', destination: 'mypage' },
+  { name: '산책 매너 배우기', destination: 'mypage' },
+  { name: '동반 시설 찾기', destination: 'mypage' },
 ]
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const backgroundOpacity = useRecoilValue(opacityState);
+  const { user, setUser } = useUserContext();
+  // const backgroundOpacity = useRecoilValue(opacityState);
+  const navigate = useNavigate();
+
   const handleMenuOpen = () => setIsOpen(true);
   const handleMenuClose = () => setIsOpen(false);
+  const handleLogout = () => {
+    logout(setUser)
+    .then((test) => {
+      setIsOpen(false);
+      navigate('/');
+    });
+  };
 
   return (
-    <header opacity={backgroundOpacity}>
+    <header className={ isOpen && 'open'}>
       <Link className={styles.title} to="/">ㅅㅊ<br />ㅇㄱ</Link>
       <button>
         <CiMenuBurger className={styles.menuIcon} onClick={handleMenuOpen} />
@@ -30,7 +44,8 @@ export default function Header() {
         isOpen && 
         <div className={styles.menu}>
           <div className={styles.menuTop}>
-            <Link className={styles.login} onClick={handleMenuClose} to={`/login`}>로그인</Link>
+            { user && <button className={styles.login} onClick={handleLogout}>로그아웃</button> }
+            { !user && <Link className={styles.login} onClick={handleMenuClose} to={`/login`}>로그인</Link> }
             <button className={styles.cancel} onClick={handleMenuClose}>
               <TfiClose />
             </button>
@@ -39,7 +54,7 @@ export default function Header() {
             {
               INITIAL_MENU.map((item) => {
                 const { name, destination } = item;
-                return <li>
+                return <li key={name}>
                   <Link onClick={handleMenuClose} to={`/${destination}`}>{name}</Link>
                 </li>
               })
