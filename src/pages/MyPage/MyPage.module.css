@@ -38,9 +38,26 @@
   font-size: 1.3rem;
   font-weight: bold;
   color: #212121;
-  /* @media only screen and (max-width: 450px) {
-      margin-right: 0;
-  } */
+}
+
+.form > div > div > input,
+.form > div > div > textarea {
+  padding: 10px;
+  white-space: nowrap;
+  overflow-y: hidden;
+  overflow-x: scroll;
+  resize: none;
+}
+
+.form > div > div > textarea::-webkit-scrollbar {
+  background-color: lightgray;
+  border-radius: 10px;
+}
+
+.form > div > div > textarea::-webkit-scrollbar-thumb {
+  /* background-color: var(--brand-border-color); */
+  background-color: var(--brand-border-color);
+  border-radius: 10px;
 }
 
 .button {
@@ -65,7 +82,7 @@
 .additionalTab {
   width: 200px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 
 .additionalTab > button {

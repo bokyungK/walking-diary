@@ -6,10 +6,12 @@ import styles from './MyPage.module.css';
 import Notice from '../../component/Notice.jsx';
 import { useRecoilValue , useSetRecoilState } from 'recoil';
 import { apiUrlState, messageState, messageOptionState } from '../../recoil/Atom.js';
+import { useUserContext } from '../../context/userContext';
 var store = require('store');
 
 // function Mypage({ changeNotice, checkLogin, checkCookie }) {
 export default function Mypage() {
+    const { user } = useUserContext();
     const apiUrl = useRecoilValue(apiUrlState);
     const setCheckMessage = useSetRecoilState(messageState);
     const setOption = useSetRecoilState(messageOptionState);
@@ -176,51 +178,53 @@ export default function Mypage() {
         <section className='column'>
             <h2>마이페이지</h2>
             <Notice />
-            <form className={styles.form}>
-                <div>
+            {
+                user && 
+                <form className={styles.form}>
                     <div>
-                        <label>이름</label>
-                        <input type='text' disabled defaultValue={userName}/>
-                    </div>
-                    <div>                       
-                        <label>아이디</label>
-                        <input type='text' disabled defaultValue={userId}/>
-                    </div>
-                    <div>
-                        <label>비밀번호</label>
-                        <input ref={userPw} type='password' autoComplete="off" maxLength='15' placeholder='현재 비밀번호' />
-                    </div>
-                    <div>
-                        <label>새 비밀번호</label>
-                        <input ref={userNewPw} onChange={handleInputValue} type='password' autoComplete="off" maxLength='15' placeholder='바꿀 비밀번호' />
-                    </div>
-                    {
-                        dogNames.map((name, idx) => {
-                            return  <div key={name + idx}>
-                                        <label>반려견 이름 {idx + 1}</label>
-                                        <input ref={inputDogNames[idx]} type='text' defaultValue={name} maxLength='10' placeholder='이름 작성 후 저장' />
-                                        {
-                                            idx === 0 ? <button className={styles.button} onClick={handleAddPetName} type='button'>Box<br />추가</button>
-                                            :
-                                            idx === dogNames.length - 1 ?
-                                                <button className={styles.button} onClick={() => {handleRemovePetName(idx)}} type='button'>Box<br />삭제</button>
+                        <div>
+                            <label>이름</label>
+                            <input type='text' disabled defaultValue={userName}/>
+                        </div>
+                        <div>                       
+                            <label>아이디</label>
+                            <textarea type='text' disabled defaultValue={user.email}></textarea>
+                        </div>
+                        <div>
+                            <label>비밀번호</label>
+                            <input ref={userPw} type='password' autoComplete="off" maxLength='15' placeholder='현재 비밀번호' />
+                        </div>
+                        <div>
+                            <label>새 비밀번호</label>
+                            <input ref={userNewPw} onChange={handleInputValue} type='password' autoComplete="off" maxLength='15' placeholder='바꿀 비밀번호' />
+                        </div>
+                        {
+                            dogNames.map((name, idx) => {
+                                return  <div key={name + idx}>
+                                            <label>반려견 이름 {idx + 1}</label>
+                                            <input ref={inputDogNames[idx]} type='text' defaultValue={name} maxLength='10' placeholder='이름 작성 후 저장' />
+                                            {
+                                                idx === 0 ? <button className={styles.button} onClick={handleAddPetName} type='button'>Box<br />추가</button>
                                                 :
-                                                ''
-                                        }
-                                    </div>
-                        })
-                    }
-                    <div className={styles.additionalTab}>
-                        <button onClick={() => {
-                            setCheckMessage({ display: 'block' });
-                            setOption({ cancel: '취소', submit: '탈퇴' });
-                        }} type='button'>회원탈퇴</button>
-                        <button onClick={handleLogout} type='button'>로그아웃</button>
+                                                idx === dogNames.length - 1 ?
+                                                    <button className={styles.button} onClick={() => {handleRemovePetName(idx)}} type='button'>Box<br />삭제</button>
+                                                    :
+                                                    ''
+                                            }
+                                        </div>
+                            })
+                        }
+                        <div className={styles.additionalTab}>
+                            <button onClick={() => {
+                                setCheckMessage({ display: 'block' });
+                                setOption({ cancel: '취소', submit: '탈퇴' });
+                            }} type='button'>회원탈퇴</button>
+                        </div>
                     </div>
-                </div>
-                <CheckMessage handleShowMessage={handleWithdrawal} />
-                <Buttons className={styles.buttonWrap} handleFormSubmit={handleFormSubmit} buttonName={{cancel: '취소', submit: '저장'}} cancelLink={{path: '/'}} />
-            </form>
+                    <CheckMessage handleShowMessage={handleWithdrawal} />
+                    <Buttons className={styles.buttonWrap} buttonName={{cancel: '취소', submit: '저장'}} cancelLink={{path: '/'}} />
+                </form>
+            }
         </section>
     )
 }
