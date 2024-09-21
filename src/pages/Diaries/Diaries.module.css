@@ -1,0 +1,264 @@
+.diary {
+  padding: 100px 20px;
+  /* min-height: auto; */
+}
+
+.bookmark,
+.diaryBox {
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  min-height: auto;
+}
+
+.bookmark > span,
+.diaryBox > span {
+  margin: 0 auto;
+}
+
+.bookmark > h2,
+.diaryBox > h2 {
+  margin-bottom: 1rem;
+}
+
+.bookmarkList {
+  list-style: none;
+}
+
+.bookmarkList > li {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  flex-basis: 300px;
+  min-width: 300px;
+  height: 300px;
+  background-color: var(--brand-color);
+  border-radius: 30px;
+  margin-bottom: 1rem;
+  margin-right: 1rem;
+  overflow: hidden;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+.bookmark > li:hover {
+  cursor: pointer;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.4);
+}
+
+.bookmark > li:not(:nth-child(3n)) {
+    margin-right: 1rem;
+}
+
+.bookmark > li > img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.bookmark > li > div {
+  width: 207px;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: var(--brand-text-color-light);
+  border: solid 3px var(--brand-border-color);
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  padding: 0 1rem;
+  font-size: 0.9rem;
+  z-index: 1;
+}
+
+.bookmark > li > div > div {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.bookmark > li > div > div > div:nth-child(3) {
+  text-align: center;
+}
+
+/*
+
+const CardInfo = css`
+    width: 207px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #fff;
+    border: #997000 solid 3px;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    padding: 0 1rem;
+    font-size: 0.9rem;
+    z-index: 1;
+`
+
+.diary {
+    margin-bottom: 3rem;
+}styled.section`
+    ${MydiarySection}
+    margin-bottom: 3rem;
+`
+` */
+
+.orderBox {
+  width: 300px; 
+  margin: 0 auto;
+  text-align: right;
+  margin-bottom: 1rem;
+}
+
+.orderSelect {
+  cursor: pointer;
+  width: 110px;
+  height: 35px;
+  color: var(--brand-border-color);
+  background-color: var(--brand-text-color-light);
+  border: 3px solid var(--brand-border-color);
+  border-radius: var(--brand-rounded-medium);
+  font-family: var(--brand-font);
+  box-shadow: var(--shadow-small);
+  text-align: center;
+  font-size: 1rem;
+}
+
+.orderSelect:hover  {
+  transform: var(--translate-3d);
+  box-shadow: none;
+}
+
+.orderSelect:focus  {
+  outline: none;
+}
+
+.diaryList {
+  width: 100%;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 300px));
+  justify-content: center;
+}
+
+.diaryLink {
+  width: 100%;
+}
+
+.diaryCard {
+  position: relative;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  width: 100%;
+  height: 300px;
+  /* background-color: var(--brand-text-color-light); */
+  /* border: 3px solid var(--brand-border-color); */
+  border-radius: var(--brand-rounded-medium);
+  /* background: var(--brand-color); */
+  overflow: hidden;
+  box-shadow: var(--shadow-small);
+  /* color: var(--brand-text-color-light); */
+
+  /* @media only screen and (max-width: 930px) {
+    margin-right: 1rem;
+  } */
+}
+
+.diaryCard:hover {
+  cursor: pointer;
+  transform: var(--translate-3d);
+  box-shadow: none;
+}
+
+.diaryImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: var(--brand-color);
+}
+
+.diaryTitleWrap {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  width: calc(100% - 2rem);
+  height: 20%;
+  align-items: center;
+  margin: 1rem;
+  padding: 0.5rem;
+  color: var(--brand-text-color-dark);
+  background-color: var(--brand-text-color-light);
+  border-radius: var(--brand-rounded);
+  font-size: 1.1rem;
+  opacity: 0.95;
+  transform: rotate(1deg);
+}
+
+.diaryList > a:nth-child(odd) > li > div {
+  transform: rotate(-1deg);
+}
+
+.diaryTitleWrap > p {
+  width: 100%;
+  height: 100%;
+  border: 3px dotted var(--brand-point-color);
+  border-radius: var(--brand-rounded);
+  padding: 0.5rem;
+}
+
+.diaryCard > div > div {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.diaryCard > div > div:nth-child(3) {
+  text-align: center;           
+}
+
+.updateButton {
+  width: 100px;
+  height: 50px;
+  padding: 0 0.5rem;
+  text-align: center;
+  color: var(--brand-border-color);
+  border: 3px solid var(--brand-border-color);
+  border-radius: 20px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  box-shadow: var(--shadow-small);
+  background-color: var(--brand-text-color-light);
+}
+
+@media (min-width: 640px) {
+  .diaryList {
+    grid-template-columns: repeat(2, 300px);
+  }
+
+  .orderBox {
+    width: 616px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .diaryList {
+    grid-template-columns: repeat(3, 300px);
+  }
+
+  .orderBox {
+    width: 932px;
+  }
+}
+
