@@ -1,104 +1,148 @@
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './Join.module.css';
 import axios from 'axios';
-import Buttons from '../../component/Buttons/Buttons.jsx';
+import Buttons from '../../component/Buttons/Buttons';
 import Notice from '../../component/Notice.jsx';
 import { useRecoilValue } from 'recoil';
 import { apiUrlState } from '../../recoil/Atom.js';
+import { login } from '../../api/firebase.js';
+import { useUserContext } from '../../context/userContext.jsx';
+
+const INITIAL_FORM = {
+  email: '',
+  pw: '',
+  name: '',
+}
 
 export default function Join({ changeNotice }) {
-    const apiUrl = useRecoilValue(apiUrlState);
-    const buttonName = {
-        cancel: '취소',
-        submit: '가입'
-    }
-    const cancelLink = {
-        path: '/login',
-    }
-    const userId = useRef();
-    const userPw = useRef();
-    const userName = useRef();
-    const userArr = [userId, userPw, userName];
-    const regExp = {
-        userId: [/^[a-z]+[a-z0-9]{4,}$/, 'ID 작성 : 영문, 숫자만 사용 가능(5~15자)'], 
-        userPw: [/^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,}$/,
-                'PW 작성 : 영문과 숫자, 특수문자 최소 한가지 조합(8~15자)'],
-        userName: [/^[가-힣]{1,}$/, '이름 작성 : 한글 사용(1~10자)'],
-    }
+  const [form, setForm] = useState(INITIAL_FORM);
+  const navigate = useNavigate();
+  const { user, setUser } = useUserContext();
 
-    function handleInfoRules(e) {
-        const getinputId = e.target.id;
-        const keys = Object.keys(regExp);
-        const keyIndex = keys.indexOf(getinputId);
-        const isRegExp = regExp[keys[keyIndex]][0].test(e.target.value);
+  const handleInput = (e) => {
+    const { id, value } = e.target;
+    setForm({...form, [id]: value});
+  }
 
-        if (isRegExp) {
-            e.target.setAttribute('regExp', true);
-            changeNotice('', '', 'none', 0);
-        } else {
-            e.target.setAttribute('regExp', false);
-            changeNotice(regExp[keys[keyIndex]][1], 'warning.png', 'flex', 0);
-        }
-    }
+  const handleJoin = () => {
+    login(form, setUser)
+    .then(() => navigate('/'));
+  }
+    // const apiUrl = useRecoilValue(apiUrlState);
+    // const buttonName = {
+    //     cancel: '취소',
+    //     submit: '가입'
+    // }
+    // const cancelLink = {
+    //     path: '/login',
+    // }
+    // const userId = useRef();
+    // const userPw = useRef();
+    // const userName = useRef();
+    // const userArr = [userId, userPw, userName];
+    // const regExp = {
+    //     userId: [/^[a-z]+[a-z0-9]{4,}$/, 'ID 작성 : 영문, 숫자만 사용 가능(5~15자)'], 
+    //     userPw: [/^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,}$/,
+    //             'PW 작성 : 영문과 숫자, 특수문자 최소 한가지 조합(8~15자)'],
+    //     userName: [/^[가-힣]{1,}$/, '이름 작성 : 한글 사용(1~10자)'],
+    // }
 
-    async function handleFormSubmit() {
-        const userInfo = {
-            userId: userId.current.value,
-            userPw: userPw.current.value,
-            userName: userName.current.value,
-        }
-        const condition = userInfo.userId === '' || userInfo.userPw === '' || userInfo.userName === '';
+    // function handleInfoRules(e) {
+    //     const getinputId = e.target.id;
+    //     const keys = Object.keys(regExp);
+    //     const keyIndex = keys.indexOf(getinputId);
+    //     const isRegExp = regExp[keys[keyIndex]][0].test(e.target.value);
 
-        if(condition) {
-            changeNotice('모든 정보를 입력하세요', 'warning.png', 'flex', 0);
-            return;
-        }
+    //     if (isRegExp) {
+    //         e.target.setAttribute('regExp', true);
+    //         changeNotice('', '', 'none', 0);
+    //     } else {
+    //         e.target.setAttribute('regExp', false);
+    //         changeNotice(regExp[keys[keyIndex]][1], 'warning.png', 'flex', 0);
+    //     }
+    // }
 
-        const regExpBooleanArr = userArr.map((item) => {
-            return item.current.attributes.regExp.value;
-        })
+    // async function handleFormSubmit() {
+    //     const userInfo = {
+    //         userId: userId.current.value,
+    //         userPw: userPw.current.value,
+    //         userName: userName.current.value,
+    //     }
+    //     const condition = userInfo.userId === '' || userInfo.userPw === '' || userInfo.userName === '';
 
-        if (regExpBooleanArr.includes("false")) {
-            changeNotice('정보를 규칙에 맞게 입력해주세요', 'warning.png', 'flex', 0);
-            return;
-        }
+    //     if(condition) {
+    //         changeNotice('모든 정보를 입력하세요', 'warning.png', 'flex', 0);
+    //         return;
+    //     }
 
-        try {
-            const res = await axios.post(apiUrl + 'join', userInfo);
-            const data = await res.data;
+    //     const regExpBooleanArr = userArr.map((item) => {
+    //         return item.current.attributes.regExp.value;
+    //     })
 
-            if (data === 'Success') {
-                changeNotice('가입 성공', 'correct.png', 'flex', "/login");
-                return
-            }
-            if (data === 'Fail') {
-                changeNotice('이미 존재하는 ID 입니다', 'warning.png', 'flex', 0);
-            }
-        } catch (err) {
-            console.error(err);
-        }
-    }
+    //     if (regExpBooleanArr.includes("false")) {
+    //         changeNotice('정보를 규칙에 맞게 입력해주세요', 'warning.png', 'flex', 0);
+    //         return;
+    //     }
+
+    //     try {
+    //         const res = await axios.post(apiUrl + 'join', userInfo);
+    //         const data = await res.data;
+
+    //         if (data === 'Success') {
+    //             changeNotice('가입 성공', 'correct.png', 'flex', "/login");
+    //             return
+    //         }
+    //         if (data === 'Fail') {
+    //             changeNotice('이미 존재하는 ID 입니다', 'warning.png', 'flex', 0);
+    //         }
+    //     } catch (err) {
+    //         console.error(err);
+    //     }
+    // }
     return (
-      <section className='column'>
-        <h2>회원가입</h2>
-        <Notice />
-        <form className={styles.form}>
+    //   <section className='column'>
+    //     <h2>회원가입</h2>
+    //     <Notice />
+    //     <form className={styles.form}>
+    //       <div>
+    //         <div>
+    //           <label className={styles.label} htmlFor='userId'>ID</label>
+    //           <input onChange={handleInfoRules} ref={userId} id='userId' type='text' maxLength='15'/>
+    //         </div>
+    //         <div>                       
+    //           <label className={styles.label} htmlFor='userPw'>PW</label>
+    //           <input onChange={handleInfoRules} ref={userPw} id='userPw' type='password' autoComplete="off" maxLength='15'/>
+    //         </div>
+    //         <div>
+    //           <label className={styles.label} htmlFor='userName'>이름</label>
+    //           <input onChange={handleInfoRules} ref={userName} id='userName' type='text' maxLength='10'/>
+    //         </div>
+    //       </div>
+    //     </form>
+    //     <Buttons buttonName={buttonName} cancelLink={cancelLink} handleFormSubmit={handleFormSubmit} disabled />
+    //   </section>
+
+    <section className='column'>
+      <h2>회원가입</h2>
+      <Notice />
+      <form className={styles.form}>
+        <div>
           <div>
-            <div>
-              <label className={styles.label} htmlFor='userId'>ID</label>
-              <input onChange={handleInfoRules} ref={userId} id='userId' type='text' maxLength='15'/>
-            </div>
-            <div>                       
-              <label className={styles.label} htmlFor='userPw'>PW</label>
-              <input onChange={handleInfoRules} ref={userPw} id='userPw' type='password' autoComplete="off" maxLength='15'/>
-            </div>
-            <div>
-              <label className={styles.label} htmlFor='userName'>이름</label>
-              <input onChange={handleInfoRules} ref={userName} id='userName' type='text' maxLength='10'/>
-            </div>
+            <label className={styles.label} htmlFor='email'>이메일</label>
+            <input id='email' type='text' onChange={handleInput} />
           </div>
-        </form>
-        <Buttons buttonName={buttonName} cancelLink={cancelLink} handleFormSubmit={handleFormSubmit} disabled />
-      </section>
+          <div>                       
+            <label className={styles.label} htmlFor='pw'>비밀번호</label>
+            <input id='pw' type='password' autoComplete="off" maxLength='15' onChange={handleInput} />
+          </div>
+          <div>
+            <label className={styles.label} htmlFor='name'>이름</label>
+            <input id='name' type='text' maxLength='10' onChange={handleInput} />
+          </div>
+        </div>
+      </form>
+      <Buttons buttonName={{submit: '가입', cancel: '취소'}} cancelLink='/login' handleJoin={handleJoin} />
+    </section>
     )
 }

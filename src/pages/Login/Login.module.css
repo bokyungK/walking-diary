@@ -37,8 +37,13 @@
 }
 
 .login:hover {
-  transform: translate(3px, 3px);
+  transform: var(--translate-3d);
   box-shadow: none;
+}
+
+.login.isLoading {
+  color: #BCBCBC;
+  border-color: #BCBCBC;
 }
 
 .joinWrap {
