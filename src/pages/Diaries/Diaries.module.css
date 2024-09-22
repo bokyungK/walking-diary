@@ -242,6 +242,10 @@ const CardInfo = css`
   background-color: var(--brand-text-color-light);
 }
 
+.noDiary {
+  text-align: center;
+}
+
 @media (min-width: 640px) {
   .diaryList {
     grid-template-columns: repeat(2, 300px);

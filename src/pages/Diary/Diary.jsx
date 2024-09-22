@@ -6,7 +6,7 @@ import { deleteDiary, saveDiary } from "../../api/firebase.js";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { IoClose } from "react-icons/io5";
 import Button from "../../component/Button/Button.jsx";
-import { saveImage } from "../../api/cloudinary.js";
+import { deleteImage, saveImage } from "../../api/cloudinary.js";
 
 const INITIAL_FILE = { status: false, value: '', file: '' }
 
@@ -75,10 +75,13 @@ export default function Diary() {
     setIsLoading(true);
 
     saveImage(file.file)
-    .then((imageUrl) => saveDiary(user.uid, {...diary, imageUrl}, id))
+    .then((imageUrl) => {
+      const newDiary = {...diary, imageUrl};
+      saveDiary(user.uid, newDiary, id);
+    })
     .finally(() => {
-      setIsLoading(false)
-      navigate('/diaries');
+      setIsLoading(false);
+      navigate('/diary');
     })
   };
 
@@ -94,8 +97,13 @@ export default function Diary() {
       saveDiary(user.uid, newDiary, id);
     } else if (type === 'delete') {
       // 삭제 후 mutation 필요, 뒤로가기 금지
-      deleteDiary(user.uid, id)
-      .then(() => navigate('/diary'))
+      deleteImage(diary.imageUrl)
+      .then((result) => {
+        if (result) {
+          deleteDiary(user.uid, id)
+          .then(() => navigate('/diary'))
+        }
+      })
     }
   }
 
@@ -141,7 +149,7 @@ export default function Diary() {
                     file.status && <img className={styles.filePreview} src={URL.createObjectURL(file.file)} alt='' />
                   }
                   {
-                    diary.imageUrl && <img className={styles.userFile} src={diary.imageUrl} alt={state.title} />
+                    diary.imageUrl && <img className={styles.userFile} src={diary.imageUrl} alt={diary.title} />
                   }
                   <button className={styles.fileCloseWrap} type='button' onClick={handleClose}>
                     <IoClose className={styles.fileClose} />

@@ -1,47 +1,31 @@
 .section {
-  position: relative;
-  /* @media only screen and (hover: hover) and (pointer: coarse) and (max-width: 450px) {
-      height: 100%;
-      margin-top: 80px;
-  }
-  @media only screen and (hover: none) and (pointer: coarse) and (max-width: 450px) {
-      height: 100%;
-      margin-top: 80px;
-  } */
+  margin-top: 80px;
+  padding-bottom: 1.5rem;
 }
   
 .form {
   text-align: center;
 }
-  
-.form > div:not(:last-child) {
+
+.inputWrap {
   width: max-content;
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  padding-left: 0.5rem;
   margin-bottom: 1rem;
-  padding-right: 7rem;
-  /* @media only screen and (max-width: 450px) {
-      padding-right: 0;
-      width: min-content;
-  } */
+  gap: 1rem;
 }
 
-.form > div > div:not(:last-child) {
-  margin-bottom: 1rem;
-  position: relative;
-}
-
-.form > div > div > label {
+.label {
+  display: none;
   margin-right: 1rem;
   font-size: 1.3rem;
   font-weight: bold;
-  color: #212121;
+  color: hsl(0, 0%, 13%);
 }
 
-.form > div > div > input,
-.form > div > div > textarea {
+.input {
   padding: 10px;
   white-space: nowrap;
   overflow-y: hidden;
@@ -49,52 +33,45 @@
   resize: none;
 }
 
-.form > div > div > textarea::-webkit-scrollbar {
+.input::placeholder {
+  opacity: 0.6;
+}
+
+textarea.input::-webkit-scrollbar {
   background-color: lightgray;
   border-radius: 10px;
 }
 
-.form > div > div > textarea::-webkit-scrollbar-thumb {
-  /* background-color: var(--brand-border-color); */
+textarea.input::-webkit-scrollbar-thumb {
   background-color: var(--brand-border-color);
   border-radius: 10px;
 }
 
-.button {
-  border: #997000 solid 3px;
-  font-weight: bold;
-  font-size: 0.7rem;
-  background-color: rgba(255, 255, 240, 1);
-  border-radius: 10px;
-  position: absolute;
-  width: 50px;
-  height: 100%;
-  line-height: 100%;
-  right: -60px;
-
-  /* @media only screen and (max-width: 450px) {
-      width: 50px;
-      height: 50px;
-      right: -60px;
-  } */
-}
-
-.additionalTab {
+.withdrawalWrap {
   width: 200px;
+  height: 1rem;
   display: flex;
   justify-content: flex-end;
 }
 
-.additionalTab > button {
+.withdrawalWrap > button {
   color: #BCBCBC;
   text-align: center;
   transition: var(--transition-color);
   font-size: 1rem;
   border-bottom: 1px solid #BCBCBC;
-  /* border: 3px solid #997000;
-  font-weight: bold;
-  border-radius: 10px;
-  width: max-content;
-  padding: 0.3rem;
-  background-color: rgba(255, 255, 240, 1); */
+}
+
+@media (min-width: 450px) {
+  .form > .inputWrap {
+    padding-right: 7.8rem;
+  }
+
+  .label {
+    display: inline;
+  }
+
+  .input::placeholder {
+    opacity: 0;
+  }
 }

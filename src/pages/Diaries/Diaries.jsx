@@ -84,10 +84,10 @@ export default function Diaries() {
               </Link>
             })
           }
-          {
-            !diaries && <span>작성된 일기가 없습니다!</span>
-          }
         </ul>
+        {
+          !diaries && <span>작성된 일기가 없습니다!</span>
+        }
       </section>
     </section>
   )
