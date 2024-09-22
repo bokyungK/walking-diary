@@ -46,7 +46,7 @@ button > svg {
 
 body {
   width: 100%;
-  min-height: 100vh;
+  /* min-height: 100vh; */
   /* background-image: url('../public/background.png'); */
   font-family: 'GmarketSansMedium';
   font-weight: normal;
@@ -80,7 +80,7 @@ input:focus {
   outline: none;
   box-shadow: none;
   transform: var(--translate-3d);
-  background-color: var(--brand-focus-color);
+  background-color: #71c7f2;
 }
 
 h2 {
