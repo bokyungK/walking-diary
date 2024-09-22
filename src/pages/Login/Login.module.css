@@ -1,18 +1,18 @@
 .form  {
   display: flex;
-  height: 150px;
-  margin-bottom: 1.5rem;
+  flex-direction: column;
+  /* height: 150px; */
 }
 
-.form > div {
+.inputWrap {
   display: flex;
   flex-direction: column;
   text-align: end;
-  margin-right: 1.5rem;
+  margin-right: unset;
 }
 
-.form > div > div:first-child {
-  margin-bottom: 1.5rem;
+.inputWrap > div:first-child {
+  margin-bottom: 1rem;
 }
 
 .label {
@@ -20,11 +20,16 @@
   font-size: 1.5rem;
   font-weight: bold;
   color: #212121;
+  display: none;
+}
+
+.input::placeholder {
+  opacity: 0.6;
 }
 
 .login {
-  width: 100px;
-  height: inherit;
+  width: 100%;
+  height: 80px;
   padding: 0 0.5rem;
   text-align: center;
   color: var(--brand-border-color);
@@ -34,6 +39,7 @@
   font-size: 1.3rem;
   font-weight: bold;
   box-shadow: var(--shadow-small);
+  margin: 1rem auto;
 }
 
 .login:hover {
@@ -58,5 +64,34 @@
 }
 
 .join:hover {
-  color: var(--brand-point-color);
+  color: var(--brand-border-color);
+}
+
+@media (min-width: 430px) {
+  .form {
+    flex-direction: row;
+    margin-bottom: 1.5rem;
+  }
+
+  .inputWrap {
+    margin-right: 1.5rem;
+  }
+
+  .label {
+    display: inline;
+  }
+
+  .inputWrap > div:first-child {
+    margin-bottom: 1.5rem;
+  }
+
+  .input::placeholder {
+    opacity: 0;
+  }
+
+  .login {
+    width: 100px;
+    height: inherit;
+    margin: unset;
+  }
 }

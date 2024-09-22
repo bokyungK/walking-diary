@@ -2,23 +2,41 @@
   text-align: center;
 }
 
-.form > div {
+.inputWrap {
   width: max-content;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   margin-bottom: 1rem;
-  padding-right: 3rem;
 }
 
-.form > div > div {
+.inputWrap > div {
   margin-bottom: 1rem;
 }
 
+.input::placeholder {
+  opacity: 0.6;
+}
+
 .label {
+  display: none;
   margin-right: 1rem;
   font-size: 1.3rem;
   font-weight: bold;
   color: #212121;
+}
+
+@media (min-width: 430px) {
+  .form > .inputWrap {
+    padding-right: 5.8rem;
+  }
+
+  .label {
+    display: inline;
+  }
+
+  .input::placeholder {
+    opacity: 0;
+  }
 }
