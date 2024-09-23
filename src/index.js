@@ -12,6 +12,8 @@ import Mypage from './pages/MyPage/MyPage';
 import reportWebVitals from './reportWebVitals';
 import { RecoilRoot } from 'recoil';
 import Diary from './pages/Diary/Diary';
+import ProtectedRoute from './component/ProtectedRoute';
+import Loading from './component/Loading/Loading';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter([
@@ -24,22 +26,6 @@ const router = createBrowserRouter([
         element: <Banner />,
       },
       {
-        path: "/diary",
-        element: <Diaries />,
-      },
-      {
-        path: "/diary/:id",
-        element: <Diary />,
-      },
-      {
-        path: "/diary/update",
-        element: <Diary />,
-      },
-      {
-        path: "/diary/new",
-        element: <Diary />,
-      },
-      {
         path: "/join",
         element: <Join />
       },
@@ -49,7 +35,33 @@ const router = createBrowserRouter([
       },
       {
         path: "/mypage",
-        element: <Mypage />,
+        element: <ProtectedRoute>
+          <Mypage />
+        </ProtectedRoute>,
+      },
+      {
+        path: "/diary",
+        element: <ProtectedRoute>
+          <Diaries />
+        </ProtectedRoute>,
+      },
+      {
+        path: "/diary/:id",
+        element: <ProtectedRoute>
+          <Diary />
+        </ProtectedRoute>,
+      },
+      {
+        path: "/diary/update",
+        element: <ProtectedRoute>
+          <Diary />
+        </ProtectedRoute>,
+      },
+      {
+        path: "/diary/new",
+        element: <ProtectedRoute>
+          <Diary />
+        </ProtectedRoute>,
       },
     ]
   },
