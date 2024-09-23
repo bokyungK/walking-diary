@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import Notice from '../../component/Notice.jsx';
 import { useUserContext } from "../../context/userContext.jsx";
 import styles from './Diary.module.css';
 import { deleteDiary, saveDiary } from "../../api/firebase.js";

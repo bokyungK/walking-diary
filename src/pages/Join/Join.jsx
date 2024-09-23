@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Join.module.css';
 import Button from '../../component/Button/Button';
-import Notice from '../../component/Notice.jsx';
 import { join, saveUser } from '../../api/firebase.js';
 import { useUserContext } from '../../context/userContext.jsx';
 
@@ -39,7 +38,6 @@ export default function Join() {
   return (
     <section className='column'>
       <h2>회원가입</h2>
-      <Notice />
       <form className={styles.form} onSubmit={handleJoin}>
         <div className={styles.inputWrap}>
           <div>

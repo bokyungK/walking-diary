@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../context/userContext';
 import Alert from "../../component/Alert/Alert";
 import styles from './Login.module.css';
-import Notice from '../../component/Notice.jsx';
 import { login } from '../../api/firebase.js';
 
 const INITIAL_FORM = {
@@ -45,7 +44,6 @@ export default function Login() {
   
   return (
     <section className='column'>
-      <Notice />
       <form className={styles.form} onSubmit={handleLogin}>
         <div className={styles.inputWrap}>
           <div>
