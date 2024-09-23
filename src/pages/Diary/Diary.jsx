@@ -136,7 +136,6 @@ export default function Diary() {
         }
       </div>
 
-      {/* <Notice /> */}
       <form className={styles.diaryInfo} onSubmit={handleSave}>
         <div className={styles.fileWrap}>
           { (pathname.includes('new') || pathname.includes('update')) && <>

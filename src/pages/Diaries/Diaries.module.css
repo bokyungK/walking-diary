@@ -1,114 +1,17 @@
-.diary {
-  padding: 100px 20px;
-  /* min-height: auto; */
-}
-
-.bookmark,
-.diaryBox {
+.section {
+  margin-top: 80px;
+  padding: 50px;
   align-items: flex-start;
-  margin-bottom: 1rem;
   min-height: auto;
 }
 
-.bookmark > span,
-.diaryBox > span {
+.section > span {
   margin: 0 auto;
 }
 
-.bookmark > h2,
-.diaryBox > h2 {
+.section > h2 {
   margin-bottom: 1rem;
 }
-
-.bookmarkList {
-  list-style: none;
-}
-
-.bookmarkList > li {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  flex-basis: 300px;
-  min-width: 300px;
-  height: 300px;
-  background-color: var(--brand-color);
-  border-radius: 30px;
-  margin-bottom: 1rem;
-  margin-right: 1rem;
-  overflow: hidden;
-  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
-}
-
-.bookmark > li:hover {
-  cursor: pointer;
-  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.4);
-}
-
-.bookmark > li:not(:nth-child(3n)) {
-    margin-right: 1rem;
-}
-
-.bookmark > li > img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.bookmark > li > div {
-  width: 207px;
-  height: 80px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background-color: var(--brand-text-color-light);
-  border: solid 3px var(--brand-border-color);
-  border-radius: 10px;
-  margin-bottom: 1rem;
-  overflow: hidden;
-  padding: 0 1rem;
-  font-size: 0.9rem;
-  z-index: 1;
-}
-
-.bookmark > li > div > div {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.bookmark > li > div > div > div:nth-child(3) {
-  text-align: center;
-}
-
-/*
-
-const CardInfo = css`
-    width: 207px;
-    height: 80px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background-color: #fff;
-    border: #997000 solid 3px;
-    border-radius: 10px;
-    margin-bottom: 1rem;
-    overflow: hidden;
-    padding: 0 1rem;
-    font-size: 0.9rem;
-    z-index: 1;
-`
-
-.diary {
-    margin-bottom: 3rem;
-}styled.section`
-    ${MydiarySection}
-    margin-bottom: 3rem;
-`
-` */
 
 .orderBox {
   width: 300px; 
@@ -161,17 +64,9 @@ const CardInfo = css`
   align-items: flex-end;
   width: 100%;
   height: 300px;
-  /* background-color: var(--brand-text-color-light); */
-  /* border: 3px solid var(--brand-border-color); */
   border-radius: var(--brand-rounded-medium);
-  /* background: var(--brand-color); */
   overflow: hidden;
   box-shadow: var(--shadow-small);
-  /* color: var(--brand-text-color-light); */
-
-  /* @media only screen and (max-width: 930px) {
-    margin-right: 1rem;
-  } */
 }
 
 .diaryCard:hover {

@@ -1,7 +1,3 @@
-.section {
-  flex-direction: column;
-}
-
 .table {
   color: white;
   background-color: var(--brand-color);
@@ -88,7 +84,7 @@
 }
 
 .footprint {
-  color: var(--brand-title-color);
+  color: var(--brand-point-color);
 }
 
 .use {

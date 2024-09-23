@@ -2,17 +2,12 @@ import React, { useState, useEffect } from 'react';
 import styles from './Banner.module.css';
 import { Link } from 'react-router-dom';
 import { useUserContext } from '../../context/userContext';
-// import { useRecoilValue } from 'recoil';
-// import { apiUrlState } from '../recoil/Atom';
+import Loading from '../../component/Loading/Loading';
 
-function Banner({ checkCookie }) {
+function Banner() {
   const { user } =  useUserContext();
-  
-  // const apiUrl = useRecoilValue(apiUrlState);
-  // const loginState = store.get('loginState');
   const [calendar, setCalendar] = useState([]);
-  const [writedDate, setWritedDate] = useState('');
-
+  const [writedDate] = useState('');
   const days = ['일', '월', '화', '수', '목', '금', '토'];
   const today = new Date();
   const currentYear = today.getFullYear();
@@ -93,10 +88,9 @@ function Banner({ checkCookie }) {
       }
       setCalendar(dateArr);
   }, [currentMonth, currentYear])
-  const test = false;
 
   return (
-      <section className={styles.section}>
+      <section className={`${styles.section} column`}>
         {
           user &&
               <div>
@@ -139,7 +133,7 @@ function Banner({ checkCookie }) {
               </div>
         }
         {
-          !user &&
+          user === null   &&
           <>
             <p className={styles.intro}>
               매일 매일<br />
@@ -148,6 +142,9 @@ function Banner({ checkCookie }) {
             </p>
             <Link to='/login' className={styles.use}>이용하러가기</Link>
           </>
+        }
+        {
+          user === undefined && <Loading isInSection />  
         }
       </section>
     )

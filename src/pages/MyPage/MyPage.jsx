@@ -15,11 +15,11 @@ const INITIAL_MYPAGE = {
 
 export default function Mypage() {
     const { user, setUser } = useUserContext();
-    const [ mypage, setMypage ] = useState(INITIAL_MYPAGE);
+    const [mypage, setMypage] = useState(INITIAL_MYPAGE);
     const [isError, setIsError] = useState('');
     const [isAlert, setIsAlert] = useState('');
     const navigate = useNavigate();
-    const { data: dogName } = useQuery({
+    const { data: dogName, isSuccess } = useQuery({
       queryKey: ['dogName', user && user.uid],
       queryFn: () => getDogName(user.uid),
       enabled: Boolean(user && user.uid),
@@ -28,10 +28,12 @@ export default function Mypage() {
     })
 
     useEffect(() => {
-      setMypage((prev) => {
-        return {...prev, dogName: dogName}
-      })
-    }, [dogName])
+      if (isSuccess) {
+        setMypage((prev) => {
+          return {...prev, dogName: dogName}
+        })
+      }
+    }, [dogName, isSuccess])
 
     const handleInput = (e) => {
       const { name, value} = e.target;
@@ -126,7 +128,7 @@ export default function Mypage() {
             <div>
               <label className={styles.label} htmlFor='dogName'>반려견</label>
               <input className={styles.input} type='text' name='dogName' onChange={handleInput}
-               value={mypage.dogName} />
+                value={mypage.dogName} />
             </div>
             <div className={styles.withdrawalWrap}>
               <button id='withdrawal'>회원탈퇴</button>

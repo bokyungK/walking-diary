@@ -74,6 +74,7 @@ textarea {
   box-shadow: var(--shadow-small);
   background: var(--brand-color);
   font-family: var(--brand-font);
+  padding: 12px 10px
 }
 
 input:focus {
@@ -97,7 +98,7 @@ a:hover {
 section {
   padding-top: 80px;
   width: 100%;
-  min-height: calc(100vh - 80px);
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
