@@ -1,0 +1,107 @@
+.section {
+  margin-top: 80px;
+  padding: unset;
+}
+
+.section.inSection {
+  margin-top: unset;
+}
+
+.imageWrap {
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.imageWrap > img {
+  width: 30px;
+  height: 30px;
+  opacity: 0;
+}
+
+.imageWrap > img:nth-child(1)  {
+  animation: fadeout1;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+
+.imageWrap > img:nth-child(2)  {
+  animation: fadeout2;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+} 
+
+.imageWrap > img:nth-child(3)  {
+  animation: fadeout3;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes fadeout1 {
+  0% {
+    opacity: 0;
+  }
+
+  25% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  75% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeout2 {
+  0% {
+    opacity: 0;
+  }
+
+  25% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  75% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeout3 {
+  0% {
+    opacity: 0;
+  }
+
+  25% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  75% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
