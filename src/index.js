@@ -5,7 +5,6 @@ import './index.css';
 import App from './App';
 import Banner from './pages/Banner/Banner';
 import Diaries from './pages/Diaries/Diaries';
-// import DetailedDiary from './pages/DetailDiary/DetailDiary';
 import Join from './pages/Join/Join';
 import Login from './pages/Login/Login';
 import Mypage from './pages/MyPage/MyPage';
@@ -13,7 +12,6 @@ import reportWebVitals from './reportWebVitals';
 import { RecoilRoot } from 'recoil';
 import Diary from './pages/Diary/Diary';
 import ProtectedRoute from './component/ProtectedRoute';
-import Loading from './component/Loading/Loading';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter([
