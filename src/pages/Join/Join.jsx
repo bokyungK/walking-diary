@@ -4,6 +4,7 @@ import styles from './Join.module.css';
 import Button from '../../component/Button/Button';
 import { join, saveUser } from '../../api/firebase.js';
 import { useUserContext } from '../../context/userContext.jsx';
+import { useSubmitContext } from '../../context/submitContext'
 
 const INITIAL_FORM = {
   email: '',
@@ -14,6 +15,7 @@ const INITIAL_FORM = {
 export default function Join() {
   const [form, setForm] = useState(INITIAL_FORM);
   const { setUser } = useUserContext();
+  const { isSubmitting, handleSubmitTrue, handleSubmitFalse } = useSubmitContext();
   const navigate = useNavigate();
 
   const handleInput = (e) => {
@@ -23,11 +25,15 @@ export default function Join() {
 
   const handleJoin = (e) => {
     e.preventDefault();
+    handleSubmitTrue();
     
     join(form, setUser)
     .then((uid) => {
       saveUser(uid, form.dogName)
-      .then(() => navigate('/'))
+      .then(() => {
+        handleSubmitFalse();
+        navigate('/');
+      })
     });
   }
 
@@ -59,7 +65,7 @@ export default function Join() {
         </div>
         <div className='buttonWrap'>
           <Button destination='/login' name='취소' />
-          <Button isButton name='가입' />
+          <Button isButton name='가입' isSubmitting={isSubmitting} />
         </div>
       </form>
     </section>

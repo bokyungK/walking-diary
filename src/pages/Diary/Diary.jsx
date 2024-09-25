@@ -1,53 +1,49 @@
 import React, { useEffect, useState } from "react";
-import { useUserContext } from "../../context/userContext.jsx";
-import styles from './Diary.module.css';
-import { deleteDiary, saveDiary } from "../../api/firebase.js";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { IoClose } from "react-icons/io5";
-import Button from "../../component/Button/Button.jsx";
+import { deleteDiary, saveDiary } from "../../api/firebase.js";
 import { deleteImage, saveImage } from "../../api/cloudinary.js";
+import { useUserContext } from "../../context/userContext.jsx";
+import { useSubmitContext } from "../../context/submitContext.jsx";
+import { IoClose } from "react-icons/io5";
+import styles from './Diary.module.css';
+import Button from "../../component/Button/Button.jsx";
+
+const today = new Date();
+const timestamp = Math.floor(new Date().getTime() / 1000);
+const fullYear = today.getFullYear();
+const month = today.getMonth() + 1;
+const date = today.getDate();
+const fixedMonth = (month < 10 ? '0' : '') + month;
+const fixedDate = (date < 10 ? '0' : '') + date;
 
 const INITIAL_FILE = { status: false, value: '', file: '' }
+const INITIAL_DIARY = {
+  title: '',
+  content: '',
+  weather: 'sunny',
+  dog: '',
+  imageUrl: '',
+  time: `${fullYear}-${fixedMonth}-${fixedDate}`,
+  mark: false,
+  timestamp,
+}
 
 export default function Diary() {
-  const { id } = useParams();
   const navigate = useNavigate();
+  const { id } = useParams();
   const { state, pathname } = useLocation();
   const { user } = useUserContext();
+  const { isSubmitting, handleSubmitTrue, handleSubmitFalse } = useSubmitContext();
   const [file, setFile] = useState(INITIAL_FILE);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const today = new Date();
-  const fullYear = today.getFullYear();
-  const month = today.getMonth() + 1;
-  const date = today.getDate();
-  const fixedMonth = (month < 10 ? '0' : '') + month;
-  const fixedDate = (date < 10 ? '0' : '') + date;
-  const [diary, setDiary] = useState({
-    title: '',
-    content: '',
-    weather: 'sunny',
-    dog: '인삼',
-    imageUrl: '',
-    time: `${fullYear}-${fixedMonth}-${fixedDate}`,
-    mark: false,
-  });
+  const [diary, setDiary] = useState(INITIAL_DIARY);
   
   useEffect(() => {
     if (pathname.includes('new')) {
-      setDiary({
-        title: '',
-        content: '',
-        weather: 'sunny',
-        dog: '인삼',
-        imageUrl: '',
-        time: `${fullYear}-${fixedMonth}-${fixedDate}`,
-        mark: false,
-      })
+      setDiary(INITIAL_DIARY);
     } else {
       setDiary(state);
     }
-  }, [pathname, fullYear, fixedMonth, fixedDate, state])
+  }, [pathname, state])
 
   const handleFile = (e) => {
     const { value, files } = e.target;
@@ -71,7 +67,7 @@ export default function Diary() {
 
   const handleSave = (e) => {
     e.preventDefault();
-    setIsLoading(true);
+    handleSubmitTrue();
 
     saveImage(file.file)
     .then((imageUrl) => {
@@ -79,7 +75,7 @@ export default function Diary() {
       saveDiary(user.uid, newDiary, id);
     })
     .finally(() => {
-      setIsLoading(false);
+      handleSubmitFalse();
       navigate('/diary');
     })
   };
@@ -87,14 +83,25 @@ export default function Diary() {
   const handleControl = (e) => {
     const { id: type } = e.currentTarget;
 
-    if (type === 'update') navigate('/diary/update/', { state });
-    else if (type === 'cancel') navigate(`/diary`, { state });
-    else if (type === 'mark') {
+    if (type === 'update') {
+      navigate('/diary/update/', { state });
+      return;
+    }
+    
+    if (type === 'cancel') {
+      navigate(`/diary`, { state });
+      return;
+    }
+    
+    if (type === 'mark') {
       // 업데이트 후 mutation 필요, 뒤로가기 금지
       const newDiary = {...diary, mark: !diary.mark};
       setDiary(newDiary)
       saveDiary(user.uid, newDiary, id);
-    } else if (type === 'delete') {
+      return;
+    }
+    
+    if (type === 'delete') {
       // 삭제 후 mutation 필요, 뒤로가기 금지
       deleteImage(diary.imageUrl)
       .then((result) => {
@@ -103,6 +110,7 @@ export default function Diary() {
           .then(() => navigate('/diary'))
         }
       })
+      return;
     }
   }
 
@@ -209,7 +217,7 @@ export default function Diary() {
             (pathname.includes('new') || pathname.includes('update')) &&
             <div className='buttonWrap'>
               <Button name='취소' destination='/diary' />
-              <Button name='저장' isButton isLoading={isLoading} />
+              <Button name='저장' isButton isSubmitting={isSubmitting} />
             </div>
           }
         </div>

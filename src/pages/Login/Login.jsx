@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../context/userContext';
+import { useSubmitContext } from '../../context/submitContext.jsx';
 import Alert from "../../component/Alert/Alert";
 import styles from './Login.module.css';
 import { login } from '../../api/firebase.js';
@@ -14,7 +15,7 @@ export default function Login() {
   const { setUser } = useUserContext();
   const [form, setForm] = useState(INITIAL_FORM);
   const [alert, setAlert] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const {isSubmitting, handleSubmitTrue, handleSubmitFalse} = useSubmitContext();
   const navigate = useNavigate();
 
   const handleInput = (e) => {
@@ -24,18 +25,17 @@ export default function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    setIsLoading(true);
+    handleSubmitTrue();
 
     login(form, setUser)
     .then((isSuccess) => {
       if (isSuccess) {
-        return navigate('/');
+        navigate('/');
       } else {
         setAlert('이메일 또는 비밀번호가 달라요!')
       }
+      handleSubmitFalse();
     })
-
-    setIsLoading(false);
   }
 
   const handleAlert = () => {
@@ -57,7 +57,7 @@ export default function Login() {
              onChange={handleInput} value={form.pw} placeholder='비밀번호' required />
           </div>
         </div>
-        <button className={styles.login} disabled={isLoading}>LOGIN</button>
+        <button className={styles.login} disabled={isSubmitting}>LOGIN{isSubmitting ? '...' : ''}</button>
       </form>
       <div className={styles.joinWrap}>
         <Link className={styles.join} to="/join">회원가입 하러가기</Link>

@@ -2,11 +2,12 @@ import React from 'react';
 import styles from './Button.module.css';
 import { Link } from 'react-router-dom';
 
-export default function Button({ name, isButton, isLoading, destination, state }) {
+export default function Button({ name, isButton, destination, state, isSubmitting }) {
   if (isButton) {
-    return <button className={styles.button}>{name}</button>
+    const addedText = isSubmitting ? '중' : '';
+    const text = name + addedText;
+    return <button className={styles.button}>{text}</button>
   } else {
-    const text = name + (isLoading ? '중' : '');
-    return <Link className={styles.button} to={destination} state={state} disabled={isLoading}>{text}</Link>;
+    return <Link className={styles.button} to={destination} state={state} disabled={isSubmitting}>{name}</Link>;
   }
 }
