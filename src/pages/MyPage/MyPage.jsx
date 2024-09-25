@@ -17,6 +17,7 @@ export default function Mypage() {
     const { user, setUser } = useUserContext();
     const [mypage, setMypage] = useState(INITIAL_MYPAGE);
     const [isError, setIsError] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState();
     const [isAlert, setIsAlert] = useState('');
     const navigate = useNavigate();
     const { data: dogName, isSuccess } = useQuery({

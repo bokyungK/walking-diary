@@ -12,6 +12,11 @@
   gap: 1rem;
 }
 
+.inputWrap > div {
+  display: flex;
+  align-items: center;
+}
+
 .label {
   display: none;
   margin-right: 1rem;
