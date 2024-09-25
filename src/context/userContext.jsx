@@ -10,7 +10,11 @@ export function UserContextProvider({children}) {
     observeUser(setUser);
   }, []);
 
-  return <UserContext.Provider value={{user, setUser}}>{children}</UserContext.Provider>
+  const handleUser = (value) => {
+    setUser(value);
+  }
+
+  return <UserContext.Provider value={{user, setUser, handleUser}}>{children}</UserContext.Provider>
 }
 
 export function useUserContext() {
