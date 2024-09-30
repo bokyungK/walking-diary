@@ -16,16 +16,21 @@ const INITIAL_MENU = [
 ]
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState('');
   const { user, setUser } = useUserContext();
   const navigate = useNavigate();
 
-  const handleMenuOpen = () => setIsOpen(true);
-  const handleMenuClose = () => setIsOpen(false);
+  const handleMenuOpen = () => setIsOpen('open');
+  const handleMenuClose = () => {
+    setIsOpen('closing');
+    setTimeout(() => {
+      setIsOpen('');
+    }, 200)
+  }
   const handleLogout = () => {
     logout(setUser)
     .then(() => {
-      setIsOpen(false);
+      setIsOpen('');
       navigate('/');
     });
   };
@@ -36,28 +41,25 @@ export default function Header() {
       <button>
         <CiMenuBurger className={styles.menuIcon} onClick={handleMenuOpen} />
       </button>
-      {
-        isOpen && 
-        <div className={styles.menu}>
-          <div className={styles.menuTop}>
-            { user && <button className={styles.login} onClick={handleLogout}>로그아웃</button> }
-            { !user && <Link className={styles.login} onClick={handleMenuClose} to={`/login`}>로그인</Link> }
-            <button className={styles.cancel} onClick={handleMenuClose}>
-              <TfiClose />
-            </button>
-          </div>
-          <ul className={styles.menuBottom}>
-            {
-              INITIAL_MENU.map((item) => {
-                const { name, destination } = item;
-                return <li key={name}>
-                  <Link onClick={handleMenuClose} to={`/${destination}`}>{name}</Link>
-                </li>
-              })
-            }
-          </ul>
+      <div className={`${styles.menu} ${isOpen ? styles[isOpen] : ''}`}>
+        <div className={styles.menuTop}>
+          { user && <button className={styles.login} onClick={handleLogout}>로그아웃</button> }
+          { !user && <Link className={styles.login} onClick={handleMenuClose} to={`/login`}>로그인</Link> }
+          <button className={styles.cancel} onClick={handleMenuClose}>
+            <TfiClose />
+          </button>
         </div>
-      }
+        <ul className={styles.menuBottom}>
+          {
+            INITIAL_MENU.map((item) => {
+              const { name, destination } = item;
+              return <li key={name}>
+                <Link onClick={handleMenuClose} to={`/${destination}`}>{name}</Link>
+              </li>
+            })
+          }
+        </ul>
+      </div>
     </header>
   )
 }

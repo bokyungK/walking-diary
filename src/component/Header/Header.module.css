@@ -39,9 +39,21 @@ header {
   right: 0;
   width: 100%;
   height: 100%;
-  background-color: var(--brand-text-color-light);
+  /* background-color: var(--brand-text-color-light); */
+  background-color: var(--brand-beige-color);
   z-index: 10;
-  overflow-y: scroll;
+  display: none;
+}
+
+.menu.open {
+  animation: fadeIn 0.2s;
+  display: block;
+}
+
+.menu.closing {
+  animation: fadeOut 0.2s;
+  display: block;
+  opacity: 0;
 }
 
 .menuTop {
@@ -123,4 +135,36 @@ header {
   transition: var(--transition-color);
   transform: translate(3px, 3px);
   box-shadow: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@media (min-width: 640px) {
+  .menu {
+    width: 300px;
+    border-radius: var(--brand-rounded-large) 0 0 var(--brand-rounded-large);
+  }
+  /* .diaryList {
+    grid-template-columns: repeat(2, 300px);
+  }
+
+  .orderBox {
+    width: 616px;
+  } */
 }

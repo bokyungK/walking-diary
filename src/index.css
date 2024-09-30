@@ -95,6 +95,10 @@ a:hover {
   color: var(--brand-border-color);
 }
 
+#root > section {
+  animation: fadeIn 0.5s;
+}
+
 section {
   padding-top: 80px;
   width: 100%;
@@ -117,81 +121,11 @@ section.column {
   margin-right: 1.5rem;
 }
 
-/*
-
-main {
-  width: 100%;
-  height: 100%;
-  padding-top: 80px;
-}
-
-input {
-  outline: none;
-  font-family: inherit;
-  border-radius: 10px;
-  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
-}
-
-input:focus {
-  border: 3px solid #F0CA61;
-  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.5);
-}
-
-select {
-  font-family: inherit;
-  text-align: center;
-  border-radius: 10px;
-  color: #333;
-  outline: none;
-  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
-}
-
-select:focus {
-  border: 3px solid #F0CA61;
-  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.5);
-}
-
-option {
-  background-color: #F0CA61;
-}
-
-textarea {
-  font-family: inherit;
-  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
-
-}
-
-textarea:focus {
-  border: 3px solid #F0CA61;
-  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.5);
-}
-
-.notice {
-  line-height: 30px;
-  margin-bottom: 0.5rem;
-}
-
-.notice > div {
-  width: max-content;
-  margin: 0 auto;
-  display: flex;
-}
-
-.notice img {
-  width: 30px;
-  height: 30px;
-  margin-right: 0.5rem;
-}
-
-@font-face {
-  font-family: 'GmarketSansMedium';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@media only screen and (hover: none) and (pointer: coarse) {
-  body {
-    overflow-x: hidden;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
-} */
+  to {
+    opacity: 1;
+  }
+}
