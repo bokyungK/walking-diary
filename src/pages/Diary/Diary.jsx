@@ -195,12 +195,12 @@ export default function Diary() {
                 ['sunny', 'cloudy', 'rainy', 'snowy'].map((type) => {
                   const checked = diary.weather === type;
 
-                  return <>
+                  return <div key={type}>
                     <input type='radio' name='weather' id={type} value={type} checked={checked} />
                     <label htmlFor={type}>
                       <img src={`/${type}.svg`} alt={type} />
                     </label>
-                  </>
+                  </div>
                 })
               }
             </fieldset>
