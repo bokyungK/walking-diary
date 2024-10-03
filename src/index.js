@@ -69,11 +69,11 @@ const router = createBrowserRouter([
 ]);
 
 root.render(
-  // <React.StrictMode>
+  <React.StrictMode>
     <RecoilRoot>
       <RouterProvider router={router} />
     </RecoilRoot>
-  // </React.StrictMode>
+  </React.StrictMode>
 );
 
 reportWebVitals();
