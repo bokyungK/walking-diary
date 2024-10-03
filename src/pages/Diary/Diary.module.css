@@ -324,7 +324,7 @@
     transform: translateY(1px);
   }
 
-  .userFile {
+  /* .userFile {
     object-fit: contain;
-  }
+  } */
 }

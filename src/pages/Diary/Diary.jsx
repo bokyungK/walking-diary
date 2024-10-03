@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { deleteDiary, saveDiary } from "../../api/firebase.js";
+import { useQuery } from '@tanstack/react-query';
+import { deleteDiary, getDogName, saveDiary } from "../../api/firebase.js";
 import { deleteImage, saveImage } from "../../api/cloudinary.js";
 import { useUserContext } from "../../context/userContext.jsx";
 import { useSubmitContext } from "../../context/submitContext.jsx";
@@ -21,7 +22,7 @@ const INITIAL_DIARY = {
   title: '',
   content: '',
   weather: 'sunny',
-  dog: '',
+  dogName: '',
   imageUrl: '',
   time: `${fullYear}-${fixedMonth}-${fixedDate}`,
   mark: false,
@@ -36,6 +37,13 @@ export default function Diary() {
   const { isSubmitting, handleSubmitTrue, handleSubmitFalse } = useSubmitContext();
   const [file, setFile] = useState(INITIAL_FILE);
   const [diary, setDiary] = useState(INITIAL_DIARY);
+  const { data: dogName } = useQuery({
+    queryKey: ['dogName', user && user.uid],
+    queryFn: () => getDogName(user.uid),
+    enabled: Boolean(user && user.uid),
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 60 * 24,
+  })
   
   useEffect(() => {
     if (pathname.includes('new')) {
@@ -113,6 +121,12 @@ export default function Diary() {
       return;
     }
   }
+
+  useEffect(() => {
+    setDiary((prev) => {
+      return {...prev, dogName}
+    })
+  }, [dogName])
 
   return (
     <section className={`${styles.section} column`}>
@@ -193,10 +207,8 @@ export default function Diary() {
           }
 
           { diary && <select onChange={handleInput} name='dog' className={styles.dogSelect}
-              value={diary.dog} required={!(pathname.includes('new') || pathname.includes('update'))} disabled={!(pathname.includes('new') || pathname.includes('update'))}>
-              {
-                ['인삼', '산삼', '홍삼'].map((text) => <option key={text}>{text}</option>)
-              }
+              value={diary.dogName} required={!(pathname.includes('new') || pathname.includes('update'))} disabled={!(pathname.includes('new') || pathname.includes('update'))}>
+              <option>{diary.dogName}</option>
             </select>
           }
         </div>
