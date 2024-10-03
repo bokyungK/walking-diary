@@ -11,19 +11,31 @@
   align-items: center;
 }
 
+.background:has(.postIt.notString) {
+  width: 250px;
+  height: 250px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -140%);
+}
+
 .postIt {
   width: 250px;
   height: 250px;
   background-color: var(--brand-beige-color);
   display: flex;
   flex-direction: column;
-  /* border: 1px solid var(--brand-gray-color); */
   position: relative;
   background-color: #f6e214;
 }
 
 .postIt.alert {
   background-color: var(--brand-beige-color);
+}
+
+.postIt.notString {
+  height: 200px;
+  background-color: #f1d1d1;
 }
 
 .postIt > div {

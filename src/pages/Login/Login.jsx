@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useUserContext } from '../../context/userContext';
 import { useSubmitContext } from '../../context/submitContext.jsx';
 import Alert from "../../component/Alert/Alert";
@@ -13,6 +13,7 @@ const INITIAL_FORM = {
 
 export default function Login() {
   const { setUser } = useUserContext();
+  const pathname = useLocation();
   const [form, setForm] = useState(INITIAL_FORM);
   const [alert, setAlert] = useState('');
   const {isSubmitting, handleSubmitTrue, handleSubmitFalse} = useSubmitContext();
@@ -44,6 +45,7 @@ export default function Login() {
   
   return (
     <section className='column'>
+      <Alert message={{ title: '테스트용 계정을 사용해보세요!', id: 'test@test.com', pw: '1234qq!!'}}></Alert>
       <form className={styles.form} onSubmit={handleLogin}>
         <div className={styles.inputWrap}>
           <div>
