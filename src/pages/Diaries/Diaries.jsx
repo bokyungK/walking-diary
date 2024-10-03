@@ -30,6 +30,8 @@ export default function Diaries() {
           return [...data].filter((item) => item.mark === true);
         } 
       })
+    } else {
+      setDiaries(null);
     }
   }, [order, data])
 
