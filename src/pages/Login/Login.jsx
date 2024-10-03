@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../context/userContext';
 import { useSubmitContext } from '../../context/submitContext.jsx';
 import Alert from "../../component/Alert/Alert";
@@ -13,7 +13,6 @@ const INITIAL_FORM = {
 
 export default function Login() {
   const { setUser } = useUserContext();
-  const pathname = useLocation();
   const [form, setForm] = useState(INITIAL_FORM);
   const [alert, setAlert] = useState('');
   const {isSubmitting, handleSubmitTrue, handleSubmitFalse} = useSubmitContext();
