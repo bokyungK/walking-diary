@@ -24,11 +24,17 @@
 }
 
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
 body {
-  background-color: #F8F9FA;
+  background-image: url('../public/background.png');
+}
+
+body:has(header.open) {
+  overflow-y: hidden;
 }
 
 #root {
@@ -50,24 +56,6 @@ button {
 
 button > svg {
   transition: var(--color-transition);
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  width: 100%;
-  /* min-height: 100vh; */
-  /* background-image: url('../public/background.png'); */
-  font-family: 'GmarketSansMedium';
-  font-weight: normal;
-}
-
-body:has(header.open) {
-  overflow-y: hidden;
 }
 
 a { 

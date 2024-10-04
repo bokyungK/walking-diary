@@ -2,13 +2,16 @@
   position: fixed;
   background-color: transparent;
   width: 100%;
+  max-width: 480px;
   height: 100%;
   top: 0;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 9;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: var(--brand-bg-color);
 }
 
 .background:has(.postIt.notString) {
