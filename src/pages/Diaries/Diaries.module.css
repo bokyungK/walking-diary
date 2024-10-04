@@ -1,7 +1,7 @@
 .section {
   width: 100%;
   margin-top: 80px;
-  padding: 50px;
+  padding: 50px 0;
   display: flex;
   min-height: calc(100vh - 80px);
 }
@@ -18,13 +18,17 @@
   display: none;
 }
 
+.section:has(div.noFliter) > .diaryWrap {
+  flex: unset;
+}
+
 .diaryWrap {
   flex: 1;
+  width: 75%;
+  margin: 0 auto;
 }
 
 .orderBox {
-  width: 300px; 
-  margin: 0 auto;
   text-align: right;
   margin-bottom: 1rem;
 }
@@ -56,23 +60,27 @@
   width: 100%;
   display: grid;
   gap: 1rem;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 300px));
+  grid-template-columns: repeat(auto-fill, minmax(100px, 500px));
   justify-content: center;
 }
 
 .diaryLink {
   width: 100%;
+  padding-top: 100%;
+  position: relative;
 }
 
 .diaryCard {
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
   list-style: none;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-end;
   width: 100%;
-  height: 300px;
+  height: 100%;
   border-radius: var(--brand-rounded-medium);
   overflow: hidden;
   box-shadow: var(--shadow-small);
@@ -97,15 +105,13 @@
   left: 0;
   bottom: 0;
   display: flex;
-  width: calc(100% - 2rem);
-  height: 20%;
+  width: calc(100% - 3rem);
   align-items: center;
-  margin: 1rem;
+  margin: 1.5rem;
   padding: 0.5rem;
   color: var(--brand-text-color-dark);
   background-color: var(--brand-text-color-light);
   border-radius: var(--brand-rounded);
-  font-size: 1.1rem;
   opacity: 0.95;
   transform: rotate(1deg);
 }
@@ -117,9 +123,14 @@
 .diaryTitleWrap > p {
   width: 100%;
   height: 100%;
+  line-height: 2.3rem;
+  padding: 0 0.5rem;
   border: 3px dotted var(--brand-point-color);
   border-radius: var(--brand-rounded);
-  padding: 0.5rem;
+  font-size: 1.1em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .diaryCard > div > div {
@@ -146,7 +157,8 @@
   background-color: var(--brand-text-color-light);
 }
 
-.noDiary {
+.noDiary,
+.noFliter {
   width: 100%;
   max-width: 500px;
   display: flex;
@@ -154,25 +166,40 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 1.5rem;
+  margin-top: 1rem;
   border: 3px dotted var(--brand-color);
   border-radius: var(--brand-rounded-medium);
   margin-bottom: 1rem;
 }
 
-.noDiary > p {
+.noDiary > p,
+.noFliter > p {
   font-size: 1.3rem;
   margin-bottom: 1.3rem;
 }
 
-.noDiary > a {
+.noDiary > a,
+.noFliter > p {
   color: #BCBCBC;
   text-align: center;
   transition: var(--transition-color);
 }
 
-.noDiary > a:hover {
+.noDiary > a:hover,
+.noFliter > a:hover {
   color: var(--brand-border-color);
+}
+
+@media (max-width: 300px) {
+  .diaryTitleWrap {
+    width: calc(100% - 2rem);
+    margin: 1rem;
+  }
+  
+  .diaryTitleWrap > p {
+    line-height: 2rem;
+    font-size: 0.9rem;
+  }
 }
 
 /* @media (min-width: 640px) {

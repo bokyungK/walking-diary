@@ -44,10 +44,10 @@ export default function Diaries() {
   if (isLoading || diaries === undefined) return <Loading isInSection />
   return (
     <section className={`${styles.section} column`}>
-      <h2>일기 보관함</h2>
-      <div className={styles.diaryWrap}>
-        {
-          diaries && <>
+      {
+        diaries && <>
+          <h2>일기 보관함</h2>
+          <div className={styles.diaryWrap}>
             <div className={styles.orderBox}>
               <select className={styles.orderSelect} onChange={handleOrder} name='sort' value={order}>
                 <option>최신 순서</option>
@@ -58,23 +58,28 @@ export default function Diaries() {
             <ul className={styles.diaryList}>
               {
                 diaries.map((item) => {
-                  const { id, title, dog, imageUrl } = item;
+                  const { id, title, dogName, imageUrl } = item;
                   return <Link className={styles.diaryLink} to={`/diary/${id}`} state={item} key={id}>
                     <li className={styles.diaryCard} key={id}>
                       <img className={styles.diaryImage} src={imageUrl} alt='산책 사진'/>
                       <div className={styles.diaryTitleWrap}>
-                        <p>{title} with {dog}</p>
+                        <p>{title} with {dogName}</p>
                       </div>
                     </li>
                   </Link>
                 })
               }
             </ul>
-          </>
-        }
-      </div>
+          </div>
+          {
+            diaries && diaries.length === 0 && <div className={styles.noFliter}>
+              <p>필터링된 일기가 없어요!</p>
+            </div>
+          }
+        </>
+      }
       {
-        !diaries && <div className={styles.noDiary}>
+        diaries && diaries.length === 0 && diaries === null && <div className={styles.noDiary}>
           <p>작성된 일기가 없어요!</p>
           <Link to='/diary/new'>일기 쓰러가기</Link>
         </div>

@@ -1,11 +1,11 @@
 .section > div {
-  width: 100%;
+  width: 75%;
 }
 
 .table {
-  width: 90%;
+  width: 100%;
   position: relative;
-  padding-top: 80%;
+  padding-top: 90%;
   margin: 0 auto;
   height: max-content;
   color: var(--brand-text-color-light);
@@ -27,8 +27,8 @@
 }
 
 .tbody {
-  top: 52px;
-  height: calc(100% - 50px);
+  top: 42px;
+  height: calc(100% - 40px);
   display: flex;
   flex-wrap: wrap;
   gap: 2px;
@@ -44,7 +44,7 @@
 }
 
 .thead > tr  {
-  height: 50px;
+  height: 40px;
 }
 
 .th {
