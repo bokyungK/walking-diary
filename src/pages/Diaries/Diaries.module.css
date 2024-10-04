@@ -159,7 +159,7 @@
 
 .noDiary,
 .noFliter {
-  width: 100%;
+  width: 75%;
   max-width: 500px;
   display: flex;
   flex: 1;
