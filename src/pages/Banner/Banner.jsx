@@ -53,7 +53,6 @@ function Banner() {
       const previousLastDate = new Date(currentYear, currentMonth, 0).getDate();
       const currentFirstDay = new Date(currentYear, currentMonth, 1).getDay();
       const currentLastDate = new Date(currentYear, currentMonth + 1, 0).getDate();
-
       const calendarLength = currentFirstDay === 0 ?
                               // 1일이 일요일부터 시작할 때
                               currentLastDate % 7 === 0 ? 
@@ -96,7 +95,7 @@ function Banner() {
               <div>
                   <h2>{ `${currentYear}년 ${currentMonth + 1}월 출석` }</h2>
                   <table className={styles.table}>
-                      <thead className={styles.days}>
+                      <thead className={styles.thead}>
                           <tr>
                               {
                                   days.map((day) => {
@@ -105,7 +104,7 @@ function Banner() {
                               }
                           </tr>
                       </thead>
-                      <tbody className={styles.days}>
+                      <tbody className={styles.tbody}>
                           {
                               calendar.map((arr, idx) => {
                                   return <tr className={styles.rows} key={`week-${idx + 1}`}>

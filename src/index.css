@@ -5,7 +5,7 @@
   font-style: normal;
 }
 
-#root {
+:root {
   --brand-color: #A6DAF4;
   --brand-point-color: #00AFF0;
   --brand-border-color: #997000;
@@ -21,10 +21,24 @@
   --shadow-small: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
   --translate-3d: translate(3px, 3px);
   --brand-font: 'IM_Hyemin-Bold';
+}
 
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #F8F9FA;
+}
+
+#root {
   font-family: var(--brand-font);
   color: var(--brand-text-color-black);
   background-color: var(--brand-bg-color);
+  max-width: 480px;
+  margin: 0 auto;
+  overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 }
 
 button {

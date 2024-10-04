@@ -54,7 +54,7 @@
 
 .fileWrap {
   width: 100%;
-  height: calc(100vw * 0.75);
+  height: 360px;
   max-height: 768px;
   position: relative;
   border-radius: var(--brand-rounded);
@@ -135,14 +135,12 @@
   position: absolute;
   display: block;
   width: 100%;
-  height: calc(100vw * 0.75);
+  height: 100%;
   margin: 0 auto;
   object-fit: cover;
   background-color: var(--brand-color);
   top: 0;
   left: 0;
-  /* line-height: calc(100vw * 0.75);
-  text-align: center; */
 }
 
 .fileInput {
@@ -276,7 +274,7 @@
   margin-right: 0;
 }
 
-@media (min-width: 768px) {
+/* @media (min-width: 768px) {
   .diaryOptions {
     flex-direction: row;
     height: 2.3rem;
@@ -316,7 +314,7 @@
     transform: translateY(1px);
   }
 
-  /* .userFile {
+  .userFile {
     object-fit: contain;
-  } */
-}
+  }
+} */

@@ -1,68 +1,87 @@
+.section > div {
+  width: 100%;
+}
+
 .table {
-  color: white;
-  background-color: var(--brand-color);
-  border-collapse: collapse;
-  border-radius: 5px;
-  overflow: hidden;
+  width: 90%;
+  position: relative;
+  padding-top: 80%;
+  margin: 0 auto;
+  height: max-content;
+  color: var(--brand-text-color-light);
+  border-radius: var(--brand-rounded);
   box-shadow: var(--shadow-small);
+}
+
+.thead,
+.tbody {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.thead {
+  border-radius: var(--brand-rounded) var(--brand-rounded) 0 0;
+  overflow: hidden;
+}
+
+.tbody {
+  top: 52px;
+  height: calc(100% - 50px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  border-radius: 0 0 var(--brand-rounded) var(--brand-rounded);
+  overflow: hidden;
+}
+
+.thead > tr,
+.tbody > tr {
+  display: flex;
+  width: 100%;
+  column-gap: 2px;
+}
+
+.thead > tr  {
+  height: 50px;
 }
 
 .th {
   font-size: 1.3rem;
-  height: 50px;
-  border: 2px solid white;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-right: none;
   border-top: none;
   background-color: var(--brand-point-color);
 }
-    
-.th:first-child {
-    border-left: none;
-}
 
-.th:last-child {
-    border-right: none;
-}
-
-.rows > .td:first-child {
-  color: var(--brand-gray-color);
-}
-  
 .td {
   position: relative;
-  width: calc((100vw * 0.1));
-  height: calc((100vw * 0.1));
-  border: 2px solid var(--brand-text-color-light);
+  flex: 1;
+  height: 100%;
   vertical-align: top;
   border-bottom: none;
   padding: 3px 0px;
   font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;  
+  background-color: var(--brand-color);
+}
+
+.td:first-child {
+  color: gray;
 }
 
 .td.today {
   color: var(--brand-point-color);
 }
 
-.td:first-child {
-  border-left: none;
-}
-
-.td:last-child {
-  border-right: none;
-}
-
 .otherMonth {
-  color: rgba(244, 243, 243, 0.534);
-  /* position: absolute;
-  top: 25%;
-  left: 25%;
-  width: 50px;
-  height: 50px; */
-
-  /* @media only screen and (max-width: 700px) {
-    width: 25px;
-    height: 25px;
-  } */
+  color: rgba(244, 243, 243, 0.534) !important;
 }
 
 .intro {
@@ -73,10 +92,6 @@
   color: black;
   margin-bottom: 1.5rem;
   flex-direction: column;
-
-  /* @media only screen and (max-width: 700px) {
-    font-size: 1.5rem;
-  } */
 }
 
 .dog {
@@ -91,11 +106,4 @@
   color: #BCBCBC;
   text-align: center;
   transition: var(--transition-color);
-}
-
-@media screen and (min-width: 1024px) {
-  .td {
-    width: 102px;
-    height: 102px;
-  }
 }
