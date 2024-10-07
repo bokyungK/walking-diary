@@ -68,7 +68,7 @@ a {
 input,
 textarea {
   background-color: var(--brand-color);
-  color: #fff;
+  color: white;
   width: 12rem;
   height: 4rem;
   font-size: 1.5rem;

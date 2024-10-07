@@ -78,6 +78,7 @@
   left: 35%;
   object-fit: contain;
   width: 50%;
+  animation: fadeIn 1s;
 }
 
 .td:first-child {
@@ -114,4 +115,13 @@
   color: #BCBCBC;
   text-align: center;
   transition: var(--transition-color);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
