@@ -30,7 +30,7 @@
 
 .orderBox {
   text-align: right;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .orderSelect {
@@ -159,17 +159,15 @@
 
 .noDiary,
 .noFliter {
-  width: 75%;
+  width: var(--brand-width);
   max-width: 500px;
   display: flex;
   flex: 1;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 1rem;
   border: 3px dotted var(--brand-color);
   border-radius: var(--brand-rounded-medium);
-  margin-bottom: 1rem;
 }
 
 .noDiary > p,
