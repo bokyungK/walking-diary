@@ -1,0 +1,34 @@
+.writingInfo {
+  width: 100%;
+  height: 2.3rem;
+  margin-bottom: 1rem;
+  line-height: 2rem;
+  padding: 0 1rem;
+  border: 3px solid var(--brand-border-color);
+  border-radius: var(--brand-rounded);
+  font-weight: normal;
+  font-size: 1.3rem;
+  outline: none;
+  background-color: var(--brand-text-color-light);
+  color: var(--brand-text-color-dark);
+  text-align: left;
+}
+
+.writingInfo:focus {
+  background-color: var(--brand-text-color-light);
+}
+
+.contentInfo {
+  resize: none;
+  height: 200px;
+  background: repeating-linear-gradient(var(--brand-text-color-light), var(--brand-text-color-light) 30px, var(--brand-border-color) 30px, var(--brand-border-color) 33px);
+  font-size: 1.2rem;
+  box-shadow: var(--shadow-small);
+  font-family: var(--brand-font);
+}
+
+.contentInfo:focus {
+  transform: var(--translate-3d);
+  background-color: var(--brand-focus-color);
+  box-shadow: none;
+}

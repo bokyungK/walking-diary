@@ -3,11 +3,13 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from '@tanstack/react-query';
 import { deleteDiary, getDogName, saveDiary } from "../../api/firebase.js";
 import { deleteImage, saveImage } from "../../api/cloudinary.js";
-import { useUserContext } from "../../context/userContext.jsx";
-import { useSubmitContext } from "../../context/submitContext.jsx";
-import { IoClose } from "react-icons/io5";
+import { useUserContext } from "../../context/userContext";
+import { useSubmitContext } from "../../context/submitContext";
 import styles from './Diary.module.css';
-import Button from "../../component/Button/Button.jsx";
+import Button from "../../component/Button/Button";
+import DiaryFile from "../../component/DiaryFile/DiaryFile";
+import DiaryOptions from "../../component/DiaryOptions/DiaryOptions";
+import DiaryWriting from "../../component/DiaryWriting/DiaryWriting";
 
 const today = new Date();
 const timestamp = Math.floor(new Date().getTime() / 1000);
@@ -53,10 +55,11 @@ export default function Diary() {
     }
   }, [pathname, state])
 
-  const handleFile = (e) => {
-    const { value, files } = e.target;
-    setFile({ status: true, value, file: files[0]});
-  }
+  useEffect(() => {
+    setDiary((prev) => {
+      return {...prev, dogName}
+    })
+  }, [dogName])
 
   const handleInput = (e) => {
     const { value, name } = e.target;
@@ -66,16 +69,18 @@ export default function Diary() {
     })
   }
 
-  const handleClose = () => {
-    setFile(INITIAL_FILE);
-    setDiary((prev) => {
-      return {...prev, imageUrl: ''}
-    });
-  }
-
   const handleSave = (e) => {
     e.preventDefault();
     handleSubmitTrue();
+
+    if (!file.status) {
+      saveDiary(user.uid, diary, diary.id)
+      .finally(() => {
+        handleSubmitFalse();
+        navigate('/diary');
+      })
+      return;
+    }
 
     saveImage(file.file)
     .then((imageUrl) => {
@@ -122,16 +127,10 @@ export default function Diary() {
     }
   }
 
-  useEffect(() => {
-    setDiary((prev) => {
-      return {...prev, dogName}
-    })
-  }, [dogName])
-
   return (
     <section className={`${styles.section} column`}>
       <h2>
-        { pathname.includes('update') && '일기 고치기' }
+        { pathname.includes('update') && '일기 수정하기' }
         { pathname.includes('new') && '일기 쓰기' }
         { !(pathname.includes('update') || pathname.includes('new')) && '일기 보기' }
       </h2>
@@ -159,81 +158,17 @@ export default function Diary() {
       </div>
 
       <form className={styles.diaryInfo} onSubmit={handleSave}>
-        <div className={styles.fileWrap}>
-          { (pathname.includes('new') || pathname.includes('update')) && <>
-              <label className={styles.fileLabel} htmlFor='file'>사진 고르기</label>
-              <input className={styles.fileInput} type='file' id='file' name='file'
-                accept='image/*' onChange={handleFile} value={file.value} required />
-              {
-                (file.status || diary.imageUrl) && <>
-                  {
-                    file.status && <img className={styles.filePreview} src={URL.createObjectURL(file.file)} alt='' />
-                  }
-                  {
-                    diary.imageUrl && <img className={styles.userFile} src={diary.imageUrl} alt={diary.title} />
-                  }
-                  <button className={styles.fileCloseWrap} type='button' onClick={handleClose}>
-                    <IoClose className={styles.fileClose} />
-                  </button>
-                </>
-              }
-            </>
-          }
-          { 
-            !(pathname.includes('update') || pathname.includes('new')) &&
-            <img className={styles.userFile} src={state.imageUrl} alt={state.title} />
-          }
-        </div>
-        <div className={styles.diaryOptions}>
-          {
-            diary && <div className={styles.dateBox}>{diary.time}</div>
-          }
-          
-          {
-            diary && <fieldset onChange={handleInput} className={styles.weatherBox} name='weather'
-              value={diary.weather} required={!(pathname.includes('new') || pathname.includes('update'))} disabled={!(pathname.includes('new') || pathname.includes('update'))}>
-              { 
-                ['sunny', 'cloudy', 'rainy', 'snowy'].map((type) => {
-                  const checked = diary.weather === type;
-
-                  return <div key={type}>
-                    <input type='radio' name='weather' id={type} value={type} checked={checked} />
-                    <label htmlFor={type}>
-                      <img src={`/${type}.svg`} alt={type} />
-                    </label>
-                  </div>
-                })
-              }
-            </fieldset>
-          }
-
-          { diary && <select onChange={handleInput} name='dog' className={styles.dogSelect}
-              value={diary.dogName} required={!(pathname.includes('new') || pathname.includes('update'))} disabled={!(pathname.includes('new') || pathname.includes('update'))}>
-              <option>{diary.dogName}</option>
-            </select>
-          }
-        </div>
-        <div>
-          {
-            diary && <input onChange={handleInput} className={styles.writingInfo} type='text' name='title'
-              placeholder='제목 쓰기' maxLength='30' required disabled={!(pathname.includes('new') || pathname.includes('update'))}
-              value={diary.title} />
-          }
-
-          { diary && <textarea onChange={handleInput} className={`${styles.writingInfo} ${styles.contentInfo} `}
-              name='content' placeholder='내용 쓰기' maxLength='500' required disabled={!(pathname.includes('new') || pathname.includes('update'))} 
-              value={diary.content}>
-            </textarea>
-          }
-
-          {
-            (pathname.includes('new') || pathname.includes('update')) &&
-            <div className='buttonWrap'>
-              <Button name='취소' destination='/diary' />
-              <Button name='저장' isButton isSubmitting={isSubmitting} />
-            </div>
-          }
-        </div>
+        <DiaryFile INITIAL_FILE={INITIAL_FILE} pathname={pathname} diary={diary} setDiary={setDiary}
+         file={file} setFile={setFile} state={state} />
+        <DiaryOptions pathname={pathname} diary={diary} handleInput={handleInput} />
+        <DiaryWriting pathname={pathname} diary={diary} handleInput={handleInput} />
+        {
+          (pathname.includes('new') || pathname.includes('update')) &&
+          <div className='buttonWrap'>
+            <Button name='취소' destination='/diary' />
+            <Button name='저장' isButton isSubmitting={isSubmitting} />
+          </div>
+        }
       </form>
     </section>
   )

@@ -1,0 +1,72 @@
+.diaryOptions {
+  display: flex;
+  flex-direction: column;
+  border: none;
+  border: 3px solid var(--brand-border-color);
+  border-radius: var(--brand-rounded);
+  background-color: var(--brand-text-color-light);
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow-small);
+}
+
+.diaryOptions > * {
+  border: none;
+  outline: none;
+  height: 2.3rem;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+}
+
+.diaryOptions > *:not(:last-child) {
+  border-bottom: 3px solid var(--brand-border-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.weatherBox > div > input[type=radio] {
+  display: none;
+}
+
+.weatherBox > div > label {
+  display: block;
+  width: 2.3rem;
+  height: 2.3rem;
+  background-size: cover;
+  opacity: 0.3;
+}
+
+.weatherBox > div > input[type=radio]:checked + label {
+  opacity: 1;
+}
+
+.weatherBox > div > label {
+  transform: translateY(-4px);
+}
+
+.weatherBox > div:nth-child(3) > label,
+.weatherBox > div:nth-child(4) > label {
+  width: 2.5rem;
+  height: 2.5rem;
+  transform: translateY(-3px);
+}
+
+.dogSelect {
+  color: var(--brand-text-color-dark);
+  font-family: var(--brand-font);
+  font-size: 1.1rem;
+}
+
+.dogSelect:disabled {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  opacity: 1;
+}
+
+.dogSelect > option {
+  border-radius: 10px;
+}
