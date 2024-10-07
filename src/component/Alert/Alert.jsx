@@ -6,7 +6,7 @@ export default function Alert ({ message, handleAlert, isAlert }) {
   const isString = typeof message === 'string' ? true : false;
 
   return (
-    <div onClick={handleAlert} className={styles.background}>
+    <div className={styles.background}>
       <div className={`${styles.postIt} ${isAlert && styles.alert} ${isString ? '' : styles.notString}`}>
         <div></div>
         <div></div>

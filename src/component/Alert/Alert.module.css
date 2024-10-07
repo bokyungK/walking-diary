@@ -11,7 +11,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--brand-bg-color);
 }
 
 .background:has(.postIt.notString) {
@@ -25,7 +24,6 @@
 .postIt {
   width: 250px;
   height: 250px;
-  background-color: var(--brand-beige-color);
   display: flex;
   flex-direction: column;
   position: relative;

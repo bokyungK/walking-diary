@@ -138,7 +138,8 @@ export default function Diary() {
       <div className={styles.ruleButtonWrap}>
         { 
           (pathname.includes('new') || pathname.includes('update')) ?
-            <button className={styles.ruleButton} type='button'>💡 작성 규칙 확인하기</button>
+            // <button className={styles.ruleButton} type='button'>💡 작성 규칙 확인하기</button>
+            ''
             :
             <>
               <button onClick={handleControl} id='delete' className={styles.controlButton} type='button'>
