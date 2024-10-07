@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useUserContext } from '../../context/userContext.jsx';
@@ -8,6 +8,8 @@ import Loading from '../../component/Loading/Loading';
 
 export default function Diaries() {
   const { user } = useUserContext();
+  const [order, setOrder] = useState('최신 순서');
+  const handleOrder = (e) => setOrder(e.target.value)
   const { data, isLoading } = useQuery({
     queryKey: ['diaries', user && user.uid],
     queryFn: () => getDiaries(user.uid),
@@ -15,37 +17,24 @@ export default function Diaries() {
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 10,
   })
-  const [diaries, setDiaries] = useState();
-  const [order, setOrder] = useState('최신 순서');
-  const handleOrder = (e) => setOrder(e.target.value)
 
-  useEffect(() => {
-    if (data) {
-      setDiaries(() => {
-        if (order === '최신 순서') {
-          return [...data].sort((a, b) => b.timestamp - a.timestamp);
-        } else if (order === '오래된 순서') {
-          return [...data].sort((a, b) => a.timestamp - b.timestamp);
-        } else if (order === '책갈피') {
-          return [...data].filter((item) => item.mark === true);
-        } 
-      })
-    } else {
-      setDiaries(null);
+  const sortedData = useMemo(() => {
+    if (!data) return;
+
+    if (order === '최신 순서') {
+      return [...data].sort((a, b) => b.timestamp - a.timestamp);
+    } else if (order === '오래된 순서') {
+      return [...data].sort((a, b) => a.timestamp - b.timestamp);
+    } else if (order === '책갈피') {
+      return [...data].filter((item) => item.mark === true);
     }
-  }, [order, data])
+  }, [data, order])
 
-  useEffect(() => {
-    if (user) {
-      getDiaries(user.uid);
-    }
-  }, [user])
-
-  if (isLoading || diaries === undefined) return <Loading isInSection />
+  if (isLoading) return <Loading isInSection />
   return (
     <section className={`${styles.section} column`}>
       {
-        diaries && <>
+        data && <>
           <h2>일기 보관함</h2>
           <div className={styles.diaryWrap}>
             <div className={styles.orderBox}>
@@ -57,7 +46,7 @@ export default function Diaries() {
             </div>
             <ul className={styles.diaryList}>
               {
-                diaries.map((item) => {
+                sortedData.map((item) => {
                   const { id, title, dogName, imageUrl } = item;
                   return <Link className={styles.diaryLink} to={`/diary/${id}`} state={item} key={id}>
                     <li className={styles.diaryCard} key={id}>
@@ -72,18 +61,21 @@ export default function Diaries() {
             </ul>
           </div>
           {
-            diaries && diaries.length === 0 && <div className={styles.noFliter}>
+            sortedData.length === 0 && <div className={styles.noFliter}>
               <p>필터링된 일기가 없어요!</p>
             </div>
           }
         </>
-      }
-      {
-        diaries && diaries.length === 0 && diaries === null && <div className={styles.noDiary}>
-          <p>작성된 일기가 없어요!</p>
-          <Link to='/diary/new'>일기 쓰러가기</Link>
-        </div>
-      }
+        }
+        {
+          data === null && <>
+            <h2 className={styles.h2}>일기 보관함</h2>
+            <div className={styles.noDiary}>
+              <p>작성된 일기가 없어요!</p>
+              <Link to='/diary/new'>일기 쓰러가기</Link>
+            </div>
+          </>
+        }
     </section>
   )
 }
