@@ -25,33 +25,35 @@ function Banner() {
   })
 
   useEffect(() => {
-    const lastDate = new Date(YEAR, MONTH + 1, 0).getDate();
-    const calendarLen = (Math.floor(lastDate / 7) + (lastDate % 7 > 0 ? 1 : 0)) * 7;
-    const firstDay = new Date(YEAR, MONTH, 1).getDay();
-    const calendarList = []
-
-    for (let i = 0; i < calendarLen; i++) {
-      if (i < firstDay && i === 0) {
-        TODAY.setDate(TODAY.getDate() - DATE - firstDay + 1);
-      } else {
-        TODAY.setDate(TODAY.getDate() + 1);
+    if (user) {
+      const lastDate = new Date(YEAR, MONTH + 1, 0).getDate();
+      const calendarLen = (Math.floor(lastDate / 7) + (lastDate % 7 > 0 ? 1 : 0)) * 7;
+      const firstDay = new Date(YEAR, MONTH, 1).getDay();
+      const calendarList = []
+  
+      for (let i = 0; i < calendarLen; i++) {
+        if (i < firstDay && i === 0) {
+          TODAY.setDate(TODAY.getDate() - DATE - firstDay + 1);
+        } else {
+          TODAY.setDate(TODAY.getDate() + 1);
+        }
+  
+        const fullDateObj = {
+          month: TODAY.getMonth() + 1,
+          date: TODAY.getDate()
+        }
+  
+        if (i % 7 === 0) {
+          calendarList.push([fullDateObj])
+        } else {
+          const listIdx = Math.floor(i / 7);
+          calendarList[listIdx].push(fullDateObj);
+        }
       }
-
-      const fullDateObj = {
-        month: TODAY.getMonth() + 1,
-        date: TODAY.getDate()
-      }
-
-      if (i % 7 === 0) {
-        calendarList.push([fullDateObj])
-      } else {
-        const listIdx = Math.floor(i / 7);
-        calendarList[listIdx].push(fullDateObj);
-      }
+  
+      setCalendar(calendarList);
     }
-
-    setCalendar(calendarList);
-  }, [])
+  }, [user])
 
   useEffect(() => {
     if (data) {
