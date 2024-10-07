@@ -7,7 +7,6 @@
   position: relative;
   padding-top: 90%;
   margin: 0 auto;
-  height: max-content;
   color: var(--brand-text-color-light);
   border-radius: var(--brand-rounded);
   box-shadow: var(--shadow-small);
@@ -70,6 +69,15 @@
   overflow: hidden;
   text-overflow: ellipsis;  
   background-color: var(--brand-color);
+  padding: 3px;
+}
+
+.attendance {
+  position: absolute;
+  top: 40%;
+  left: 35%;
+  object-fit: contain;
+  width: 50%;
 }
 
 .td:first-child {
