@@ -37,11 +37,16 @@ function Banner() {
         TODAY.setDate(TODAY.getDate() + 1);
       }
 
+      const fullDateObj = {
+        month: TODAY.getMonth() + 1,
+        date: TODAY.getDate()
+      }
+
       if (i % 7 === 0) {
-        calendarList.push([TODAY.getDate()])
+        calendarList.push([fullDateObj])
       } else {
         const listIdx = Math.floor(i / 7);
-        calendarList[listIdx].push(TODAY.getDate());
+        calendarList[listIdx].push(fullDateObj);
       }
     }
 
@@ -52,10 +57,9 @@ function Banner() {
     if (data) {
       setWritedList(data.map((item) => {
         const { time } = item;
-        const month = time.slice(5, 7);
+        const month = parseInt(time.slice(5, 7));
         const date = parseInt(time.slice(8, 10));
-        const isCurMonth = MONTH === parseInt(month);
-        return isCurMonth ? `${month}/${date}` : date;
+        return `${month}/${date}`;
       }))
     }
   }, [data])
@@ -81,14 +85,15 @@ function Banner() {
                   calendar.map((arr, idx) => {
                   return <tr className={styles.rows} key={`week-${idx + 1}`}>
                     {
-                      arr.map((num) => {
-                        const todayClass = num === DATE && styles.today;
-                        const otherMonthClass = ((idx === 0 && num > 7) || (idx === calendar.length - 1 && num < 7)) && styles.otherMonth;
+                      arr.map((item) => {
+                        const { month, date } = item;
+                        const todayClass = date === DATE && styles.today;
+                        const otherMonthClass = ((idx === 0 && date > 7) || (idx === calendar.length - 1 && date < 7)) && styles.otherMonth;
                       
-                        return <td className={`${styles.td} ${otherMonthClass} ${todayClass}`} key={`current-${num}`}>
-                          <span>{num}</span>
-                          { writedList && writedList.includes(num) && 
-                            <img className={styles.attendance} src='/icons/footprint.png' alt={num} />
+                        return <td className={`${styles.td} ${otherMonthClass} ${todayClass}`} key={`current-${date}`}>
+                          <span>{date}</span>
+                          { writedList && writedList.includes(`${month}/${date}`) && 
+                            <img className={styles.attendance} src='/icons/footprint.png' alt={date} />
                           }
                         </td>
                       })
