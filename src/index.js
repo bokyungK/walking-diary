@@ -63,16 +63,11 @@ const router = createBrowserRouter([
       },
     ]
   },
-  {
-
-  }
 ]);
 
 root.render(
   <React.StrictMode>
-    <RecoilRoot>
-      <RouterProvider router={router} />
-    </RecoilRoot>
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 
