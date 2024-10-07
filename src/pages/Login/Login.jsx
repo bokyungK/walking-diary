@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../context/userContext';
+import { useAlertContext } from '../../context/alertContext.jsx';
 import { useSubmitContext } from '../../context/submitContext.jsx';
 import Alert from "../../component/Alert/Alert";
 import styles from './Login.module.css';
@@ -14,7 +15,7 @@ const INITIAL_FORM = {
 export default function Login() {
   const { setUser } = useUserContext();
   const [form, setForm] = useState(INITIAL_FORM);
-  const [alert, setAlert] = useState('');
+  const {alert, handleAlert} = useAlertContext();
   const {isSubmitting, handleSubmitTrue, handleSubmitFalse} = useSubmitContext();
   const navigate = useNavigate();
 
@@ -32,19 +33,18 @@ export default function Login() {
       if (isSuccess) {
         navigate('/');
       } else {
-        setAlert('이메일 또는 비밀번호가 달라요!')
+        handleAlert('이메일 또는 비밀번호가 틀려요!')
       }
       handleSubmitFalse();
     })
   }
 
-  const handleAlert = () => {
-    setAlert('');
-  }
-  
+  useEffect(() => {
+    handleAlert({ title: '테스트용 계정', id: 'test@test.com', pw: '1234qq!!'})
+  }, [handleAlert])
+
   return (
     <section className='column'>
-      <Alert message={{ title: '테스트용 계정을 사용해보세요!', id: 'test@test.com', pw: '1234qq!!'}}></Alert>
       <form className={styles.form} onSubmit={handleLogin}>
         <div className={styles.inputWrap}>
           <div>
@@ -64,7 +64,7 @@ export default function Login() {
         <Link className={styles.join} to="/join">회원가입 하러가기</Link>
       </div>
       {
-        alert && <Alert handleAlert={handleAlert} message={alert} />
+        alert && <Alert />
       }
     </section>
   )

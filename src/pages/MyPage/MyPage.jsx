@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from '@tanstack/react-query';
 import { useUserContext } from '../../context/userContext';
+import { useAlertContext } from '../../context/alertContext.jsx';
 import { deleteUserAndDiaries, getDogName, reAuthUser, saveUser, updateUserPw, withdrawalUser } from "../../api/firebase.js";
 import { useNavigate } from "react-router-dom";
 import { useSubmitContext } from '../../context/submitContext.jsx';
@@ -18,9 +19,8 @@ const INITIAL_MYPAGE = {
 export default function Mypage() {
     const { user, setUser } = useUserContext();
     const [mypage, setMypage] = useState(INITIAL_MYPAGE);
-    const [isError, setIsError] = useState('');
+    const { alert, handleAlert } = useAlertContext();
     const {isSubmitting, handleSubmitTrue, handleSubmitFalse} = useSubmitContext();
-    const [isAlert, setIsAlert] = useState('');
     const navigate = useNavigate();
     const { data: dogName, isSuccess, isLoading } = useQuery({
       queryKey: ['dogName', user && user.uid],
@@ -50,7 +50,7 @@ export default function Mypage() {
       withdrawalUser(mypage.pw)
       .then((code) => {
         if (code === 400) {
-          setIsError('비밀번호가 틀려요!');
+          handleAlert('비밀번호가 틀려요!');
         }
         
         if (code === 200) {
@@ -80,9 +80,9 @@ export default function Mypage() {
 
         updateUserPw(mypage.pw, mypage.newPw)
         .then((res) => {
-          if (res) setIsAlert('비밀번호를 바꿨어요!');
-          else if (res === 401) setIsError('비밀번호가 틀려요!');
-          else setIsError('비밀번호는 6글자 이상!');
+          if (res) handleAlert('비밀번호를 바꿨어요!');
+          else if (res === 401) handleAlert('비밀번호가 틀려요!');
+          else handleAlert('비밀번호는 6글자 이상!');
 
           handleSubmitFalse()
         })
@@ -97,23 +97,18 @@ export default function Mypage() {
 
           if (res) {
             saveUser(user.uid, mypage.dogName)
-            .then(() => setIsAlert('반려견 이름을 바꿨어요!'))
+            .then(() => handleAlert('반려견 이름을 바꿨어요!'))
           } else {
-            setIsError('비밀번호가 틀려요!');
+            handleAlert('비밀번호가 틀렸어요!');
           }
 
           handleSubmitFalse();
         })
       }
 
-      if (id === 'withdrawal' && mypage.dogName !== dogName) {
-        setIsError('변경할 정보를 입력해요!');
+      if (mypage.dogName === dogName) {
+        handleAlert('변경할 정보를 입력해주세요!');
       }
-    }
-
-    const handleAlert = () => {
-      setIsError('');
-      setIsAlert('');
     }
 
   if (isLoading) return <Loading isInSection />
@@ -156,7 +151,7 @@ export default function Mypage() {
         </>
       }
       {
-        (isError || isAlert) && <Alert handleAlert={handleAlert} message={isError || isAlert} isAlert={isAlert} />
+        alert && <Alert />
       }
     </section>
   )
