@@ -9,7 +9,6 @@ import Join from './pages/Join/Join';
 import Login from './pages/Login/Login';
 import Mypage from './pages/MyPage/MyPage';
 import reportWebVitals from './reportWebVitals';
-import { RecoilRoot } from 'recoil';
 import Diary from './pages/Diary/Diary';
 import ProtectedRoute from './component/ProtectedRoute';
 
