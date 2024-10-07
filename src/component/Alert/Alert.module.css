@@ -8,17 +8,13 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 9;
-  display: flex;
   justify-content: center;
   align-items: center;
+  display: flex;
 }
 
-.background:has(.postIt.notString) {
-  width: 250px;
-  height: 250px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -140%);
+.background.notOpacity {
+  background-color: var(--brand-bg-color);
 }
 
 .postIt {
@@ -27,23 +23,19 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  background-color: #f6e214;
+  background-color: var(--brand-beige-color);
+  border-radius: var(--brand-rounded-large) var(--brand-rounded-large) 0 var(--brand-rounded-large);
+  box-shadow: var(--shadow-small);
+  justify-content: center;
+  align-items: center;
 }
 
 .postIt.alert {
   background-color: var(--brand-beige-color);
 }
 
-.postIt.notString {
-  height: 200px;
-  background-color: #f1d1d1;
-}
-
-.postIt > div {
-  flex: 1;
-  padding: 5px;
-  border-bottom: 1px solid var(--brand-gray-color);
-  text-align: center;
+.postIt > .account:not(:last-child) {
+  margin-bottom: 5px;
 }
 
 .postIt:hover::before {
@@ -61,7 +53,12 @@
 }
 
 .closeButton {
-  top: 10px;
-  right: 10px;
+  top: 20px;
+  right: 15px;
   position: absolute;
+}
+
+.closeButton svg {
+  width: 15px;
+  height: 15px;
 }
