@@ -53,6 +53,7 @@ button {
   cursor: pointer;
   background-color: transparent;
   border: none;
+  color: var(--brand-text-color-black);
 }
 
 button > svg {
