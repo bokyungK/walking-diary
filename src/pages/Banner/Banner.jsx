@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import styles from './Banner.module.css';
 import { Link } from 'react-router-dom';
 import { useUserContext } from '../../context/userContext';
@@ -7,14 +7,13 @@ import { getDiaries } from "../../api/firebase.js";
 import Loading from '../../component/Loading/Loading';
 
 const DAY_LIST = ['일', '월', '화', '수', '목', '금', '토'];
-const TODAY = new Date();
-const YEAR = TODAY.getFullYear();
-const MONTH = TODAY.getMonth();
-const DATE = TODAY.getDate();
 
 function Banner() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth();
+  const date = today.getDate();
   const { user } =  useUserContext();
-  const [calendar, setCalendar] = useState([]);
   const [writedList, setWritedList] = useState();
   const { data } = useQuery({
     queryKey: ['diaries', user && user.uid],
@@ -24,36 +23,38 @@ function Banner() {
     staleTime: 1000 * 60 * 10,
   })
 
-  useEffect(() => {
-    if (user) {
-      const lastDate = new Date(YEAR, MONTH + 1, 0).getDate();
-      const calendarLen = (Math.floor(lastDate / 7) + (lastDate % 7 > 0 ? 1 : 0)) * 7;
-      const firstDay = new Date(YEAR, MONTH, 1).getDay();
-      const calendarList = []
-  
-      for (let i = 0; i < calendarLen; i++) {
-        if (i < firstDay && i === 0) {
-          TODAY.setDate(TODAY.getDate() - DATE - firstDay + 1);
-        } else {
-          TODAY.setDate(TODAY.getDate() + 1);
-        }
-  
-        const fullDateObj = {
-          month: TODAY.getMonth() + 1,
-          date: TODAY.getDate()
-        }
-  
-        if (i % 7 === 0) {
-          calendarList.push([fullDateObj])
-        } else {
-          const listIdx = Math.floor(i / 7);
-          calendarList[listIdx].push(fullDateObj);
-        }
+  const getCalendar = useMemo(() => {
+    const curtDay = new Date();
+    const curMonth = curtDay.getMonth();
+    const curYear = curtDay.getFullYear();
+    const curDate = curtDay.getDate();
+    const lastDate = new Date(curYear, curMonth + 1, 0).getDate();
+    const calendarLen = (Math.floor(lastDate / 7) + (lastDate % 7 > 0 ? 1 : 0)) * 7;
+    const firstDay = new Date(curYear, curMonth, 1).getDay();
+    const calendarList = []
+
+    for (let i = 0; i < calendarLen; i++) {
+      if (i < firstDay && i === 0) {
+        curtDay.setDate(curtDay.getDate() - curDate - firstDay + 1);
+      } else {
+        curtDay.setDate(curtDay.getDate() + 1);
       }
-  
-      setCalendar(calendarList);
+
+      const fullDateObj = {
+        curMonth: curtDay.getMonth() + 1,
+        curDate: curtDay.getDate()
+      }
+
+      if (i % 7 === 0) {
+        calendarList.push([fullDateObj])
+      } else {
+        const listIdx = Math.floor(i / 7);
+        calendarList[listIdx].push(fullDateObj);
+      }
     }
-  }, [user])
+  
+    return calendarList;
+  }, [])
 
   useEffect(() => {
     if (data) {
@@ -71,7 +72,7 @@ function Banner() {
         {
           user &&
           <div>
-            <h2>{ `${YEAR}년 ${MONTH + 1}월 출석` }</h2>
+            <h2>{ `${year}년 ${month + 1}월 출석` }</h2>
             <table className={styles.table}>
               <thead className={styles.thead}>
                 <tr>
@@ -84,18 +85,19 @@ function Banner() {
               </thead>
               <tbody className={styles.tbody}>
                 {
-                  calendar.map((arr, idx) => {
+                  getCalendar.map((arr, idx) => {
                   return <tr className={styles.rows} key={`week-${idx + 1}`}>
                     {
                       arr.map((item) => {
-                        const { month, date } = item;
-                        const todayClass = date === DATE && styles.today;
-                        const otherMonthClass = ((idx === 0 && date > 7) || (idx === calendar.length - 1 && date < 7)) && styles.otherMonth;
+                        const { curMonth, curDate } = item;
+                        const fullDate = `${curMonth}/${curDate}`;
+                        const todayClass = curDate === date && styles.today;
+                        const otherMonthClass = ((idx === 0 && curDate > 7) || (idx === getCalendar.length - 1 && curDate < 7)) && styles.otherMonth;
                       
-                        return <td className={`${styles.td} ${otherMonthClass} ${todayClass}`} key={`current-${date}`}>
-                          <span>{date}</span>
-                          { writedList && writedList.includes(`${month}/${date}`) && 
-                            <img className={styles.attendance} src='/icons/footprint.png' alt={date} />
+                        return <td className={`${styles.td} ${otherMonthClass} ${todayClass}`} key={fullDate}>
+                          <span>{curDate}</span>
+                          { writedList && writedList.includes(fullDate) && 
+                            <img className={styles.attendance} src='/icons/footprint.png' alt={curDate} />
                           }
                         </td>
                       })
