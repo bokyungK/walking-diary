@@ -88,6 +88,10 @@ input:focus {
   background-color: #71c7f2;
 }
 
+input:disabled {
+  opacity: 1;
+}
+
 h2 {
   width: 100%;
   text-align: center;

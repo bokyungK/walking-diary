@@ -39,7 +39,8 @@
 
 .orderSelect {
   cursor: pointer;
-  width: 110px;
+  width: max-content;
+  padding: 0 5px;
   height: 35px;
   color: var(--brand-border-color);
   background-color: var(--brand-text-color-light);
@@ -48,6 +49,7 @@
   font-family: var(--brand-font);
   box-shadow: var(--shadow-small);
   text-align: center;
+  text-align-last: center;
   font-size: 1rem;
 }
 
