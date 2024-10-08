@@ -33,21 +33,22 @@
 
 .weatherBox > div > label {
   display: block;
-  width: 2.3rem;
+  width: 2.2rem;
   height: 100%;
   background-size: cover;
   opacity: 0.3;
-  transform: translateY(-2px);
 }
 
 .weatherBox > div:nth-child(3) > label,
 .weatherBox > div:nth-child(4) > label {
-  transform: scale(1.2);
+  transform: scale(1.2) translateY(1.5px);
+  
 }
 
 .weatherBox > div > label > img {
   width: 100%;
   height: 100%;
+  object-fit: contain;
 }
 
 .weatherBox > div > input[type=radio]:checked + label {

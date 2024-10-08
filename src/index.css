@@ -88,7 +88,8 @@ input:focus {
   background-color: #71c7f2;
 }
 
-input:disabled {
+input:disabled,
+textarea:disabled {
   opacity: 1;
 }
 
