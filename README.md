@@ -15,7 +15,7 @@
 <br />
 
 <h2>🗃️ Architecture</h2>
-<p>
+<pre>
   📦 walking-diary
  ┣ 📂public
  ┣ 📂src
@@ -45,7 +45,7 @@
  ┃ ┣ 📜App.js
  ┃ ┣ 📜index.css
  ┗ ┗ 📜index.js
-</p>
+</pre>
 <br />
 
 <h2>🧑🏻 Members</h2>
